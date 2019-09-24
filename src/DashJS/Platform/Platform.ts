@@ -11,7 +11,6 @@ export class Platform {
         this.dpp = new DashPlatformProtocol(opts);
         this.client = opts.client;
         this.setCurrentContract(opts.schema);
-        Object.assign(Platform.prototype, {...opts.client});
     }
 
 
