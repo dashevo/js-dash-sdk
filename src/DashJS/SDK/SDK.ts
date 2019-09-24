@@ -1,5 +1,6 @@
 // import {Wallet} from "@dashevo/wallet-lib";
 import {Wallet} from "../../../../wallet-lib/src";
+import {Network} from "@dashevo/wallet-lib/src/types";
 import {Platform} from '../Platform';
 // @ts-ignore
 import DAPIClient from "@dashevo/dapi-client"
@@ -18,7 +19,7 @@ export class SDK {
 
     constructor(opts: {
         schema?: object;
-        network: string;
+        network: Network;
         mnemonic?: string
     }) {
         this.network = opts.network;
