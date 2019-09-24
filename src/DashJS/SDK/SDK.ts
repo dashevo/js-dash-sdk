@@ -12,25 +12,26 @@ const defaultSeeds =  [
 
 export class SDK {
     private network: string | string;
-    public wallet: Wallet;
-    public platform: Platform;
-    private client: any;
+    public wallet: Wallet | undefined;
+    public platform: Platform | undefined;
+    public client: DAPIClient;
 
     constructor(opts: {
-        schema: any;
-        network: string; }) {
+        schema?: object;
+        network: string;
+        mnemonic?: string
+    }) {
         this.network = opts.network;
-        // @ts-ignore
-        // @ts-ignore
-
 
         this.client = new DAPIClient(Object.assign({seeds:defaultSeeds,
             timeout: 20000,
             retries: 15},opts));
-        // @ts-ignore
-        this.wallet = new Wallet(opts);
-        this.platform = new Platform(Object.assign({},{client:this.client,schema:opts.schema}))
+        if(opts.mnemonic) {
+            // @ts-ignore
+            this.wallet = new Wallet(opts);
+        }
+        if(opts.schema){
+            this.platform = new Platform(Object.assign({},{client:this.client,schema:opts.schema}))
+        }
     }
-
-
 }

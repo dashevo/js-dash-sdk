@@ -1,6 +1,7 @@
 // @ts-ignore
 import DashPlatformProtocol from "@dashevo/dpp";
 
+
 export class Platform {
     private dpp: DashPlatformProtocol;
     private contractId: any;
@@ -10,10 +11,11 @@ export class Platform {
         this.dpp = new DashPlatformProtocol(opts);
         this.client = opts.client;
         this.setCurrentContract(opts.schema);
+        Object.assign(Platform.prototype, {...opts.client});
     }
 
 
-    async fetchDocuments(type: string, opts: {}) {
+    async fetchDocuments(type: string, opts: object) {
         return this.client.fetchDocuments(this.contractId, type, opts);
     }
 

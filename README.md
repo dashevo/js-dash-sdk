@@ -53,7 +53,7 @@ async function sendPayment(){
 }
 
 async function readDocument() {
-    const profile = await sdk.platform.fetchDocuments('profile', {})
+    const profile = await sdk.platform.fetchDocuments('profile',{},opts)
     console.log(profile);
 }
 ```
