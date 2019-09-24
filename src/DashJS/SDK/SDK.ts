@@ -12,7 +12,7 @@ const defaultSeeds =  [
 
 export class SDK {
     private network: string | string;
-    public wallet: Wallet | undefined;
+    public wallet: Wallet;
     public platform: Platform | undefined;
     public client: DAPIClient;
 
@@ -26,10 +26,9 @@ export class SDK {
         this.client = new DAPIClient(Object.assign({seeds:defaultSeeds,
             timeout: 20000,
             retries: 15},opts));
-        if(opts.mnemonic) {
-            // @ts-ignore
-            this.wallet = new Wallet(opts);
-        }
+
+        this.wallet = new Wallet({...opts, offlineMode: !opts.mnemonic});
+
         if(opts.schema){
             this.platform = new Platform(Object.assign({},{client:this.client,schema:opts.schema}))
         }
