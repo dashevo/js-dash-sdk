@@ -1,6 +1,6 @@
 // import {Wallet} from "@dashevo/wallet-lib";
 import {Wallet} from "../../../../wallet-lib/src";
-import {Network} from "@dashevo/wallet-lib/src/types";
+import {Mnemonic, Network} from "@dashevo/wallet-lib/src/types";
 import {Platform} from '../Platform';
 // @ts-ignore
 import DAPIClient from "@dashevo/dapi-client"
@@ -12,15 +12,15 @@ const defaultSeeds =  [
 ].map(ip => ({ service: `${ip}:3000` }));
 
 export class SDK {
-    private network: string | string;
+    private network: string;
     public wallet: Wallet;
-    public platform: Platform | undefined;
+    public platform: Platform;
     public client: DAPIClient;
 
     constructor(opts: {
         schema?: object;
         network: Network;
-        mnemonic?: string
+        mnemonic?: Mnemonic
     }) {
         this.network = opts.network;
 
@@ -30,8 +30,6 @@ export class SDK {
 
         this.wallet = new Wallet({...opts, offlineMode: !opts.mnemonic});
 
-        if(opts.schema){
-            this.platform = new Platform(Object.assign({},{client:this.client,schema:opts.schema}))
-        }
+        this.platform = new Platform(Object.assign({},{client:this.client,schema:opts.schema}))
     }
 }

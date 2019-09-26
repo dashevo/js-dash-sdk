@@ -8,9 +8,11 @@ export class Platform {
     private client: any;
 
     constructor(opts: any) {
-        this.dpp = new DashPlatformProtocol(opts);
-        this.client = opts.client;
-        this.setCurrentContract(opts.schema);
+        if(opts){
+            this.dpp = new DashPlatformProtocol(opts);
+            this.client = opts.client;
+            this.setCurrentContract(opts.schema);
+        }
     }
 
 
