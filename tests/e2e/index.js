@@ -1,5 +1,5 @@
 const {expect} = require('chai');
-const DashJS = require('../build');
+const DashJS = require('../../build');
 
 describe('DashJS', () => {
 

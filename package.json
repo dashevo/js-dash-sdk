@@ -9,7 +9,9 @@
     "build": "rimraf ./build && tsc -p .",
     "build:live": "nodemon --exec 'ts-node' examples/usage1.js",
     "build:livenet": "nodemon --exec 'ts-node' examples/usage.ts",
-    "test": "mocha test --recursive"
+    "test": "npm run test:ts && npm run build && npm run test:js",
+    "test:ts": "mocha -r ts-node/register \"tests/**/*.ts\"",
+    "test:js": "mocha --recursive tests/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,8 @@
   },
   "devDependencies": {
     "@dashevo/dashcore-lib": "^0.17.9",
+    "@types/chai": "^4.2.3",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.5",
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
