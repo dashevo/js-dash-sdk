@@ -1,17 +1,25 @@
 // @ts-ignore
 import DashPlatformProtocol from "@dashevo/dpp";
+import {Mnemonic, Network} from "@dashevo/wallet-lib/src/types";
+// @ts-ignore
+import DAPIClient from "@dashevo/dapi-client"
 
 
 export class Platform {
     private dpp: DashPlatformProtocol;
     private contractId: any;
-    private client: any;
+    private client: DAPIClient;
 
-    constructor(opts: any) {
+    constructor(opts?: {
+        schema?: object;
+        client: DAPIClient
+    }) {
         if(opts){
             this.dpp = new DashPlatformProtocol(opts);
             this.client = opts.client;
-            this.setCurrentContract(opts.schema);
+            if(opts.schema){
+                this.setCurrentContract(opts.schema);
+            }
         }
     }
 
@@ -20,7 +28,8 @@ export class Platform {
         return this.client.fetchDocuments(this.contractId, type, opts);
     }
 
-    private setCurrentContract(schema: { name: any; }) {
+    private setCurrentContract(schema: object) {
+        // @ts-ignore
         const contract = this.dpp.contract.create(schema.name, schema);
 
         this.dpp.setContract(contract);
