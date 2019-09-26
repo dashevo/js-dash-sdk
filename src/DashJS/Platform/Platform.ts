@@ -7,7 +7,7 @@ import DAPIClient from "@dashevo/dapi-client"
 
 export class Platform {
     private dpp: DashPlatformProtocol;
-    private contractId: any;
+    contractId: any;
     private client: DAPIClient;
 
     constructor(opts?: {

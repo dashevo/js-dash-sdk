@@ -23,7 +23,7 @@ export class SDK {
     constructor(opts?: {
         schema?: object;
         network?: Network;
-        mnemonic?: Mnemonic
+        mnemonic?: Mnemonic|string
     }) {
         this.network = (opts && opts.network) ? opts.network : 'testnet';
 

@@ -58,3 +58,9 @@ async function readDocument() {
 }
 ```
 
+Notes : 
+
+- Omitting mnemonic will set the Wallet functionalities in offlineMode (for resources savings purposes) and set a default mnemonic.  
+ You can use `sdk.wallet.exportWallet()` to get the randomly generated mnemonic.
+- Omitting a schema will unset the Platform functionalities.
+
