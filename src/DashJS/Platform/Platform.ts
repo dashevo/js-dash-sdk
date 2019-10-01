@@ -4,16 +4,17 @@ import {Mnemonic, Network} from "@dashevo/wallet-lib/src/types";
 // @ts-ignore
 import DAPIClient from "@dashevo/dapi-client"
 
+export interface PlatformOpts {
+  schema?: object;
+  client: DAPIClient;
+}
 
 export class Platform {
     private dpp: DashPlatformProtocol;
     contractId: any;
     private client: DAPIClient;
 
-    constructor(opts?: {
-        schema?: object;
-        client: DAPIClient
-    }) {
+    constructor(opts?: PlatformOpts) {
         if(opts){
             this.dpp = new DashPlatformProtocol(opts);
             this.client = opts.client;

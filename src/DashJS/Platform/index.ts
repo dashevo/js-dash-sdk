@@ -1,1 +1,1 @@
-export { Platform } from './Platform';
+export { Platform, PlatformOpts } from './Platform';

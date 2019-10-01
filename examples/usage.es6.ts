@@ -1,8 +1,9 @@
 import DashJS from "../src/index";
 import schema from "./schema.json";
+import {SDKOpts} from "../src/DashJS/SDK/SDK";
 
 const network = "testnet";
-const opts = {
+const opts: SDKOpts = {
     network,
     mnemonic: "arena light cheap control apple buffalo indicate rare motor valid accident isolate",
     schema
