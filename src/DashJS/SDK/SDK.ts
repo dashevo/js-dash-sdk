@@ -32,6 +32,7 @@ export class SDK {
             retries: 15
         }, opts));
 
+        // @ts-ignore
         this.wallet = new Wallet({...opts, offlineMode: !(opts && opts.mnemonic)});
 
         let platformOpts: PlatformOpts = {
