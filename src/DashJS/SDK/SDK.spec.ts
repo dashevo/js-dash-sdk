@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import {SDK} from "../../../src/DashJS/SDK";
+import {SDK} from "./index";
 import 'mocha';
-import schema from '../../fixtures/dp1.schema.json'
+import schema from '../../../tests/fixtures/dp1.schema.json'
 const mnemonic = 'agree country attract master mimic ball load beauty join gentle turtle hover';
 describe('DashJS - SDK', () => {
 

@@ -10,7 +10,7 @@
     "build:live": "nodemon --exec 'ts-node' examples/usage1.js",
     "build:livenet": "nodemon --exec 'ts-node' examples/usage.ts",
     "test": "npm run test:ts && npm run build && npm run test:js",
-    "test:ts": "mocha -r ts-node/register \"tests/**/*.ts\"",
+    "test:ts": "mocha -r ts-node/register \"src/**/*.spec.ts\"",
     "test:js": "mocha --recursive tests/**/*.js"
   },
   "repository": {
