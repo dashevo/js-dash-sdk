@@ -4,7 +4,6 @@
     "module": "commonjs",
     "lib": ["es6"],
     "outDir": "build",
-    "rootDir": "src",
     "strict": true,
     "allowUmdGlobalAccess": true,
     "esModuleInterop": true,
