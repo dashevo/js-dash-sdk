@@ -12,4 +12,5 @@
     "sourceMap": true,
   },
   "exclude": ["node_modules", "**/*.test.ts", "examples", "tests", "dist"]
+  "typeRoots": ["node_modules/@types", "./typings"]
 }

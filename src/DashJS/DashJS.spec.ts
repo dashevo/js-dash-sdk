@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import {DashJS} from "../../src/DashJS";
+import {DashJS} from "./index";
 import 'mocha';
 
 describe('DashJS', () => {
