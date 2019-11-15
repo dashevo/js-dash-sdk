@@ -30,7 +30,6 @@ export interface SDKSchemas {
     [name:string]: DPASchema
 }
 
-
 export class SDK {
     public network: string = 'testnet';
     public wallet: Wallet | undefined;
@@ -49,6 +48,7 @@ export class SDK {
             }, opts || {network: this.network}))
         }
         if(opts.mnemonic){
+            // @ts-ignore
             this.wallet = new Wallet({...opts, offlineMode: !(opts && opts.mnemonic)});
         }
         if(opts.schemas!== undefined){

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm run build && node build/index.js",
     "start:dev": "nodemon",
-    "build": "rimraf ./build && tsc -p .",
+    "build:dev": "webpack -d --display-error-details --progress",
+    "build:prod": "webpack -p --progress"
     "build:live": "nodemon --exec 'ts-node' examples/usage1.js",
     "build:livenet": "nodemon --exec 'ts-node' examples/usage.ts",
     "test": "npm run test:ts && npm run build && npm run test:js",
@@ -36,7 +37,11 @@
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "rimraf": "^3.0.0",
+    "ts-loader": "^6.2.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "webpack": "^4.41.0",
+    "webpack-bundle-analyzer": "^3.5.2",
+    "webpack-cli": "^3.3.9"
   }
 }
