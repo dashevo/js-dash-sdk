@@ -23,6 +23,12 @@ const doc = await sdk.platform.documents.fetch(type,queryOpts);
 const doc = sdk.platform.documents.create();
 ```   
 
+## Broadcasting a document
+
+```js
+const txid = sdk.platform.documents.broadcast(doc);
+```   
+
 ## Deleting a document
 
 ```js
