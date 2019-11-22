@@ -2,7 +2,7 @@
 
 The [Dash Core Developer Guide](https://dashcore.readme.io/docs/core-guide-introduction) will answer most of the questions about the fundamentals of Dash.   
 
-However, some elements provided by the SDK need to be grasped, so we will quickly cover some of thoses. 
+However, some elements provided by the SDK need to be grasped, so we will quickly cover some of those.
 
 ## Wallet
 
