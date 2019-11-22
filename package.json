@@ -27,10 +27,10 @@
   "dependencies": {
     "@dashevo/dapi-client": "^0.6.7",
     "@dashevo/wallet-lib": "^4.0.0",
+    "@dashevo/dashcore-lib": "^0.17.9",
     "@dashevo/dpp": "^0.7.2"
   },
   "devDependencies": {
-    "@dashevo/dashcore-lib": "^0.17.9",
     "@types/chai": "^4.2.3",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.5",
