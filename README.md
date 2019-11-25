@@ -51,7 +51,7 @@ async function readDocument() {
 ## In a nutshell 
 
 - If you use multiple contracts, fetchDocuments is done using dot-locator `dashpay.profile` and passing a named-schemas object.
-   See more on how to [work with multiples contracts in details](https://dashevo.github.io/DashJS/#/getting-started/multiples-schemas)
+   See more on how to [work with multiple contracts in detail](https://dashevo.github.io/DashJS/#/getting-started/multiples-schemas)
 
 ## Dependencies 
 
