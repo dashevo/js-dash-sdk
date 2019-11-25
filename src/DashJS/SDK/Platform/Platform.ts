@@ -1,6 +1,6 @@
 // @ts-ignore
 import DashPlatformProtocol from "@dashevo/dpp";
-import {Mnemonic, Network} from "@dashevo/wallet-lib/src/types";
+import {Mnemonic, Network} from "@dashevo/wallet-lib/src/types/types";
 // @ts-ignore
 import DAPIClient from "@dashevo/dapi-client"
 import {SDKClients, SDKSchemas} from "../SDK";

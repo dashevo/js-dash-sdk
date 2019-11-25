@@ -1,5 +1,6 @@
 import {Wallet} from "@dashevo/wallet-lib";
-import {Mnemonic, Network} from "@dashevo/wallet-lib/src/types";
+// FIXME: use dashcorelib types
+import {Mnemonic, Network} from "@dashevo/wallet-lib/src/types/types";
 import {Platform, PlatformOpts} from './Platform';
 // @ts-ignore
 import DAPIClient from "@dashevo/dapi-client"
@@ -14,7 +15,7 @@ const defaultSeeds = [
 export type DPASchema = object
 
 export interface SDKOpts {
-    network?: Network;
+    network?: Network | string;
     mnemonic?: Mnemonic | string,
     schemas?:SDKSchemas;
 }
