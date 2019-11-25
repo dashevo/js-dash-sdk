@@ -18,8 +18,8 @@
     "type": "git",
     "url": "git+https://github.com/dashevo/DashJS.git"
   },
-  "author": "Dashevo",
-  "license": "ISC",
+  "author": "Dash Core Group <contact@dash.org>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dashevo/DashJS/issues"
   },
