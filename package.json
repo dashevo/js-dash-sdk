@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node build/index.js",
-    "start:dev": "nodemon",
+    "start:dev": "nodemon --exec 'npm build && npm start'",
     "build:dev": "webpack -d --display-error-details --progress",
     "build:prod": "webpack -p --progress",
     "build:live": "nodemon --exec 'ts-node' examples/usage1.js",
@@ -36,6 +36,7 @@
     "@types/node": "^12.12.12",
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
+    "nodemon": "^2.0.1",
     "rimraf": "^3.0.0",
     "ts-loader": "^6.2.0",
     "ts-node": "^8.5.2",
