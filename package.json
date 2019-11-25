@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/dashevo/DashJS#readme",
   "dependencies": {
-    "@dashevo/dashcore-lib": "^0.17.12",
+    "@dashevo/dashcore-lib": "https://github.com/dashevo/dashcore-lib",
     "@dashevo/dapi-client": "^0.7.0",
     "@dashevo/wallet-lib": "^4.1.1",
     "@dashevo/dpp": "^0.9.0"
