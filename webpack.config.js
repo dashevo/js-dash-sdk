@@ -8,6 +8,8 @@ module.exports = {
     devtool: 'cheap-module-source-map',
     // mode: 'development',
     mode: "production",
+    // fixes : Module not found : 'fs' in winston.
+    target: 'node',
     module: {
         rules: [
             {
