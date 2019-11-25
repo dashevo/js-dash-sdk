@@ -6,7 +6,7 @@
 > Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)
 
 
-DashJS allow you to transact on L1 or fetch/register documents on L2 within a single library, including management and signing of your documents.  
+DashJS allows you to transact on L1 or fetch/register documents on L2 within a single library, including management and signing of your documents.
 
 Find more in the : 
 - [Documentation](https://dashevo.github.io/DashJS/#/)
@@ -50,20 +50,19 @@ async function readDocument() {
 
 ## In a nutshell 
 
-- If you use multiples contracts, fetchDocuments is done using dot-locator `dashpay.profile` and passing a named-schemas object.
+- If you use multiple contracts, fetchDocuments is done using dot-locator `dashpay.profile` and passing a named-schemas object.
    See more on how to [work with multiples contracts in details](https://dashevo.github.io/DashJS/#/getting-started/multiples-schemas)
 
 ## Dependencies 
 
-DashJS works using multiples dependencies that might interests you :   
+DashJS works using multiple dependencies that might interest you :
 - [Wallet-Lib](https://github.com/dashevo/wallet-lib) - Wallet management for handling, signing and broadcasting transactions (HD44).
 - [Dashcore-Lib](https://github.com/dashevo/dashcore-lib) - Providing the main primitives (Block, Transaction,...).
 - [DAPI-Client](https://github.com/dashevo/dapi-client) - Client library for accessing DAPI endpoints.
 - [DPP](https://github.com/dashevo/js-dpp) - Implementation (JS) of Dash Platform Protocol.
 
-Some features might be more extensive in those libs, as DashJS only intend to wrap around them by providing a single interface that is easy to use (thus with less features).
+Some features might be more extensive in those libs, as DashJS only wraps around them to provide a single interface that is easy to use (and thus has less features).
 
 ## Licence
 
 [MIT](/LICENCE.md) © Dash Core Group, Inc.
-
