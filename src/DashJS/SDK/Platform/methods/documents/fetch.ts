@@ -13,6 +13,7 @@ export function fetch(this: Platform, typeLocator: string, opts: fetchOpts): any
 
     //We can either provide of type `dashpay.profile` or if only one schema provided, of type `profile`.
     const [contractName, fieldType] = (typeLocator.includes('.')) ? typeLocator.split('.') : [contractsName[0], typeLocator];
+    // FIXME: we may later want a hashmap of schemas and contract IDs
     this.dpp.setContract(this.schemas[contractName]);
 
     const contractId = this.dpp.getContract().getId();

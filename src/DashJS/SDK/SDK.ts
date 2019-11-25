@@ -60,7 +60,7 @@ export class SDK {
     }
 
     getDAPIInstance(){
-        if (!!this.clients['dapi']) {
+        if (this.clients['dapi'] == undefined) {
             throw new Error(`There is no client DAPI`);
         }
         return this.clients['dapi'];
