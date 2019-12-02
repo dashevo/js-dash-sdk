@@ -23,8 +23,8 @@ module.exports = {
         extensions: ['.ts', '.js', '.json'],
     },
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+        filename: 'dash.min.js',
+        path: path.resolve(__dirname, 'lib'),
     },
     plugins: [
         // new BundleAnalyzerPlugin(),
