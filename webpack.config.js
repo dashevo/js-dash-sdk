@@ -24,7 +24,7 @@ module.exports = {
     },
     output: {
         filename: 'dash.min.js',
-        path: path.resolve(__dirname, 'lib'),
+        path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
         // new BundleAnalyzerPlugin(),

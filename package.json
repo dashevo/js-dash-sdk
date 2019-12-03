@@ -2,12 +2,12 @@
   "name": "dashjs",
   "version": "1.0.0",
   "description": "Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)",
-  "main": "index.js",
+  "main": "dist/dash.min.js",
   "scripts": {
     "start:dev": "nodemon --exec 'npm run build:dev && npm run test:ts'",
     "build:dev": "webpack -d --display-error-details --progress",
     "build:prod": "webpack -p --display-error-details --progress",
-    "test": "npm run test:ts && npm run build && npm run test:js",
+    "test": "npm run test:ts && npm run build:prod && npm run test:js",
     "test:ts": "mocha -r ts-node/register \"src/**/*.spec.ts\"",
     "test:js": "mocha --recursive tests/**/*.js"
   },
