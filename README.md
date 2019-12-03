@@ -52,7 +52,7 @@ Having [NodeJS](https://nodejs.org/) installed, just type : `npm install @dashev
 For browser usage, you can also directly rely on unpkg : 
 
 ```
-<script src="https://unpkg.com/dashjs"></script>
+<script src="https://unpkg.com/dash"></script>
 ```
 
 ## Usage

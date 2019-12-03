@@ -1,5 +1,5 @@
 {
-  "name": "dashjs",
+  "name": "dash",
   "version": "1.0.0",
   "description": "Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)",
   "main": "dist/dash.min.js",
