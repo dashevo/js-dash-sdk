@@ -1,6 +1,6 @@
-import DashJS from "../src/index";
-import schema from "./schema.json";
-import {SDKOpts} from "../src/DashJS/SDK/SDK";
+import DashJS from "../../src";
+import schema from "../schema.json";
+import {SDKOpts} from "../../src/DashJS/SDK/SDK";
 
 const network = "testnet";
 const opts: SDKOpts = {
