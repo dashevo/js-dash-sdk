@@ -2,7 +2,8 @@
   "name": "dash",
   "version": "1.0.0",
   "description": "Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)",
-  "main": "dist/dash.min.js",
+  "main": "dist/dash.cjs.min.js",
+  "unpkg": "dist/dash.min.js",
   "scripts": {
     "start:dev": "nodemon --exec 'npm run build:dev && npm run test:ts'",
     "build:dev": "webpack -d --display-error-details --progress",
@@ -22,10 +23,10 @@
   },
   "homepage": "https://github.com/dashevo/DashJS#readme",
   "dependencies": {
-    "@dashevo/dashcore-lib": "https://github.com/dashevo/dashcore-lib",
+    "@dashevo/dashcore-lib": "^0.18.0",
     "@dashevo/dapi-client": "^0.7.0",
     "@dashevo/wallet-lib": "^4.1.1",
-    "@dashevo/dpp": "^0.9.0"
+    "@dashevo/dpp": "^0.9.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.5",
@@ -40,6 +41,7 @@
     "typescript": "^3.7.2",
     "webpack": "^4.41.0",
     "webpack-bundle-analyzer": "^3.5.2",
-    "webpack-cli": "^3.3.9"
+    "webpack-cli": "^3.3.9",
+    "webpack-node-externals": "^1.7.2"
   }
 }
