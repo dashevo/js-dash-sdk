@@ -1,9 +1,9 @@
 Code of Conduct
 ===============
 
-This is an open-source repository that intends to provide valuable features to the users and developers.  
+This is an open-source repository that intends to provide valuable features to users and developers.  
 As such, we remember that we were all juniors and therefore we expect all contributors to be welcoming to contributions being made and improvements being proposed. We expect contributors to follow the same rules.  
-It's a virtual workplace, where we interact in ways that contribute to an healthy community, and we will maintain this repository as a harassment-free experience.  
+This is a virtual workplace, where we interact in ways that contribute to a healthy community, and we will maintain this repository as a harassment-free experience.  
 
 ## Our Standards
 
