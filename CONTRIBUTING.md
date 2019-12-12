@@ -29,7 +29,7 @@ By participating, you are expected to uphold this code. Please report unacceptab
 
 #### Conventional Commits
 
-A valid PR expects it's commits and title to fit with the conventional commits standard, here is the valid types : 
+A valid PR's commits and title are expected to comply with the conventional commits standard. The valid types are : 
 
 - **feat** (Features): Used for a new feature being implemented
 - **fix** (Bug Fixes): Used for bug fixes
@@ -50,14 +50,14 @@ Examples :
 - impr(Document): parsing handle schema validation
 - fix(Document): parsing leak memory fixed
 
-Try to mind that we deeply rely on commit title to follow changes and research previous modification.   
-Don't hesitate to use commit message to tell more about the changes.   
+Please remember that we depend on commit titles to follow changes and research previous modifications.   
+Don't hesitate to use commit messages to explain more about the changes.   
 
 #### Issues
 
-* Demonstrating the issue by creating a JSFiddle (you can inherit DashJS from unpkg) is definitively welcome. 
-* **Title follows Use a clear and descriptive title** for the issue to identify the suggestion.
-* **Provide a comprehensive description of the suggested enhancement** in as much detail as possible. (a template is automatically generated for you on creating an issue / pr)
+* Demonstrating the issue by creating a JSFiddle (you can inherit DashJS from unpkg) is definitely welcome. 
+* **Use a clear and descriptive title** for the issue to identify the suggestion.
+* **Provide a comprehensive description of the suggested enhancement** in as much detail as possible. (a template is automatically generated for you when creating an issue / pr)
 * (If applicable) **Provide specific examples to demonstrate the steps**.
 
 #### Pull Requests
