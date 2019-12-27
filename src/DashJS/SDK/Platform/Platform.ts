@@ -3,7 +3,7 @@ import DashPlatformProtocol from "@dashevo/dpp";
 import {Mnemonic, Network} from "@dashevo/wallet-lib/src/types/types";
 // @ts-ignore
 import DAPIClient from "@dashevo/dapi-client"
-import {SDKClients, SDKSchemas} from "../SDK";
+import {SDKClients, SDKApps} from "../SDK";
 
 import broadcastDocument from "./methods/documents/broadcast";
 import createDocument from "./methods/documents/create";
@@ -21,7 +21,7 @@ import searchIdentity from "./methods/identities/search";
 
 export interface PlatformOpts {
     client: DAPIClient,
-    schemas: SDKSchemas
+    apps: SDKApps
 }
 
 
@@ -44,7 +44,7 @@ export class Platform {
         fetch:Function
     };
     client: DAPIClient;
-    schemas: SDKSchemas;
+    apps: SDKApps;
 
     constructor(platformOpts: PlatformOpts) {
         // @ts-ignore
@@ -68,6 +68,6 @@ export class Platform {
         };
         this.dpp = new DashPlatformProtocol(platformOpts);
         this.client = platformOpts.client;
-        this.schemas = platformOpts.schemas;
+        this.apps = platformOpts.apps;
     }
 }

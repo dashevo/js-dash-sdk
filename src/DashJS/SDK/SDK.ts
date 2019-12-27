@@ -14,9 +14,9 @@ const defaultSeeds = [
 export type DPASchema = object
 
 export interface SDKOpts {
-    network?: Network | string;
+    network?: Network | string,
     mnemonic?: Mnemonic | string,
-    schemas?:SDKSchemas;
+    apps?: SDKApps
 }
 
 export type SDKClient = object | DAPIClient;
@@ -25,8 +25,11 @@ export interface SDKClients {
     [name: string]: SDKClient,
     dapi: DAPIClient
 }
-export interface SDKSchemas {
-    [name:string]: DPASchema
+export interface SDKApps {
+    [name:string]: {
+        contractId: number,
+        schema: DPASchema
+    }
 }
 
 export class SDK {
@@ -34,11 +37,11 @@ export class SDK {
     public wallet: Wallet | undefined;
     public platform: Platform | undefined;
     private readonly clients: SDKClients;
-    private readonly schemas: SDKOpts['schemas'];
+    private readonly apps: SDKApps;
 
     constructor(opts: SDKOpts = {}) {
         this.network = opts.network || 'testnet';
-        this.schemas = opts.schemas;
+        this.apps = opts.apps || {};
         this.clients = {
             dapi: new DAPIClient(Object.assign({
                 seeds: defaultSeeds,
@@ -50,10 +53,10 @@ export class SDK {
             // @ts-ignore
             this.wallet = new Wallet({...opts, offlineMode: !(opts.mnemonic)});
         }
-        if(opts.schemas!== undefined){
+        if(opts.apps !== undefined && Object.entries(opts.apps).length > 0){
             let platformOpts: PlatformOpts = {
                 client: this.getDAPIInstance(),
-                schemas : this.getSchemas()
+                apps : this.getApps()
             };
             this.platform = new Platform(platformOpts)
         }
@@ -65,16 +68,16 @@ export class SDK {
         }
         return this.clients['dapi'];
     }
-    addSchema(schemaName: string, schemaData: object){
-        if(this.clients[schemaName]){
-            throw new Error(`There is already a schema named ${schemaName}`);
+    addApp(appName: string, contractId: number, schema: object){
+        if(this.apps[appName]){
+            throw new Error(`Already using an app named ${appName}`);
         }
-        this.clients[schemaName] = schemaData
+        this.apps[appName] = {
+            contractId,
+            schema
+        }
     }
-    getSchemas():SDKSchemas{
-        if(!this.schemas){
-            throw new Error(`No schemas set`);
-        }
-        return this.schemas;
+    getApps():SDKApps{
+        return this.apps;
     }
 }
