@@ -16,7 +16,12 @@ Let's create a DashJS SDK instance specifying both our mnemonic and the schema w
 const DashJS = require("../src");
 const opts = {
   network: 'testnet',
-  schema: require('schema.json'),
+  apps: {
+    dashpay: {
+      contractId:1234,
+      schema: require('schema.json')
+    },
+  },
   mnemonic: "arena light cheap control apple buffalo indicate rare motor valid accident isolate",
 };
 const sdk = new DashJS.SDK(opts);
@@ -24,8 +29,10 @@ const activeAccount = sdk.wallet.getAccount();
 ```
 
 Quick note :
-- If no schema is provided, the subinstance `sdk.Platform` will not be initiated.
-- If no mnemonic is provided, the subinstance `sdk.Wallet` will not be initiated.
+- If no schema or contractId is provided, the subinstance `sdk.Platform` will not be initiated.
+- If no mnemonic is provided, the subinstance `sdk.Wallet` will not be initiated (write function for platforms won't be usable).
+
+If you do not have any mnemonic, you can pass `null` to get one generated or omit that parameter to only use DashJS in `read-only`.  
 
 ## Make a payment
 

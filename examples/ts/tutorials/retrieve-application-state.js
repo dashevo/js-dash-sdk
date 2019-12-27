@@ -5,7 +5,12 @@ const network = "testnet";
 const sdkOpts = {
   network,
   mnemonic: "arena light cheap control apple buffalo indicate rare motor valid accident isolate",
-  schemas: {dashpay: schema}
+  apps: {
+    dashpay: {
+      contractId: 12345,
+      schema
+    }
+  }
 };
 const sdk = new DashJS.SDK(sdkOpts);
 // const acc = sdk.wallet.getAccount();
