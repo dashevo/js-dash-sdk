@@ -10,5 +10,11 @@ const sdkOpts = {
 const sdk = new DashJS.SDK(sdkOpts);
 
 let platform = sdk.platform;
-let user = platform.identities.get('alice');
-console.log(user);
+
+
+async function retrieveProfile(){
+  let user = await platform.identities.get('bob');
+  console.log({user});
+}
+retrieveProfile();
+
