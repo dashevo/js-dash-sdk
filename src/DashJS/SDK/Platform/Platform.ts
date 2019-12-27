@@ -18,10 +18,12 @@ import createIdentity from "./methods/identities/create";
 import getIdentity from "./methods/identities/get";
 import registerIdentity from "./methods/identities/register";
 import searchIdentity from "./methods/identities/search";
+import {Account} from "@dashevo/wallet-lib";
 
 export interface PlatformOpts {
     client: DAPIClient,
     apps: SDKApps
+    account?: Account
 }
 
 
@@ -45,6 +47,7 @@ export class Platform {
     };
     client: DAPIClient;
     apps: SDKApps;
+    account?: Account;
 
     constructor(platformOpts: PlatformOpts) {
         // @ts-ignore
@@ -69,5 +72,8 @@ export class Platform {
         this.dpp = new DashPlatformProtocol(platformOpts);
         this.client = platformOpts.client;
         this.apps = platformOpts.apps;
+        if(platformOpts.account){
+            this.account = platformOpts.account;
+        }
     }
 }
