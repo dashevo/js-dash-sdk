@@ -7,8 +7,7 @@ import DAPIClient from "@dashevo/dapi-client"
 import {Schema} from "inspector";
 
 const defaultSeeds = [
-    '18.237.69.61',
-    '18.236.234.255',
+    '18.236.131.253',
 ].map(ip => ({service: `${ip}:3000`}));
 
 
