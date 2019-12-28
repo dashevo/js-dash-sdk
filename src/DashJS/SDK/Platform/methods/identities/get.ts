@@ -1,10 +1,12 @@
 import {Platform} from "../../Platform";
 
 export async function get(this: Platform, id: string): Promise<any> {
-    // FIXME : we might want to update client definitions
     // @ts-ignore
-    return this.client.getIdentity(id);
-
+    const identityBuffer = await this.client.getIdentity(id);
+    if(identityBuffer===null){
+        return null;
+    }
+    return this.dpp.identity.createFromSerialized(identityBuffer);
 }
 
 export default get;
