@@ -67,26 +67,24 @@ export class SDK {
                 this.account = this.wallet.getAccount({index: 0});
             }
         }
-        if (opts.apps !== undefined && Object.entries(opts.apps).length > 0) {
-            let platformOpts: PlatformOpts = {
-                client: this.getDAPIInstance(),
-                apps: this.getApps()
-            };
-            const self = this;
-            if (this.account) {
-                this.account
-                    .isReady()
-                    .then(() => {
-                        // @ts-ignore
-                        self.state.isReady = true;
-                    })
-            } else {
-                // @ts-ignore
-                this.state.isReady = true;
-            }
-            this.platform = new Platform({...platformOpts, account: this.account})
-        }
 
+        let platformOpts: PlatformOpts = {
+            client: this.getDAPIInstance(),
+            apps: this.getApps()
+        };
+        const self = this;
+        if (this.account) {
+            this.account
+                .isReady()
+                .then(() => {
+                    // @ts-ignore
+                    self.state.isReady = true;
+                })
+        } else {
+            // @ts-ignore
+            this.state.isReady = true;
+        }
+        this.platform = new Platform({...platformOpts, account: this.account})
     }
 
     async isReady() {
