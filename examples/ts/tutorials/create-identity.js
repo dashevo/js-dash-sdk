@@ -15,12 +15,14 @@ const sdkOpts = {
   }
 };
 const sdk = new DashJS.SDK(sdkOpts);
+const createIdentity = async function(){
+  let platform = sdk.platform;
+  await sdk.isReady();
+  platform.identities.create('obusco').then((res)=>{
+    console.log({res});
+  });
+};
+createIdentity();
 
-let platform = sdk.platform;
-
-console.log(sdk.account.getUnusedAddress());
-platform.identities.create('obusco').then((res)=>{
-  console.log({res});
-});
 
 

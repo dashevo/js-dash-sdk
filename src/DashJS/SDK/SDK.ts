@@ -74,7 +74,8 @@ export class SDK {
             };
             const self = this;
             if (this.account) {
-                this.account.isReady()
+                this.account
+                    .isReady()
                     .then(() => {
                         // @ts-ignore
                         self.state.isReady = true;

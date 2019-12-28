@@ -14,18 +14,18 @@ export async function create(this: Platform, identityType: any): Promise<any> {
         throw new Error(`A initialized wallet is required to create an Identity.`);
     }
     const hardenedFeatureKey = account.keyChain.getHardenedDIP9FeaturePath();
-    const identityPrivateKey = hardenedFeatureKey
+    const identityHDPrivateKey = hardenedFeatureKey
         // @ts-ignore
         .deriveChild(account.index, true)
         // @ts-ignore
         .deriveChild(0, false);
+    const identityPrivateKey = identityHDPrivateKey.privateKey;
 
     const identityPublicKey = identityPrivateKey.publicKey;
-    const identityAddress = identityPrivateKey.publicKey.toAddress();
+    const identityAddress = identityPublicKey.toAddress().toString();
+    const changeAddress = account.getUnusedAddress('internal').address;
     console.log('Identity Public Key', identityPublicKey.toString());
-
-    console.log('get UTXO');
-
+    console.log('Identity Public Address', identityAddress);
 
     let selection;
     try {
@@ -42,23 +42,24 @@ export async function create(this: Platform, identityType: any): Promise<any> {
         if(balance<output.satoshis){
             throw new Error(`Not enought balance (${balance}) to cover burn amount of ${burnAmount}`)
         }
-        console.log(balance);
-        // @ts-ignore
-        // if(utxos.length===0){
-        //     throw new Error('Missing balance')
-        // }
         selection = utils.coinSelection(utxos, [output]);
-        transaction.from(selection)
+        transaction
+            .from(selection.utxos)
             .addBurnOutput(output.satoshis, identityPublicKey._getID())
             .to(identityAddress, output.satoshis)
             // @ts-ignore
-            .change(account.getUnusedAddress('internal'))
+            .change(changeAddress)
             .fee(selection.estimatedFee)
 
         console.log('Estimated fee', selection.estimatedFee)
+        const UTXOHDPrivateKey = account.getPrivateKeys(selection.utxos.map((utxo:any)=>utxo.address));
 
-        const signedTransaction = account.sign(transaction, identityPrivateKey);
-        console.log({signedTransaction})
+        // @ts-ignore
+        const signingKeys = UTXOHDPrivateKey.map((hdprivateKey)=> hdprivateKey.privateKey);
+        // signingKeys.push(identityPrivateKey);
+
+        // @ts-ignore
+        const signedTransaction = account.sign(transaction, signingKeys);
 
         throw new Error('Not implemented ');
         // const txId = await account.broadcastTransaction(transaction.serialize());
