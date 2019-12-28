@@ -15,12 +15,18 @@ const sdkOpts = {
   }
 };
 const sdk = new DashJS.SDK(sdkOpts);
-const createIdentity = async function(){
+
+const createIdentity = async function () {
   let platform = sdk.platform;
   await sdk.isReady();
-  platform.identities.create('obusco').then((res)=>{
-    console.log({res});
-  });
+
+  platform
+      .identities
+      .create('user')
+      .then((identityId) => {
+        console.log({identityId});
+      });
+
 };
 createIdentity();
 
