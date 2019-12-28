@@ -65,13 +65,12 @@ export class Platform {
         // @ts-ignore
         this.identities = {
             register: registerIdentity.bind(this),
-            create: createIdentity.bind(this),
             get: getIdentity.bind(this),
-            search: searchIdentity.bind(this),
         };
         this.dpp = new DashPlatformProtocol(platformOpts);
         this.client = platformOpts.client;
         this.apps = platformOpts.apps;
+
         if(platformOpts.account){
             this.account = platformOpts.account;
         }
