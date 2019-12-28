@@ -13,12 +13,14 @@ const sdkOpts = {
   }
 };
 const sdk = new DashJS.SDK(sdkOpts);
-// const acc = sdk.wallet.getAccount();
-readDocument();
 
 async function readDocument() {
+  await sdk.isReady();
+
   const queryOpts = {
   };
   const profile = await sdk.platform.documents.fetch('profile', queryOpts);
   console.log(profile);
 }
+
+readDocument();

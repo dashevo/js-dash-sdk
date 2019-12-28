@@ -14,10 +14,8 @@ import createContract from "./methods/contracts/create";
 import fetchContract from "./methods/contracts/fetch";
 
 
-import createIdentity from "./methods/identities/create";
 import getIdentity from "./methods/identities/get";
 import registerIdentity from "./methods/identities/register";
-import searchIdentity from "./methods/identities/search";
 import {Account} from "@dashevo/wallet-lib";
 
 export interface PlatformOpts {
