@@ -14,7 +14,7 @@ const createIdentity = async function () {
 
   platform
       .identities
-      .create('user')
+      .register('user')
       .then((identityId) => {
         console.log({identityId});
       });
