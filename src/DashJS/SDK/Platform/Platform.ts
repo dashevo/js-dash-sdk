@@ -37,10 +37,8 @@ export class Platform {
         fetch:Function
     };
     public identities: {
-        create:Function,
         get:Function,
         register:Function,
-        search:Function,
     };
     public contracts: {
         broadcast:Function,

@@ -24,9 +24,9 @@ export async function register(this: Platform, identityType: string = 'USER'): P
     const hardenedFeatureKey = account.keyChain.getHardenedDIP9FeaturePath();
     const identityHDPrivateKey = hardenedFeatureKey
         // @ts-ignore
-        .deriveChild(account.index, true)
+        .deriveChild(Identity.TYPES[identityType.toUpperCase()], true)
         // @ts-ignore
-        .deriveChild(0, false);
+        .deriveChild(account.index, false);
 
     const identityPrivateKey = identityHDPrivateKey.privateKey;
     const identityPublicKey = identityHDPrivateKey.publicKey;
