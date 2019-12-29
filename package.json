@@ -25,8 +25,8 @@
   "dependencies": {
     "@dashevo/dashcore-lib": "^0.18.0",
     "@dashevo/dapi-client": "^0.8.0-dev.14",
-    "@dashevo/wallet-lib": "https://github.com/dashevo/wallet-lib#impr/evonet",
-    "@dashevo/dpp": "^0.10.0-dev"
+    "@dashevo/wallet-lib": "^5.0.0",
+    "@dashevo/dpp": "^0.10.0-dev.14"
   },
   "devDependencies": {
     "@types/chai": "^4.2.5",
