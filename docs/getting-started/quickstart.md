@@ -29,10 +29,10 @@ const activeAccount = sdk.wallet.getAccount();
 ```
 
 Quick note :
-- If no schema or contractId is provided, the subinstance `sdk.Platform` will not be initiated.
 - If no mnemonic is provided, the subinstance `sdk.Wallet` will not be initiated (write function for platforms won't be usable).
 
 If you do not have any mnemonic, you can pass `null` to get one generated or omit that parameter to only use DashJS in `read-only`.  
+
 
 ## Make a payment
 
