@@ -16,6 +16,10 @@ import fetchContract from "./methods/contracts/fetch";
 
 import getIdentity from "./methods/identities/get";
 import registerIdentity from "./methods/identities/register";
+
+import getName from "./methods/names/get";
+import registerName from "./methods/names/register";
+
 import {Account} from "@dashevo/wallet-lib";
 
 export interface PlatformOpts {
@@ -60,6 +64,11 @@ export class Platform {
             create: createContract.bind(this),
             fetch: fetchContract.bind(this),
         };
+        // @ts-ignore
+        this.names = {
+            register: registerName.bind(this),
+            get: getName.bind(this),
+        }
         // @ts-ignore
         this.identities = {
             register: registerIdentity.bind(this),
