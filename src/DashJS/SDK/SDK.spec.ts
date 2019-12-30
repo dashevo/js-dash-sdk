@@ -4,7 +4,7 @@ import 'mocha';
 import schema from '../../../tests/fixtures/dp1.schema.json'
 const mnemonic = 'agree country attract master mimic ball load beauty join gentle turtle hover';
 describe('DashJS - SDK', function suite() {
-  this.timeout(6000);
+  this.timeout(10000);
   it('should provide expected class', function () {
     expect(SDK.name).to.be.equal('SDK');
     expect(SDK.constructor.name).to.be.equal('Function');
