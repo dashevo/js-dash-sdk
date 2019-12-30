@@ -25,7 +25,9 @@ const opts = {
   mnemonic: "arena light cheap control apple buffalo indicate rare motor valid accident isolate",
 };
 const sdk = new DashJS.SDK(opts);
-const activeAccount = sdk.wallet.getAccount();
+sdk.isReady().then(()=>{
+    const activeAccount = sdk.account;
+ });
 ```
 
 Quick note :
@@ -48,6 +50,6 @@ activeAccount
 
 ```js
 activeAccount.platform
-  .fetchDocuments('profile', {name:'bob'})
+  .documents.fetch('dashpay.profile', {name:'bob'})
   .then((profile)=> console.log(profile));
 ```

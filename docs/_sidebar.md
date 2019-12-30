@@ -16,13 +16,4 @@
         - [Signing, Encrypt and Decrypt](wallet/signing-encrypt.md)
     - [Dashcore Primitives](usage/dashcorelib-primitives.md)
 
-- Walkthroughs
-    - [Receive payment as a merchant](walkthroughs/receive-payment-as-a-merchant/receive-payment-as-a-merchant.md)
-    - [Automatically consolidate UTXO](walkthroughs/automatically-consolidate-UTXO/automatically-consolidate-UTXO.md)
-    - [Fetch documents on front-end (Memo.dash)](walkthroughs/fetch-documents-on-front-end/fetch-documents-on-front-end.md)
-    - [Transaction with scripts (OP-RETURN)](walkthroughs/transactions-with-scripts/transactions-with-scripts.md)
-    - [Create/broadcast a contract](walkthroughs/create-broadcast-contracts/create-broadcast-contracts.md)
-    - [Get Raw Transaction, Blocks,...](walkthroughs/get-public-data/get-public-data.md)
-    
-- [Changelog](changelog.md)
-- [License](#license)
+- [License](LICENSE)
