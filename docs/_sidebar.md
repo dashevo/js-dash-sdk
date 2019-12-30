@@ -10,6 +10,7 @@
         - [Identities](platform/identities.md)
         - [Contracts](platform/contracts.md)
         - [Documents](platform/documents.md)
+        - [Names](platform/names.md)
     - [Wallet](wallet/about-wallet-lib.md)
         - [Accounts](wallet/accounts.md)
         - [Payments](wallet/payments.md)
