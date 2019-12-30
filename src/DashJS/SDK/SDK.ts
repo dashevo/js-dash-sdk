@@ -17,7 +17,8 @@ export type DPASchema = object
 export interface SDKOpts {
     network?: Network | string,
     mnemonic?: Mnemonic | string,
-    apps?: SDKApps
+    apps?: SDKApps,
+    accountIndex?: number,
 }
 
 export type SDKClient = object | DAPIClient;
@@ -40,6 +41,7 @@ export class SDK {
     public wallet: Wallet | undefined;
     public account: Account | undefined;
     public platform: Platform | undefined;
+    public accountIndex: number = 0;
     private readonly clients: SDKClients;
     private readonly apps: SDKApps;
     public state: { isReady: boolean };
@@ -63,8 +65,8 @@ export class SDK {
             // @ts-ignore
             this.wallet = new Wallet({...opts, transport: this.clients.dapi});
             if (this.wallet) {
-                // TODO: index as an options
-                this.account = this.wallet.getAccount({index: 0});
+                let accountIndex = (opts.accountIndex!==undefined) ? opts.accountIndex : 0;
+                this.account = this.wallet.getAccount({index: accountIndex});
             }
         }
 
