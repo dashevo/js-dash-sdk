@@ -21,12 +21,18 @@ export async function register(this: Platform, identityType: string = 'USER'): P
     if (account === undefined) {
         throw new Error(`A initialized wallet is required to create an Identity.`);
     }
-    const hardenedFeatureKey = account.keyChain.getHardenedDIP9FeaturePath();
-    const identityHDPrivateKey = hardenedFeatureKey
+    const hardenedFeatureRootKey = account.keyChain.getHardenedDIP9FeaturePath();
+
+    // Feature 5 : identity.
+    const identityFeatureKey = hardenedFeatureRootKey.deriveChild(5, true);
+
+    const identityHDPrivateKey = identityFeatureKey
         // @ts-ignore
-        .deriveChild(Identity.TYPES[identityType.toUpperCase()], true)
+        .deriveChild(account.index, true)
         // @ts-ignore
-        .deriveChild(account.index, false);
+        .deriveChild(Identity.TYPES[identityType.toUpperCase()], false)
+        // @ts-ignore
+        .deriveChild(0, false);
 
     const identityPrivateKey = identityHDPrivateKey.privateKey;
     const identityPublicKey = identityHDPrivateKey.publicKey;

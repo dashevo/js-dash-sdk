@@ -1,9 +1,9 @@
 ## About Identities
 
-DPNS is a special Dash Platform Application that is intended to provide a naming service for the Application Chain.  
+Identities are blockchain-based identitiers for individuals (user) and applications.  
+Identity is the atomic elements that linked with additional applications can be extended toward providing new functionnalities.   
 
-Decoupling from the Blockchain identity allow to provide a unique user experience coupled with the highest security while remaining compatible with Identity Standard.
-
+Read more on [DPNS Name Service](/platform/names) that leverages Identity to allow you to create name-based user experiences.
 
 ## Registering a new identity (User, Application ID)
 
@@ -12,11 +12,11 @@ Identity can be of multiple type, supported by this SDK, you will find these two
 - User Identity as type `USER`
 - Application Identity as type `APPLICATION`
 
-
 ```js
-// Assuming third account used (index:2), DIP9 path used on livenet would be be : "m/9'/5'/0'/2
+// Assuming first user id created on our third HDWallet account (index:2)
 const alice = sdk.platform.identities.register('user');
-// Assuming third account used (index:2), DIP9 path used on livenet would be be : "m/9'/5'/1'/2
+
+// Assuming first application id created on our third HDWallet account (index:2).
 const appId = sdk.platform.identities.register('application');
 ```   
 
