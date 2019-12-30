@@ -11,7 +11,7 @@ import fetchDocument from "./methods/documents/fetch";
 
 import broadcastContract from "./methods/contracts/broadcast";
 import createContract from "./methods/contracts/create";
-import fetchContract from "./methods/contracts/fetch";
+import getContract from "./methods/contracts/get";
 
 
 import getIdentity from "./methods/identities/get";
@@ -47,7 +47,7 @@ export class Platform {
     public contracts: {
         broadcast:Function,
         create:Function,
-        fetch:Function
+        get:Function
     };
     client: DAPIClient;
     apps: SDKApps;
@@ -62,7 +62,7 @@ export class Platform {
         this.contracts = {
             broadcast: broadcastContract.bind(this),
             create: createContract.bind(this),
-            fetch: fetchContract.bind(this),
+            get: getContract.bind(this),
         };
         this.names = {
             register: registerName.bind(this),
