@@ -36,7 +36,7 @@ For browser usage, you can also directly rely on unpkg :
 ## Usage
 
 ```js
-import DashJS from "@dashevo/dashjs"; 
+import DashJS from "dash"; 
 import schema from "./schema.json";
 
 const network = "testnet";
