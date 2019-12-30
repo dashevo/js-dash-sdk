@@ -40,6 +40,10 @@ export class Platform {
         get:Function,
         register:Function,
     };
+    public names: {
+        get:Function,
+        register:Function,
+    };
     public contracts: {
         broadcast:Function,
         create:Function,
@@ -50,24 +54,20 @@ export class Platform {
     account?: Account;
 
     constructor(platformOpts: PlatformOpts) {
-        // @ts-ignore
         this.documents = {
             broadcast: broadcastDocument.bind(this),
             create: createDocument.bind(this),
             fetch: fetchDocument.bind(this),
         };
-        // @ts-ignore
         this.contracts = {
             broadcast: broadcastContract.bind(this),
             create: createContract.bind(this),
             fetch: fetchContract.bind(this),
         };
-        // @ts-ignore
         this.names = {
             register: registerName.bind(this),
             get: getName.bind(this),
         }
-        // @ts-ignore
         this.identities = {
             register: registerIdentity.bind(this),
             get: getIdentity.bind(this),
