@@ -31,7 +31,7 @@ export interface SDKClients {
 
 export interface SDKApps {
     [name: string]: {
-        contractId: number,
+        contractId: string,
         schema: DPASchema
     }
 }
@@ -109,7 +109,7 @@ export class SDK {
         return this.clients['dapi'];
     }
 
-    addApp(appName: string, contractId: number, schema: object) {
+    addApp(appName: string, contractId: string, schema: object) {
         if (this.apps[appName]) {
             throw new Error(`Already using an app named ${appName}`);
         }

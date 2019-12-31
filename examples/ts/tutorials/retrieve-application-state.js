@@ -5,8 +5,8 @@ const network = "testnet";
 const sdkOpts = {
   network,
   apps: {
-    dashpay: {
-      contractId: 12345,
+    dpns: {
+      contractId: '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse',
       schema
     }
   }
@@ -17,8 +17,9 @@ async function readDocument() {
   await sdk.isReady();
 
   const queryOpts = {
+
   };
-  const profile = await sdk.platform.documents.fetch('profile', queryOpts);
+  const profile = await sdk.platform.documents.get('dpns.domain', queryOpts);
   console.log(profile);
 }
 
