@@ -21,10 +21,6 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
         throw new Error(`No app named ${appName} specified.`)
     }
     const app = this.apps[appName];
-    if (!app.schema) {
-        throw new Error(`Missing schema for ${appName}`)
-    }
-    const schema = app.schema;
     if (!app.contractId) {
         throw new Error(`Missing contract ID for ${appName}`)
     }
@@ -33,6 +29,7 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
         // @ts-ignore
         const rawDataList = await this.client.getDocuments(contractId, fieldType, opts);
         const documents: any[] = [];
+
         for (const rawData of rawDataList) {
             documents.push(await this.dpp.document.createFromSerialized(rawData, {skipValidation: true}));
         }

@@ -49,7 +49,13 @@ export class SDK {
     constructor(opts: SDKOpts = {}) {
 
         this.network = (opts.network !== undefined) ? opts.network.toString() : 'testnet';
-        this.apps = opts.apps || {};
+        this.apps = Object.assign({
+            dpns: {
+                contractId: '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse'
+            }
+        }, opts.apps);
+        console.log(this.apps);
+
         this.state = {
             isReady: false
         };
@@ -86,7 +92,7 @@ export class SDK {
             // @ts-ignore
             this.state.isReady = true;
         }
-        this.platform = new Platform({...platformOpts, account: this.account})
+        this.platform = new Platform({...platformOpts, account: this.account, wallet: this.wallet})
     }
 
     async isReady() {
