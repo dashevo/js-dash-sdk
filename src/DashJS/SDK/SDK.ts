@@ -92,7 +92,11 @@ export class SDK {
             // @ts-ignore
             this.state.isReady = true;
         }
-        this.platform = new Platform({...platformOpts, account: this.account, wallet: this.wallet})
+        this.platform = new Platform({
+            ...platformOpts,
+            network: this.network,
+            account: this.account,
+        })
     }
 
     async isReady() {

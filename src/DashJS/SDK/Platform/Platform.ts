@@ -25,7 +25,8 @@ import {Account} from "@dashevo/wallet-lib";
 export interface PlatformOpts {
     client: DAPIClient,
     apps: SDKApps
-    account?: Account
+    account?: Account,
+    network?: string
 }
 
 
@@ -52,6 +53,7 @@ export class Platform {
     client: DAPIClient;
     apps: SDKApps;
     account?: Account;
+    network?: string;
 
     constructor(platformOpts: PlatformOpts) {
         this.documents = {
@@ -75,6 +77,7 @@ export class Platform {
         this.dpp = new DashPlatformProtocol(platformOpts);
         this.client = platformOpts.client;
         this.apps = platformOpts.apps;
+        this.network = platformOpts.network;
 
         if(platformOpts.account){
             this.account = platformOpts.account;
