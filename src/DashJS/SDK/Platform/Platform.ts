@@ -7,7 +7,6 @@ import {SDKClients, SDKApps} from "../SDK";
 
 import broadcastDocument from "./methods/documents/broadcast";
 import createDocument from "./methods/documents/create";
-import fetchDocument from "./methods/documents/fetch";
 import getDocument from "./methods/documents/get";
 
 import broadcastContract from "./methods/contracts/broadcast";
@@ -35,7 +34,6 @@ export class Platform {
     public documents: {
         broadcast:Function,
         create:Function,
-        fetch:Function,
         get:Function,
     };
     public identities: {
@@ -59,7 +57,6 @@ export class Platform {
         this.documents = {
             broadcast: broadcastDocument.bind(this),
             create: createDocument.bind(this),
-            fetch: fetchDocument.bind(this),
             get: getDocument.bind(this),
         };
         this.contracts = {
