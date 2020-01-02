@@ -36,7 +36,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(sdkInstance.platform.dpp).to.exist;
     expect(sdkInstance.platform.client).to.exist;
   });
-  it('should swiftly be ready', (done) => {
+  it('should be ready quickly', (done) => {
     let timer = setTimeout(() => {
       done(new Error('Should have been initialized in time'));
     }, 5000);
@@ -94,10 +94,11 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
   it('should wait for block to may be be mined',  function (done) {
     setTimeout(()=>{
       done();
-    }, 160000)
+    }, 30000)
   });
   it('should retrieve it\'s identity' , async function () {
     const getDocument = await sdkInstance.platform.names.get(username);
+    console.log(getDocument);
     expect(getDocument.revision).to.equal(1);
     expect(getDocument.type).to.equal('domain');
     expect(getDocument.userId).to.equal(createdIdentityId);
@@ -106,7 +107,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(getDocument.data.normalizedParentDomainName).to.equal('dash');
   });
   it('should retrieve a document', async function () {
-    const doc = await sdkInstance.platform.documents.get('dpns.domain', {where:[
+    const [doc] = await sdkInstance.platform.documents.get('dpns.domain', {where:[
         ["normalizedParentDomainName","==","dash"],
         ["normalizedLabel","==",username.toLowerCase()],
       ]})
