@@ -3,12 +3,23 @@ import {Platform} from "../../Platform";
 declare type ContractIdentifier = string;
 
 export async function get(this: Platform, identifier: ContractIdentifier): Promise<any> {
-    // TODO : if identifier is contractId then fetch directly
-    // if not, fetch from dpns the contract id and fetch it
+    let localContract;
 
-    // @ts-ignore
-    const contract = await this.client.getDataContract(identifier);
-    return this.dpp.dataContract.createFromSerialized(contract);
+    for (let appName in this.apps) {
+        const app = this.apps[appName];
+        if (app.contractId === identifier && app.contract !== undefined) {
+            localContract = app;
+        }
+    }
+
+    if (localContract) {
+        return localContract.contract;
+    } else {
+        // @ts-ignore
+        const rawContract = await this.client.getDataContract(identifier)
+        const contract = this.dpp.dataContract.createFromSerialized(rawContract);
+        return this.apps[Date.now()] = {contractId: identifier, contract};
+    }
 }
 
 export default get;
