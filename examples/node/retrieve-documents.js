@@ -1,4 +1,4 @@
-import DashJS from '../../../src';
+import DashJS from '../../src';
 
 const sdkOpts = {
   network: 'testnet'
@@ -9,7 +9,7 @@ const getDocuments = async function () {
   let platform = sdk.platform;
   await sdk.isReady();
 
-  const dpnsDomains = await platform.documents.get('dpns.domain', {});
+  const documents = await platform.documents.get('dpns.domain', {});
   console.dir({documents},{depth:5});
 };
 getDocuments();

@@ -1,4 +1,4 @@
-import DashJS from '../../../src';
+import DashJS from '../../src';
 
 const sdkOpts = {
   network: 'testnet',
