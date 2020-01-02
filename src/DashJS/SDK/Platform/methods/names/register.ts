@@ -19,8 +19,6 @@ export async function register(this: Platform,
 
     // @ts-ignore
     const identityPrivateKey = identityHDPrivateKey.privateKey;
-    // @ts-ignore
-    const identityPublicKey = identityHDPrivateKey.publicKey;
 
     const records = {dashIdentity: identity.id};
 

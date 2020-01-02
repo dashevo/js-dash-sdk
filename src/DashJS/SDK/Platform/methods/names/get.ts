@@ -1,7 +1,6 @@
 import {Platform} from "../../Platform";
 
 export async function get(this: Platform, id: string): Promise<any> {
-    // }
     const queryOpts = {
         where: [
             ['normalizedLabel', '==', id.toLowerCase()],
