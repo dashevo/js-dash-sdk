@@ -91,11 +91,6 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(createDocument.data.label).to.equal(username)
     expect(createDocument.data.normalizedParentDomainName).to.equal('dash');
   });
-  it('should wait for block to may be be mined',  function (done) {
-    setTimeout(()=>{
-      done();
-    }, 30000)
-  });
   it('should retrieve it\'s identity' , async function () {
     const getDocument = await sdkInstance.platform.names.get(username);
     console.log(getDocument);
