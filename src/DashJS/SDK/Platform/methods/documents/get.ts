@@ -1,6 +1,4 @@
 import {Platform} from "../../Platform";
-// @ts-ignore
-import Document from "@dashevo/dpp/lib/document/Document";
 
 declare interface fetchOpts {
     where: any;
