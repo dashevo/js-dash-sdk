@@ -54,7 +54,6 @@ export class SDK {
                 contractId: '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse'
             }
         }, opts.apps);
-        console.log(this.apps);
 
         this.state = {
             isReady: false,
@@ -110,7 +109,9 @@ export class SDK {
                 console.error(e);
             }
         }
-        Promise.all(promises).then(() => this.state.isReady = true);
+        Promise
+            .all(promises)
+            .then((res) => {this.state.isReady = true});
     }
 
     async isReady() {
@@ -119,18 +120,27 @@ export class SDK {
         return new Promise(((resolve) => {
             // @ts-ignore
             if (self.state.isAccountReady && self.state.isReady) return resolve(true);
-            // @ts-ignore
-            self.account.isReady().then(() => {
-                if (!self.state.isReady) {
-                    const isReadyInterval = setInterval(() => {
+
+            const promises = [];
+
+            if(!self.state.isAccountReady){
+                // @ts-ignore
+                promises.push(self.account.isReady());
+            }
+            if(!self.state.isReady){
+                const p = new Promise((res)=>{
+                    let isReadyInterval = setInterval(() => {
                         if (self.state.isReady) {
                             clearInterval(isReadyInterval);
-                            resolve(true);
+                            res(true);
                         }
                     }, 100);
-                } else {
-                    resolve(true)
-                }
+                })
+                promises.push(p);
+            }
+
+            Promise.all(promises).then((promisesResults)=>{
+                resolve(true);
             });
         }));
     }
