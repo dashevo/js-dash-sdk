@@ -9,12 +9,7 @@ const getDocuments = async function () {
   let platform = sdk.platform;
   await sdk.isReady();
 
-  platform
-      .documents
-      .get('dpns.domain', {})
-      .then((documents) => {
-        console.dir({documents},{depth:5});
-      });
-
+  const dpnsDomains = await platform.documents.get('dpns.domain', {});
+  console.dir({documents},{depth:5});
 };
 getDocuments();
