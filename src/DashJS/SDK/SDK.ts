@@ -16,7 +16,7 @@ export type DPASchema = object
 
 export interface SDKOpts {
     network?: Network | string,
-    mnemonic?: Mnemonic | string,
+    mnemonic?: Mnemonic | string | null,
     apps?: SDKApps,
     accountIndex?: number,
 }
@@ -102,8 +102,7 @@ export class SDK {
         for (let appName in this.apps) {
             const app = this.apps[appName];
             try {
-                const p = this.platform?.contracts.get(app.contractId)
-                    .then((contract: object) => app.contract = contract);
+                const p = this.platform?.contracts.get(app.contractId);
                 promises.push(p);
             } catch (e) {
                 console.error(e);
