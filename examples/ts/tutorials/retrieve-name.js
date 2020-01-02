@@ -8,8 +8,8 @@ const sdk = new DashJS.SDK(sdkOpts);
 
 const platform = sdk.platform;
 
-async function retrieveProfile(){
-  const user = await platform.names.get('dana');
+async function retrieveName(){
+  const user = await platform.names.get('alice');
   console.dir({user}, {depth:5});
 }
-retrieveProfile();
+retrieveName();

@@ -13,8 +13,8 @@ const getContract = async function () {
   platform
       .contracts
       .get('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse')
-      .then((identity) => {
-        console.log({identity});
+      .then((contract) => {
+        console.dir({contract},{depth:5});
       });
 
 };
