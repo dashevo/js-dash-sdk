@@ -5,7 +5,7 @@
 Allow to fetch documents of a certains type specified by the schema contract provided. 
 
 ```js
-const doc = await sdk.platform.documents.fetch('dashpay.profile',{});
+const doc = await sdk.platform.documents.get('dashpay.profile',{});
 ```  
 
 `fetch(type,queryOpts)`
@@ -22,7 +22,7 @@ const doc = await sdk.platform.documents.fetch('dashpay.profile',{});
 ## Creating a document
 
 ```js
-const doc = sdk.platform.documents.create(data);
+const doc = sdk.platform.documents.create(locator, data);
 ```   
 
 ## Broadcasting a document

@@ -42,8 +42,13 @@ export async function register(this: Platform,
         saltedDomainHashBuffer,
     ).toString('hex');
 
-    const dataContract = await this.contracts.get('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse');
-
+    if(!this.apps.dpns.contractId){
+        throw new Error('DPNS is required to register a new name.');
+    }
+    const dataContract = await this.contracts.get(this.apps.dpns.contractId);
+    if(!dataContract){
+        throw new Error('DPNS Contract not loaded. Cannot register.');
+    }
     // 1. Create preorder document
     const preorderDocument = dpp.document.create(
         dataContract,
