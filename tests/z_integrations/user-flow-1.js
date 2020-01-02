@@ -11,7 +11,7 @@ let createdIdentity;
 
 const year = chance.birthday({string: true}).slice(-2);
 const firstname = chance.first();
-const username = `CI-${firstname}${year}`;
+const username = `test-${firstname}${year}`;
 
 const sdkOpts = {
   network: fixtures.network,
