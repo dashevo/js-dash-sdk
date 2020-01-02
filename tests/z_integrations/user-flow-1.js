@@ -11,7 +11,7 @@ let createdIdentity;
 
 const year = chance.birthday({string: true}).slice(-2);
 const firstname = chance.first();
-const username = `${firstname}${year}`;
+const username = `CI-${firstname}${year}`;
 
 const sdkOpts = {
   network: fixtures.network,
@@ -113,6 +113,8 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(doc.data.label).to.equal(username)
     expect(doc.data.normalizedParentDomainName).to.equal('dash');
   });
-
+  it('should disconnect', async function () {
+    await sdkInstance.disconnect();
+  });
 });
 

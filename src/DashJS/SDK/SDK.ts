@@ -144,6 +144,13 @@ export class SDK {
         }));
     }
 
+   async disconnect(){
+        if(this.wallet){
+            await this.wallet.disconnect();
+        }
+    }
+
+
     getDAPIInstance() {
         if (this.clients['dapi'] == undefined) {
             throw new Error(`There is no client DAPI`);
