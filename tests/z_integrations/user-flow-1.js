@@ -6,6 +6,7 @@ const chance = new Chance();
 
 let sdkInstance;
 let hasBalance=false;
+let hasDuplicate=true;
 let createdIdentityId;
 let createdIdentity;
 
@@ -58,6 +59,11 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     hasBalance = true;
     return done();
   });
+  it('should check it\'s DPNS reg is available' , async function () {
+    const getDocument = await sdkInstance.platform.names.get(username);
+    expect(getDocument).to.equal(null);
+    hasDuplicate = false;
+  });
   it('should register an identity', async function () {
     if(!hasBalance){
       throw new Error('Insufficient balance to perform this test')
@@ -82,7 +88,9 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     if(!createdIdentity){
       throw new Error('Can\'t perform the test. Failed to fetch identity');
     }
-
+    if(hasDuplicate){
+      throw new Error(`Duplicate username ${username} registered. Skipping.`)
+    }
     const createDocument = await sdkInstance.platform.names.register(username, createdIdentity);
     expect(createDocument.action).to.equal(1);
     expect(createDocument.type).to.equal('domain');
@@ -91,17 +99,8 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(createDocument.data.label).to.equal(username)
     expect(createDocument.data.normalizedParentDomainName).to.equal('dash');
   });
-  it('should retrieve it\'s identity' , async function () {
-    const getDocument = await sdkInstance.platform.names.get(username);
-    console.log(getDocument);
-    expect(getDocument.revision).to.equal(1);
-    expect(getDocument.type).to.equal('domain');
-    expect(getDocument.userId).to.equal(createdIdentityId);
-    expect(getDocument.contractId).to.equal('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse');
-    expect(getDocument.data.label).to.equal(username)
-    expect(getDocument.data.normalizedParentDomainName).to.equal('dash');
-  });
-  it('should retrieve a document', async function () {
+
+  it('should retrieve itself by document', async function () {
     const [doc] = await sdkInstance.platform.documents.get('dpns.domain', {where:[
         ["normalizedParentDomainName","==","dash"],
         ["normalizedLabel","==",username.toLowerCase()],
