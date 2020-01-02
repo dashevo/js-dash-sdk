@@ -8,7 +8,7 @@ export async function get(this: Platform, id: string): Promise<any> {
         ],
     };
     try{
-        const documents = await this.documents.get('dpns.domain', {});
+        const documents = await this.documents.get('dpns.domain', queryOpts);
         return documents[0];
     }catch (e) {
         throw e;
