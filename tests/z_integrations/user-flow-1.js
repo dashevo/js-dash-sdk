@@ -1,7 +1,6 @@
 const {expect} = require('chai');
 const DashJS = require('../../dist/dash.cjs.min.js');
 const fixtures = require('../fixtures/user-flow-1');
-const faker = require('faker');
 const Chance = require('chance');
 const chance = new Chance();
 

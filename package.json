@@ -1,6 +1,6 @@
 {
   "name": "dash",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)",
   "main": "dist/dash.cjs.min.js",
   "unpkg": "dist/dash.min.js",
@@ -35,7 +35,6 @@
     "@types/node": "^12.12.12",
     "chai": "^4.2.0",
     "chance": "^1.1.4",
-    "faker": "^4.1.0",
     "mocha": "^6.2.2",
     "nodemon": "^2.0.1",
     "rimraf": "^3.0.0",
