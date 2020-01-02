@@ -1,9 +1,8 @@
-import DashJS from "../../../src";
-import schema from "../../schema.json";
+import DashJS from '../../../src';
+import schema from '../../schema.json';
 
-const network = "testnet";
 const sdkOpts = {
-  network,
+  network: 'testnet',
   apps: {
     dpns: {
       contractId: '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse',

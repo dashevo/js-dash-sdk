@@ -1,8 +1,7 @@
 import DashJS from '../../../src';
 
-const network = 'testnet';
 const sdkOpts = {
-  network,
+  network: 'testnet',
   mnemonic:'your mnemonic here'
 };
 const identityId = 'your identity id';
