@@ -70,7 +70,8 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     }
     createdIdentityId = await sdkInstance.platform.identities.register();
     expect(createdIdentityId).to.not.equal(null);
-    expect(createdIdentityId.length).to.equal(44);
+    expect(createdIdentityId.length).to.gte(42);
+    expect(createdIdentityId.length).to.lte(44);
   });
 
   it('should fetch the identity back', async function () {
