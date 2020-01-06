@@ -17,7 +17,7 @@ const displayFundingAddress = async function () {
 };
 const onReceivedTransaction = function(data){
   const {account} = sdk;
-  console.log(data);
+  console.log('Received tx',data.txid);
   console.log('Total pending confirmation',  account.getUnconfirmedBalance());
   console.log('Total balance',  account.getTotalBalance());
 }

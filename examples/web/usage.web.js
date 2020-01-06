@@ -13,12 +13,12 @@ sdk.isReady().then(()=>{
   const {account, platform} = sdk;
 
   async function sendPayment() {
-    const tx = await account.createTransaction({recipient: 'yLptqWxjgTxtwKJuLHoGY222NnoeqYuN8h', satoshis: 12000});
+    const tx = await account.createTransaction({recipient: 'yNPbcFfabtNmmxKdGwhHomdYfVs6gikbPf', satoshis: 12000});
     console.log(await account.broadcastTransaction(tx));
   }
 
   async function readDocument() {
-    const profile = await platform.documents.fetch('dashpay.profile', opts);
+    const profile = await platform.documents.fetch('dashpay.profile', {});
     console.log(profile);
   }
 });

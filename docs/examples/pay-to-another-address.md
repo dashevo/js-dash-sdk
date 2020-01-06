@@ -13,7 +13,7 @@ sdk.isReady().then(payToRecipient);
 async function payToRecipient() {
     const {account} = sdk;
     const transaction = account.createTransaction({
-      recipient:"yhY4Mnf69PK1WtsVPSAAq1rYHUknDr9nJH",
+      recipient:"yNPbcFfabtNmmxKdGwhHomdYfVs6gikbPf",
       satoshis:10000
     });
     const transactionId = await account.broadcastTransaction(transaction);
