@@ -4,22 +4,7 @@
     - [Working with multiples apps](getting-started/multiples-apps.md)
     - [Dash Platform Applications](getting-started/dash-platform-applications.md)
     - [About Schemas](getting-started/about-schemas.md)
-
-- Usage 
-    - [DAPI](usage/dapi.md)    
-    - [Platform](platform/about-platform.md)
-        - Identities
-            - [About identities](platform/identities/about-identity.md)
-            - [`.get()`](platform/identities/get.md)
-            - [`.register()`](platform/identities/register.md)
-        - [Contracts](platform/contracts.md)
-        - [Documents](platform/documents.md)
-        - [Names](platform/names.md)
-    - [Wallet](wallet/about-wallet-lib.md)
-        - [Accounts](wallet/accounts.md)
-        - [Signing, Encrypt and Decrypt](wallet/signing-encrypt.md)
-    - [Dashcore Primitives](usage/dashcorelib-primitives.md)
-
+    
 - Examples 
     - [Generate a mnemonic](/examples/generate-a-new-mnemonic.md) 
     - [Receive money and display balance](/examples/receive-money-and-check-balance.md) 
@@ -33,4 +18,31 @@
     - [Register an identity](https://dashplatform.readme.io/docs/tutorial-register-an-identity)
     - [Register a Name for an Identity](https://dashplatform.readme.io/docs/tutorial-register-a-name-for-an-identity)
     
+- Usage 
+    - [DAPI](usage/dapi.md)    
+    - [Platform](platform/about-platform.md)
+        - [About platform](platform/about-platform.md)
+        - **Identities**
+            - [About identities](platform/identities/about-identity.md)
+            - [`.get()`](platform/identities/get.md)
+            - [`.register()`](platform/identities/register.md)
+        - **Contracts**
+            - [About contracts](platform/contracts/about-contracts.md)
+            - [`.get()`](platform/contracts/get.md)
+            - [`.create()`](platform/contracts/create.md)
+            - [`.broadcast()`](platform/contracts/broadcast.md)
+        - **Documents**
+            - [About contracts](platform/contracts/about-contracts.md)
+            - [`.get()`](platform/contracts/get.md)
+            - [`.create()`](platform/contracts/create.md)
+            - [`.broadcast()`](platform/contracts/broadcast.md)
+        - **Names**
+            - [About DPNS](platform/names/about-dpns.md)
+            - [`.get()`](platform/names/get.md)
+            - [`.register()`](platform/names/register.md)
+    - [Wallet](wallet/about-wallet-lib.md)
+        - [Accounts](wallet/accounts.md)
+        - [Signing, Encrypt and Decrypt](wallet/signing-encrypt.md)
+    - [Dashcore Primitives](usage/dashcorelib-primitives.md)
+
 - [License](LICENSE)
