@@ -11,9 +11,9 @@ and [attached to a name](https://dashplatform.readme.io/docs/tutorial-register-a
 
 ```js
 const schema = {};// You JSON schema defining the app.
-const sdk = new DashJS.SDK(
+const sdk = new DashJS.SDK({
   mnemonic: ''// Your app mnemonic, which holds the app identity
-);
+});
 
 // This is the name previously registered in DPNS.
 const appName = 'MyApp';

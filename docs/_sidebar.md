@@ -8,7 +8,10 @@
 - Usage 
     - [DAPI](usage/dapi.md)    
     - [Platform](platform/about-platform.md)
-        - [Identities](platform/identities.md)
+        - Identities
+            - [About identities](platform/identities/about-identity.md)
+            - [`.get()`](platform/identities/get.md)
+            - [`.register()`](platform/identities/register.md)
         - [Contracts](platform/contracts.md)
         - [Documents](platform/documents.md)
         - [Names](platform/names.md)
