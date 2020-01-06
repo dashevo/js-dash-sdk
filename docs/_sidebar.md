@@ -17,6 +17,14 @@
 - Tutorial
     - [Register an identity](https://dashplatform.readme.io/docs/tutorial-register-an-identity)
     - [Register a Name for an Identity](https://dashplatform.readme.io/docs/tutorial-register-a-name-for-an-identity)
+
+- Snippets 
+    - [Register identity](/examples/node/register-identity.js)
+    - [Register name](/examples/node/register-name.js)
+    - [Retrieve Contract](/examples/node/retrieve-contract.js)
+    - [Retrieve documents](/examples/node/retrieve-documents.js)
+    - [Retrieve Identity](/examples/node/retrieve-identity.js)
+    - [Retrieve Name](/examples/node/retrieve-name.js)    
     
 - Usage 
     - [DAPI](usage/dapi.md)    
