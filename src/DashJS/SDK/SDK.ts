@@ -4,6 +4,7 @@ import {Platform, PlatformOpts} from './Platform';
 // @ts-ignore
 import DAPIClient from "@dashevo/dapi-client"
 import {Network, Mnemonic} from "@dashevo/dashcore-lib";
+import isReady from "./methods/isReady";
 
 const defaultSeeds = [
     '52.26.165.185',
@@ -45,8 +46,10 @@ export class SDK {
     private readonly clients: SDKClients;
     private readonly apps: SDKApps;
     public state: { isReady: boolean, isAccountReady: boolean };
+    public isReady: Function;
 
     constructor(opts: SDKOpts = {}) {
+        this.isReady = isReady.bind(this);
 
         this.network = (opts.network !== undefined) ? opts.network.toString() : 'testnet';
         this.apps = Object.assign({
@@ -113,36 +116,7 @@ export class SDK {
             .then((res) => {this.state.isReady = true});
     }
 
-    async isReady() {
-        const self = this;
-        // eslint-disable-next-line consistent-return
-        return new Promise(((resolve) => {
-            // @ts-ignore
-            if (self.state.isAccountReady && self.state.isReady) return resolve(true);
 
-            const promises = [];
-
-            if(!self.state.isAccountReady){
-                // @ts-ignore
-                promises.push(self.account.isReady());
-            }
-            if(!self.state.isReady){
-                const p = new Promise((res)=>{
-                    let isReadyInterval = setInterval(() => {
-                        if (self.state.isReady) {
-                            clearInterval(isReadyInterval);
-                            res(true);
-                        }
-                    }, 100);
-                })
-                promises.push(p);
-            }
-
-            Promise.all(promises).then((promisesResults)=>{
-                resolve(true);
-            });
-        }));
-    }
 
    async disconnect(){
         if(this.wallet){
