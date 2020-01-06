@@ -47,7 +47,7 @@ sdk.isReady().then(async () => {
 
 
 ### Use-cases examples
-- [Generate a mnemonic](/examples/generate-a-mnemonic.md) 
+- [Generate a mnemonic](/examples/generate-a-new-mnemonic.md) 
 - [Receive money and display balance](/examples/receive-money-and-check-balance.md) 
 - [Pay to another address](/examples/pay-to-another-address.md) 
 - [Use a local evonet](/examples/use-local-evonet.md) 
