@@ -25,7 +25,6 @@ async function isReady(this: any) {
     }
 
     await Promise.all(promises);
-    console.log('FINISHED')
     return true;
 }
 export default isReady;
