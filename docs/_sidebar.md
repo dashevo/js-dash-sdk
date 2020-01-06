@@ -19,6 +19,7 @@
     - [Register a Name for an Identity](https://dashplatform.readme.io/docs/tutorial-register-a-name-for-an-identity)
 
 - Snippets 
+    - [Create and fund wallet](/examples/node/create-and-fund-wallet.js)
     - [Register identity](/examples/node/register-identity.js)
     - [Register name](/examples/node/register-name.js)
     - [Retrieve Contract](/examples/node/retrieve-contract.js)
