@@ -16,6 +16,7 @@ const defaultSeeds = [
 export type DPASchema = object
 
 export interface SDKOpts {
+    seeds?: [string];
     network?: Network | string,
     mnemonic?: Mnemonic | string | null,
     apps?: SDKApps,
@@ -62,13 +63,16 @@ export class SDK {
             isReady: false,
             isAccountReady: false
         };
+        const seeds = (opts.seeds)? opts.seeds : defaultSeeds;
+
         this.clients = {
-            dapi: new DAPIClient(Object.assign({
-                seeds: defaultSeeds,
-                timeout: 20000,
-                retries: 15
-            }, opts || {network: this.network}))
-        }
+            dapi: new DAPIClient({
+                seeds: seeds,
+                timeout: 1000,
+                retries: 5,
+                network: this.network
+            })
+        };
         // We accept null as parameter for a new generated mnemonic
         if (opts.mnemonic !== undefined) {
             // @ts-ignore
