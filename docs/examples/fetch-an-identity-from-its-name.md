@@ -1,6 +1,6 @@
 ## Fetching an identity from it's name
 
-Assuming you have created an identity and attached a name to it (see how to [registered an identity](https://dashplatform.readme.io/docs/tutorial-register-an-identity) and how to [attache it to a name](https://dashplatform.readme.io/docs/tutorial-register-a-name-for-an-identity).   
+Assuming you have created an identity and attached a name to it (see how to [register an identity](https://dashplatform.readme.io/docs/tutorial-register-an-identity) and how to [attach it to a name](https://dashplatform.readme.io/docs/tutorial-register-a-name-for-an-identity).   
 You will then be able to directly recover an identity from its names. See below: 
 
 ```js
