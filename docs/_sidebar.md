@@ -1,7 +1,7 @@
 - Getting started
     - [Quick start](getting-started/quickstart.md)
     - [Quick introduction to core concepts](getting-started/core-concepts.md)
-    - [Working with multiples apps](getting-started/multiples-apps.md)
+    - [Working with multiple apps](getting-started/multiples-apps.md)
     - [Dash Platform Applications](getting-started/dash-platform-applications.md)
     - [About Schemas](getting-started/about-schemas.md)
     - [With TypeScript](getting-started/with-typescript.md)
