@@ -5,7 +5,7 @@ Parameters:
 
 | parameters                | type      | required       | Description                                                                   |  
 |---------------------------|-----------|----------------| ----------------------------------------------------------------------------- |
-| **name**                  | String    | yes            | An alphanumeric (2-64) value used for human-identification (can contains `-`) |
+| **name**                  | String    | yes            | An alphanumeric (2-63) value used for human-identification (can contains `-`) |
 | **identity**              | Identity  | yes            | A valid [registered identity](/platform/identities/register.md)               |
 
 
