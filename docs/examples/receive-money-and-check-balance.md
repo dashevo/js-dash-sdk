@@ -34,7 +34,7 @@ This above code will generate a new unique (never used) address.
 
 ## Display your balance
 
-There is three different balance, the `getTotalBalance()` that gives you the sum of `confirmed` and `unconfirmed` transactions (not included in a block). 
+There are three different balances, the `getTotalBalance()` that gives you the sum of `confirmed` and `unconfirmed` transactions (not included in a block). ```
 You probably most of the time want to rely of your confirmed balance when you check fund before a payment.  
 Value is in satoshis (smallest unit).
 
