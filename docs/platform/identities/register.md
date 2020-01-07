@@ -5,6 +5,6 @@ Parameters:
 
 | parameters        | type    | required            | Description                                                       |  
 |-------------------|---------|------------------	| -----------------------------------------------------------------	|
-| **identityType**  | string  | no (default: 'USER')| Allow to register a user (`USER`) or an application `APPLICATION` |
+| **identityType**  | string  | no (default: 'USER')| Allow to register a user (`USER`) or an application (`APPLICATION`) |
 
 **Example**: `await sdk.platform.identities.register('APPLICATION')`
