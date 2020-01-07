@@ -1,6 +1,6 @@
 # Working with multiple apps
 
-When working with another registered contracts, you will need to know it's contractId and reference it on the SDK constructor. 
+When working with other registered contracts, you will need to know their `contractId` and reference it on the SDK constructor.
 
 Assuming a contract DashPay and having a following `contractId: "2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse"`. 
 You can then pass it as an options.
