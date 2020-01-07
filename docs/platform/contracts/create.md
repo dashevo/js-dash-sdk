@@ -6,7 +6,7 @@ Parameters:
 | parameters               | type              | required           | Description                                                       |  
 |--------------------------|-------------------|------------------	| -----------------------------------------------------------------	|
 | **contractDefinitions**  | JSONDataContract  | yes                | The defined [JSON Application Schema](https://dashplatform.readme.io/docs/explanation-platform-protocol-data-contract) |
-| **identity**             | Identity          | yes                | A valid [registered identity](/platform/identities/register.md) |
+| **identity**             | Identity          | yes                | A valid [registered `application` identity](/platform/identities/register.md) |
 
 **Example**: 
 ```js
@@ -17,4 +17,3 @@ Parameters:
 ```
 
 Returns : Contract.
-
