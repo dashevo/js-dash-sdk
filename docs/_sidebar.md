@@ -24,7 +24,7 @@
     - [Register identity](/examples/node/register-identity.js)
     - [Register name](/examples/node/register-name.js)
     - [Retrieve Contract](/examples/node/retrieve-contract.js)
-    - [Retrieve documents](/examples/node/retrieve-documents.js)
+    - [Retrieve Documents](/examples/node/retrieve-documents.js)
     - [Retrieve Identity](/examples/node/retrieve-identity.js)
     - [Retrieve Name](/examples/node/retrieve-name.js)    
     
