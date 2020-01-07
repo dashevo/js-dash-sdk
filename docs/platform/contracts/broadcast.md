@@ -1,5 +1,5 @@
 **Usage**: `sdk.platform.contracts.broadcast(contract, identity)`    
-**Description**: This method will create an `application` or `user` new identity for you. 
+**Description**: This method will sign and broadcast any valid contract. 
 
 Parameters: 
 
