@@ -11,7 +11,7 @@
     - [Receive money and display balance](/examples/receive-money-and-check-balance.md) 
     - [Pay to another address](/examples/pay-to-another-address.md) 
     - [Use a local evonet](/examples/use-local-evonet.md) 
-    - [Fetch an identity from it's name](/examples/fetch-an-identity-from-its-name.md) 
+    - [Fetch an identity from its name](/examples/fetch-an-identity-from-its-name.md) 
     - [Publishing a new contract](/examples/publishing-a-new-contract.md) 
     - [Use another BIP44 account](/examples/use-different-account.md) 
     
