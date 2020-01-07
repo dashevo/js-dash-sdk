@@ -16,7 +16,7 @@ Therefore usage might varies if you need to deal with platform or not.
 
 ### Access to account with platform.
 
-You will actually need to replace sdk.account to get platform correctly fetch the right account for it's signing/utxos fetching.
+You will actually need to replace `sdk.account` to get platform to correctly fetch the right account to use for signing and fetching UTXOs.
 
 ```js
 async function changeAccount(){
