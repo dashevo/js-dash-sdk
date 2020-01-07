@@ -1,5 +1,5 @@
 **Usage**: `sdk.platform.names.get(name)`    
-**Description**: This method will allow you to fetch back an DPNS records from it's humanized name. 
+**Description**: This method will allow you to fetch back a DPNS records from its humanized name. 
 
 Parameters: 
 
