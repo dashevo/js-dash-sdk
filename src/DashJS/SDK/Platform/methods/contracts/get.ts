@@ -27,7 +27,7 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
             }
             return app.contract;
         } catch (e) {
-            console.error('failed to getDataContract', e);
+            console.error('Failed to get dataContract', e);
             throw e;
         }
 

@@ -46,7 +46,7 @@ export async function register(this: Platform,
         throw new Error('DPNS is required to register a new name.');
     }
     // 1. Create preorder document
-    const preorderDocument = this.documents.create(
+    const preorderDocument = await this.documents.create(
         'dpns.preorder',
         identity,
         {
@@ -61,7 +61,7 @@ export async function register(this: Platform,
     await client.applyStateTransition(preorderTransition);
 
     // 3. Create domain document
-    const domainDocument = this.documents.create(
+    const domainDocument = await this.documents.create(
         'dpns.domain',
         identity,
         {
