@@ -5,7 +5,7 @@ declare interface createOpts {
 }
 
 export async function create(this: Platform, typeLocator: string, identity: any, opts: createOpts): Promise<any> {
-    const {  dpp } = this;
+    const { dpp } = this;
 
     const appNames = Object.keys(this.apps);
     //We can either provide of type `dashpay.profile` or if only one schema provided, of type `profile`.
