@@ -53,7 +53,7 @@ export async function register(this: Platform,
     const preorderDocument = dpp.document.create(
         dataContract,
         identity.id,
-        'preorder',
+        'dpns.preorder',
         {
             saltedDomainHash,
         },
@@ -69,7 +69,7 @@ export async function register(this: Platform,
     const domainDocument = dpp.document.create(
         dataContract,
         identity.id,
-        'domain',
+        'dpns.domain',
         {
             nameHash,
             label,
