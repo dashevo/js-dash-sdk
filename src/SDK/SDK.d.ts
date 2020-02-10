@@ -1,3 +1,5 @@
+import {Client as _Client} from './Client';
+
 import {
     Transaction as _Transaction,
     Address as _Address,
@@ -14,7 +16,8 @@ import {
     PrivateKey as _PrivateKey
 } from '@dashevo/dashcore-lib';
 
-export declare namespace DashJS {
+export declare namespace SDK {
+    export type Client = _Client;
     export type Transaction = _Transaction;
 
     export type Address = _Address;

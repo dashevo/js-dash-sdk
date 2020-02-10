@@ -15,11 +15,11 @@ const defaultSeeds = [
 
 export type DPASchema = object
 
-export interface SDKOpts {
+export interface ClientOpts {
     seeds?: [string];
     network?: Network | string,
     mnemonic?: Mnemonic | string | null,
-    apps?: SDKApps,
+    apps?: ClientApps,
     accountIndex?: number,
 }
 
@@ -31,25 +31,25 @@ export interface SDKClients {
     dapi: DAPIClient
 }
 
-export interface SDKApps {
+export interface ClientApps {
     [name: string]: {
         contractId: string,
         contract: DPASchema
     }
 }
 
-export class SDK {
+export class Client {
     public network: string = 'testnet';
     public wallet: Wallet | undefined;
     public account: Account | undefined;
     public platform: Platform | undefined;
     public accountIndex: number = 0;
     private readonly clients: SDKClients;
-    private readonly apps: SDKApps;
+    private readonly apps: ClientApps;
     public state: { isReady: boolean, isAccountReady: boolean };
     public isReady: Function;
 
-    constructor(opts: SDKOpts = {}) {
+    constructor(opts: ClientOpts = {}) {
         this.isReady = isReady.bind(this);
 
         this.network = (opts.network !== undefined) ? opts.network.toString() : 'testnet';
@@ -138,9 +138,9 @@ export class SDK {
     }
 
 
-    getApps(): SDKApps {
+    getApps(): ClientApps {
         return this.apps;
     }
 }
 
-export default SDK;
+export default Client;
