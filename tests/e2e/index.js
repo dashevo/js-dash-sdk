@@ -5,6 +5,6 @@ describe('DashJS', () => {
 
   it('should provide expected class', function () {
     expect(DashJS).to.have.property('SDK');
-    expect(DashJS.SDK.constructor.name).to.be.equal('Function')
+    expect(DashJS.Client.constructor.name).to.be.equal('Function')
   });
 });
