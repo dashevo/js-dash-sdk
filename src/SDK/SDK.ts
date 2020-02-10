@@ -2,10 +2,15 @@ import {Client as _Client} from './Client';
 import {default as _DAPIClient} from '@dashevo/dapi-client';
 // @ts-ignore
 import {default as _DashPlatformProtocol} from '@dashevo/dpp';
+
 import {
     Wallet as _Wallet,
     Account as _Account,
     KeyChain as _KeyChain,
+    CONSTANTS as _WalletLibCONSTANTS,
+    EVENTS as _WalletLibEVENTS,
+    utils as _WalletLibUtils,
+    plugins as _WalletLibPlugins
 } from '@dashevo/wallet-lib';
 
 import {
@@ -34,6 +39,13 @@ export namespace SDK {
     export let Wallet = _Wallet;
     export let Account = _Account;
     export let KeyChain = _KeyChain;
+
+    export let WalletLib = {
+        CONSTANTS: _WalletLibCONSTANTS,
+        EVENTS: _WalletLibEVENTS,
+        plugins: _WalletLibPlugins,
+        utils: _WalletLibUtils,
+    }
 
     // Dashcore-lib primitives
     export let Transaction = _Transaction;
