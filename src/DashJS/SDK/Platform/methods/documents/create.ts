@@ -1,7 +1,7 @@
 import {Platform} from "../../Platform";
 
 declare interface createOpts {
-    [name:string]: any; // @TODO what is this type?
+    [name:string]: any;
 }
 
 /**
@@ -11,7 +11,7 @@ declare interface createOpts {
  * @param {string} typeLocator - type locator
  * @param identity - identity
  * @param {createOpts} opts - options 
- * @param {[string]} [opts.name] - documents names
+ * @param {[string]:any} [opts.name] - documents names
  */
 export async function create(this: Platform, typeLocator: string, identity: any, opts: createOpts): Promise<any> {
     const { dpp } = this;

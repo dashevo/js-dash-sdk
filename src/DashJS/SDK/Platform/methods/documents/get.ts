@@ -17,8 +17,8 @@ declare interface fetchOpts {
 /**
  * Get documents from the platform
  * 
- * @param this 
- * @param typeLocator 
+ * @param {Platform} this bound instance class
+ * @param {string} typeLocator type locator
  * @param {fetchOpts} opts - MongoDB style query
  * @returns documents
  */
