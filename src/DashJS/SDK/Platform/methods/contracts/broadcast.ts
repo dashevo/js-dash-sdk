@@ -1,5 +1,12 @@
 import {Platform} from "../../Platform";
 
+/**
+ * Broadcast contract onto the platform
+ * 
+ * @param {Platform} this - bound instance class
+ * @param contract - contract
+ * @param identity - identity
+ */
 export async function broadcast(this: Platform, contract: any, identity: any): Promise<any> {
     const {account, client, dpp} = this;
 
