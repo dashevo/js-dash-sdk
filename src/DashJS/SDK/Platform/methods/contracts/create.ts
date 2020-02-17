@@ -1,8 +1,8 @@
 import {Platform} from "../../Platform";
 
 /**
- * Create contracts on the platform
- * 
+ * Create and prepare contracts for the platform
+ *
  * @param {Platform} this - bound instance class
  * @param documentDefinitions - document definitions
  * @param identity - identity
