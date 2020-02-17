@@ -6,6 +6,7 @@ import {
     UnspentOutput as _UnspentOutput,
     HDPublicKey as _HDPublicKey,
     HDPrivateKey as _HDPrivateKey,
+    Message as _Message,
     Mnemonic as _Mnemonic,
     Network as _Network,
     Input as _Input,
@@ -28,6 +29,7 @@ export namespace DashJS {
     export let HDPrivateKey = _HDPrivateKey;
     export let PublicKey = _PublicKey;
     export let PrivateKey = _PrivateKey;
+    export let Message = _Message;
     export let Mnemonic = _Mnemonic;
     export let Network = _Network;
     export let Script = _Script;
