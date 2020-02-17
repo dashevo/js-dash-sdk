@@ -2,7 +2,7 @@
 
 DashJS exports the Message constructor `new DashJS.Message`.   
 
-You can refer to it's documentation : https://github.com/dashevo/dashcore-message/blob/master/README.md
+You can refer to its documentation : https://github.com/dashevo/dashcore-message/blob/master/README.md
 
 ```js
 const pk = new DashJS.PrivateKey();
