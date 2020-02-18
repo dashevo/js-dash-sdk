@@ -10,6 +10,7 @@ import DataContract from "@dashevo/dpp/lib/dataContract/DataContract";
 import Identity from "@dashevo/dpp/lib/identity/Identity";
 // @ts-ignore
 import DashPlatformProtocol from "@dashevo/dpp";
+import getTypeOfRecord from "./getTypeOfRecord";
 
 export const enum StateTransitionBuilderTypes {
     CONTRACT = 'dataContract',
@@ -20,23 +21,9 @@ export const enum StateTransitionBuilderTypes {
 export type Record = Document | DataContract | Identity;
 
 export interface StateTransitionBuilderOpts {
-    type: StateTransitionBuilderTypes,
     dpp: DashPlatformProtocol,
     client?: DAPIClient
 };
-
-const getTypeOfRecord = (record: Record) => {
-    switch (typeof record) {
-        case Document.prototype.name:
-            return StateTransitionBuilderTypes.DOCUMENT;
-        case DataContract.prototype.name:
-            return StateTransitionBuilderTypes.CONTRACT;
-        case Identity.prototype.name:
-            return StateTransitionBuilderTypes.IDENTITY;
-        default:
-            throw new Error('Invalid record type');
-    }
-}
 
 /**
  * Builder for ST. Allows to manage and broadcast a set of record
@@ -47,14 +34,13 @@ const getTypeOfRecord = (record: Record) => {
  */
 export class StateTransitionBuilder {
     public records: Record[];
-    public type: StateTransitionBuilderTypes;
+    public type: StateTransitionBuilderTypes | undefined;
 
     private dpp: DashPlatformProtocol | undefined;
     private client: DAPIClient | undefined;
 
     constructor(opts: StateTransitionBuilderOpts) {
-        this.type = opts.type || StateTransitionBuilderTypes.DOCUMENT;
-
+        this.type = undefined;
         if (opts.client) this.client = opts.client;
         if (opts.dpp === undefined) {
             throw new Error('Records requires a DPP instance for stateTransition creation');
@@ -68,7 +54,12 @@ export class StateTransitionBuilder {
      * @param record - a valid record
      */
     addRecord(record: Record) {
+        if(Array.isArray(record)){
+            record.forEach((_record)=> this.addRecord(_record))
+            return;
+        }
         let recordType = getTypeOfRecord(record);
+        if(!this.type) this.type = recordType;
         if (recordType !== this.type) {
             throw new Error(`Records cannot add to records of type ${this.type}: record type ${recordType}`);
         }
@@ -100,6 +91,7 @@ export class StateTransitionBuilder {
      * @return {DataContractStateTransition|DocumentsStateTransition|IdentityCreateTransition}
      */
     toStateTransition() {
+        if(!this.type) throw new Error('Need record to create a StateTransition');
         return this.dpp[this.type].createStateTransition(this.records)
     }
 }

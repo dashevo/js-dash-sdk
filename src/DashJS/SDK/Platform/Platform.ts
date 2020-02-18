@@ -8,6 +8,8 @@ import broadcastDocument from "./methods/documents/broadcast";
 import createDocument from "./methods/documents/create";
 import getDocument from "./methods/documents/get";
 
+import broadcastRecords from "./methods/broadcastRecords";
+
 import broadcastContract from "./methods/contracts/broadcast";
 import createContract from "./methods/contracts/create";
 import getContract from "./methods/contracts/get";
@@ -24,7 +26,7 @@ import {Account} from "@dashevo/wallet-lib";
 
 /**
  * Interface for PlatformOpts
- * 
+ *
  * @remarks
  * required parameters include { client, apps }
  * optional parameters include { ..., account?, network? }
@@ -58,7 +60,7 @@ interface Credentials {
 
 /**
  * Class for Dash Platform
- * 
+ *
  * @param documents - documents
  * @param identities - identites
  * @param names - names
@@ -66,7 +68,7 @@ interface Credentials {
  */
 export class Platform {
     dpp: DashPlatformProtocol;
-    
+
     public documents: Records;
     /**
      * @param {Function} get - get identities from the platform
@@ -91,7 +93,7 @@ export class Platform {
 
     /**
      * Construct some instance of Platform
-     * 
+     *
      * @param {platformOpts} - options for Platform
      */
     constructor(platformOpts: PlatformOpts) {
@@ -113,6 +115,7 @@ export class Platform {
             register: registerIdentity.bind(this),
             get: getIdentity.bind(this),
         };
+
         this.dpp = new DashPlatformProtocol(platformOpts);
         this.client = platformOpts.client;
         this.apps = platformOpts.apps;
