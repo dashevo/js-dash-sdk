@@ -9,7 +9,7 @@ export async function broadcast(this: Platform, contract: any, identity: any): P
     // @ts-ignore
     const identityPrivateKey = identityHDPrivateKey.privateKey;
 
-    const stateTransition = dpp.dataContract.createStateTransition([contract]);
+    const stateTransition = dpp.dataContract.createStateTransition(contract);
     stateTransition.sign(identity.getPublicKeyById(1), identityPrivateKey);
 
     // @ts-ignore
