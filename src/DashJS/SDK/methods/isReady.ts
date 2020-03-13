@@ -1,3 +1,11 @@
+/**
+ * Report state in a fixed interval of time [100 ms]
+ * 
+ * @param this bound class instance
+ * 
+ * @remarks
+ * isReady calls isSelfReady to check report state
+ */
 const isSelfReady = async function(this: any){
     const self = this;
     return new Promise((res)=>{
@@ -10,6 +18,12 @@ const isSelfReady = async function(this: any){
     })
 }
 
+/**
+ * Check if this instance state is reported ready
+ * 
+ * @param this bound class instance
+ * @returns true only if this is ready
+ */
 async function isReady(this: any) {
     const {state, account} = this;
     if (state.isAccountReady && state.isReady) {

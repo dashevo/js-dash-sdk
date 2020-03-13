@@ -4,6 +4,15 @@ declare interface createOpts {
     [name:string]: any;
 }
 
+/**
+ * Create and prepare documents for the platform
+ *
+ * @param {Platform} this - bound instance class
+ * @param {string} typeLocator - type locator
+ * @param identity - identity
+ * @param {createOpts} opts - options
+ * @param {[string]:any} [opts.name] - documents names
+ */
 export async function create(this: Platform, typeLocator: string, identity: any, opts: createOpts): Promise<any> {
     const { dpp } = this;
 

@@ -3,6 +3,18 @@ const entropy = require('@dashevo/dpp/lib/util/entropy');
 const { hash } = require('@dashevo/dpp/lib/util/multihashDoubleSHA256');
 const bs58 = require('bs58');
 
+/**
+ * Register names to the platform
+ * 
+ * @param {Platform} this - bound instance class
+ * @param {string} name - name
+ * @param identity - identity
+ * @param {any} [identity.id] - identity ID
+ * @param {number} [identity.type] - identity type
+ * @param {[any]} [identity.publicKeys] - identity public keys
+ * @param {function(number):any} - get public key by ID
+ * @returns registered names
+ */
 export async function register(this: Platform,
                                name: string,
                                identity: {
