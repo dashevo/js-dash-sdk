@@ -6,6 +6,9 @@ import DAPIClient from "@dashevo/dapi-client"
 import {Network, Mnemonic} from "@dashevo/dashcore-lib";
 import isReady from "./methods/isReady";
 
+/**
+ * default seed passed to SDK options
+ */
 const defaultSeeds = [
     '52.26.165.185',
     '54.202.56.123',
@@ -15,6 +18,15 @@ const defaultSeeds = [
 
 export type DPASchema = object
 
+/**
+ * Interface SDK Options
+ *
+ * @param {[string]?} [seeds] - wallet seeds
+ * @param {Network? | string?} [network] - evonet network
+ * @param {Mnemonic? | string? | null?} [mnemonic] - mnemonic passphrase
+ * @param {SDKApps?} [apps] - applications
+ * @param {number?} [accountIndex] - account index number
+ */
 export interface SDKOpts {
     seeds?: [string];
     network?: Network | string,
@@ -23,14 +35,24 @@ export interface SDKOpts {
     accountIndex?: number,
 }
 
+/**
+ * Defined Type for SDK Client
+ */
 export type SDKClient = object | DAPIClient;
 
+/**
+ * Interface for SDKClients
+ * @typeparam SDKClient object or DAPIClient
+ */
 export interface SDKClients {
     [name: string]: SDKClient,
 
     dapi: DAPIClient
 }
 
+/**
+ * Interface for SDKApps
+ */
 export interface SDKApps {
     [name: string]: {
         contractId: string,
@@ -38,6 +60,9 @@ export interface SDKApps {
     }
 }
 
+/**
+ * class for SDK
+ */
 export class SDK {
     public network: string = 'testnet';
     public wallet: Wallet | undefined;
@@ -49,6 +74,11 @@ export class SDK {
     public state: { isReady: boolean, isAccountReady: boolean };
     public isReady: Function;
 
+    /**
+     * Construct some instance of DAPI SDK
+     *
+     * @param {opts} SDKOpts - options for DAPI SDK
+     */
     constructor(opts: SDKOpts = {}) {
         this.isReady = isReady.bind(this);
 
@@ -122,14 +152,23 @@ export class SDK {
 
     }
 
-
+    /**
+     * disconnect wallet from Dapi
+     */
     async disconnect() {
         if (this.wallet) {
             await this.wallet.disconnect();
         }
     }
 
-
+    /**
+     * fetch some instance of DAPI client
+     *
+     * @remarks
+     * This function throws an error message when there is no client DAPI instance
+     *
+     * @returns DAPI client instance
+     */
     getDAPIInstance() {
         if (this.clients['dapi'] == undefined) {
             throw new Error(`There is no client DAPI`);
@@ -137,7 +176,14 @@ export class SDK {
         return this.clients['dapi'];
     }
 
-
+    /**
+     * fetch list of applications
+     *
+     * @remarks
+     * check if returned value can be null on devnet
+     *
+     * @returns applications list
+     */
     getApps(): SDKApps {
         return this.apps;
     }

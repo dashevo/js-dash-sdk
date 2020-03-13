@@ -2,6 +2,13 @@ import {Platform} from "../../Platform";
 
 declare type ContractIdentifier = string;
 
+/**
+ * Get contracts from the platform
+ * 
+ * @param {Platform} this - bound instance class 
+ * @param {ContractIdentifier} identifier - identifier
+ * @returns contracts
+ */
 export async function get(this: Platform, identifier: ContractIdentifier): Promise<any> {
     let localContract;
 
