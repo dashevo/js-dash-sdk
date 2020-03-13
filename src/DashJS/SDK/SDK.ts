@@ -10,10 +10,9 @@ import isReady from "./methods/isReady";
  * default seed passed to SDK options
  */
 const defaultSeeds = [
-    '34.214.221.50',
-    '54.213.18.11',
-    '34.211.149.102',
-    '52.38.244.67',
+    '52.26.165.185',
+    '54.202.56.123',
+    '54.245.133.124',
 ].map(ip => ({service: `${ip}:3000`}));
 
 
