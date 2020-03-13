@@ -10,9 +10,10 @@ import isReady from "./methods/isReady";
  * default seed passed to SDK options
  */
 const defaultSeeds = [
-    '52.26.165.185',
-    '54.202.56.123',
-    '54.245.133.124',
+    '34.214.221.50',
+    '54.213.18.11',
+    '34.211.149.102',
+    '52.38.244.67',
 ].map(ip => ({service: `${ip}:3000`}));
 
 
@@ -20,7 +21,7 @@ export type DPASchema = object
 
 /**
  * Interface SDK Options
- * 
+ *
  * @param {[string]?} [seeds] - wallet seeds
  * @param {Network? | string?} [network] - evonet network
  * @param {Mnemonic? | string? | null?} [mnemonic] - mnemonic passphrase
@@ -75,8 +76,8 @@ export class SDK {
     public isReady: Function;
 
     /**
-     * Construct some instance of DAPI SDK 
-     * 
+     * Construct some instance of DAPI SDK
+     *
      * @param {opts} SDKOpts - options for DAPI SDK
      */
     constructor(opts: SDKOpts = {}) {
@@ -85,7 +86,7 @@ export class SDK {
         this.network = (opts.network !== undefined) ? opts.network.toString() : 'testnet';
         this.apps = Object.assign({
             dpns: {
-                contractId: '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse'
+                contractId: 'BSwrqgq7idvxgBWSHWsmxyoi1XHDXU1URoDVaRXFozhp'
             }
         }, opts.apps);
 
@@ -153,7 +154,7 @@ export class SDK {
     }
 
     /**
-     * disconnect wallet from Dapi 
+     * disconnect wallet from Dapi
      */
     async disconnect() {
         if (this.wallet) {
@@ -163,10 +164,10 @@ export class SDK {
 
     /**
      * fetch some instance of DAPI client
-     * 
+     *
      * @remarks
      * This function throws an error message when there is no client DAPI instance
-     * 
+     *
      * @returns DAPI client instance
      */
     getDAPIInstance() {
@@ -178,10 +179,10 @@ export class SDK {
 
     /**
      * fetch list of applications
-     * 
+     *
      * @remarks
      * check if returned value can be null on devnet
-     * 
+     *
      * @returns applications list
      */
     getApps(): SDKApps {
