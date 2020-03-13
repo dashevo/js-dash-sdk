@@ -6,7 +6,7 @@ const mnemonic = 'agree country attract master mimic ball load beauty join gentl
 describe('DashJS - SDK', function suite() {
   this.timeout(10000);
   it('should provide expected class', function () {
-    expect(Client.name).to.be.equal('SDK');
+    expect(Client.name).to.be.equal('Client');
     expect(Client.constructor.name).to.be.equal('Function');
   });
   it('should be instantiable', function () {
