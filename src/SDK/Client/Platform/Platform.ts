@@ -2,7 +2,7 @@
 import DashPlatformProtocol from "@dashevo/dpp";
 // @ts-ignore
 import DAPIClient from "@dashevo/dapi-client"
-import {SDKClients, SDKApps} from "../SDK";
+import {ClientDependencies, ClientApps} from "../Client";
 
 import broadcastDocument from "./methods/documents/broadcast";
 import createDocument from "./methods/documents/create";
@@ -32,8 +32,8 @@ import {Account} from "@dashevo/wallet-lib";
  * optional parameters include { ..., account?, network? }
  */
 export interface PlatformOpts {
-    client: DAPIClient,
-    apps: SDKApps
+    client: ClientDependencies,
+    apps: ClientApps
     account?: Account,
     network?: string
 }
@@ -86,8 +86,8 @@ export class Platform {
      * @param {Function} register - register contracts on the platform
      */
     public contracts: Records;
-    client: DAPIClient;
-    apps: SDKApps;
+    client: ClientDependencies;
+    apps: ClientApps;
     account?: Account;
     network?: string;
 

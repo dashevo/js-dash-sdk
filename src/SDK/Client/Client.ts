@@ -19,7 +19,7 @@ const defaultSeeds = [
 export type DPASchema = object
 
 /**
- * Interface SDK Options
+ * Interface Client Options
  *
  * @param {[string]?} [seeds] - wallet seeds
  * @param {Network? | string?} [network] - evonet network
@@ -27,33 +27,31 @@ export type DPASchema = object
  * @param {SDKApps?} [apps] - applications
  * @param {number?} [accountIndex] - account index number
  */
-export interface SDKOpts {
+export interface ClientOpts {
     seeds?: [string];
     network?: Network | string,
     mnemonic?: Mnemonic | string | null,
-    apps?: SDKApps,
+    apps?: ClientApps,
     accountIndex?: number,
 }
 
 /**
- * Defined Type for SDK Client
+ * Defined Type for ClientDependency
  */
-export type SDKClient = object | DAPIClient;
+export type ClientDependency = DAPIClient | any;
 
 /**
- * Interface for SDKClients
- * @typeparam SDKClient object or DAPIClient
+ * Interface for ClientDependencies
+ * @typeparam ClientDependencies object or DAPIClient
  */
-export interface SDKClients {
-    [name: string]: SDKClient,
-
-    dapi: DAPIClient
+export interface ClientDependencies {
+    [name: string]: ClientDependency,
 }
 
 /**
- * Interface for SDKApps
+ * Interface for ClientApps
  */
-export interface SDKApps {
+export interface ClientApps {
     [name: string]: {
         contractId: string,
         contract: DPASchema
@@ -63,23 +61,23 @@ export interface SDKApps {
 /**
  * class for SDK
  */
-export class SDK {
+export class Client {
     public network: string = 'testnet';
     public wallet: Wallet | undefined;
     public account: Account | undefined;
     public platform: Platform | undefined;
     public accountIndex: number = 0;
-    private readonly clients: SDKClients;
-    private readonly apps: SDKApps;
+    private readonly clients: ClientDependencies;
+    private readonly apps: ClientApps;
     public state: { isReady: boolean, isAccountReady: boolean };
     public isReady: Function;
 
     /**
-     * Construct some instance of DAPI SDK
+     * Construct some instance of SDK Client
      *
-     * @param {opts} SDKOpts - options for DAPI SDK
+     * @param {opts} ClientOpts - options for SDK Client
      */
-    constructor(opts: SDKOpts = {}) {
+    constructor(opts: ClientOpts = {}) {
         this.isReady = isReady.bind(this);
 
         this.network = (opts.network !== undefined) ? opts.network.toString() : 'testnet';
@@ -139,6 +137,7 @@ export class SDK {
         for (let appName in this.apps) {
             const app = this.apps[appName];
             const p = this.platform?.contracts.get(app.contractId);
+            // @ts-ignore
             promises.push(p);
         }
         Promise
@@ -184,9 +183,9 @@ export class SDK {
      *
      * @returns applications list
      */
-    getApps(): SDKApps {
+    getApps(): ClientApps {
         return this.apps;
     }
 }
 
-export default SDK;
+export default Client;

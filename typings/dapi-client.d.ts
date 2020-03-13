@@ -11,19 +11,13 @@ declare module "@dashevo/dapi-client";
  */
 
  /**
- * Class for DAPI Client 
+ * Class for DAPI Client
  */
 declare class DAPIClient {
     /**
      * Construct an instance of DAPI client
      */
-    constructor(options: {
-        seeds?: object[];
-        port?: number;
-        nativeGrpcPort?: number;
-        timeout?: number;
-        retries?: number;
-    });
+    constructor(options: { retries: number; seeds: [string] | { service: string }[]; timeout: number; network: string });
 
     /**
      * Estimate fee
@@ -265,5 +259,3 @@ declare class DAPIClient {
         count?: number;
     }): Promise<any>;
 }
-
-

@@ -11,6 +11,7 @@ import Identity from "@dashevo/dpp/lib/identity/Identity";
 // @ts-ignore
 import DashPlatformProtocol from "@dashevo/dpp";
 import getTypeOfRecord from "./getTypeOfRecord";
+import {ClientDependency} from "../Client";
 
 export const enum StateTransitionBuilderTypes {
     CONTRACT = 'dataContract',
@@ -22,7 +23,7 @@ export type Record = Document | DataContract | Identity;
 
 export interface StateTransitionBuilderOpts {
     dpp: DashPlatformProtocol,
-    client?: DAPIClient
+    client?: ClientDependency
 };
 
 /**
@@ -30,14 +31,14 @@ export interface StateTransitionBuilderOpts {
  *
  * @param {StateTransitionBuilderTypes} type - a valid st builder type
  * @param dpp - DashPlatformProtocol instance
- * @param client - DAPIClient instance
+ * @param client - ClientDependency instance
  */
 export class StateTransitionBuilder {
     public records: Record[];
     public type: StateTransitionBuilderTypes | undefined;
 
     private dpp: DashPlatformProtocol | undefined;
-    private client: DAPIClient | undefined;
+    private client: ClientDependency | undefined;
 
     constructor(opts: StateTransitionBuilderOpts) {
         this.type = undefined;
@@ -54,12 +55,12 @@ export class StateTransitionBuilder {
      * @param record - a valid record
      */
     addRecord(record: Record) {
-        if(Array.isArray(record)){
-            record.forEach((_record)=> this.addRecord(_record))
+        if (Array.isArray(record)) {
+            record.forEach((_record) => this.addRecord(_record))
             return;
         }
         let recordType = getTypeOfRecord(record);
-        if(!this.type) this.type = recordType;
+        if (!this.type) this.type = recordType;
         if (recordType !== this.type) {
             throw new Error(`Records cannot add to records of type ${this.type}: record type ${recordType}`);
         }
@@ -91,7 +92,7 @@ export class StateTransitionBuilder {
      * @return {DataContractStateTransition|DocumentsStateTransition|IdentityCreateTransition}
      */
     toStateTransition() {
-        if(!this.type) throw new Error('Need record to create a StateTransition');
+        if (!this.type) throw new Error('Need record to create a StateTransition');
         return this.dpp[this.type].createStateTransition(this.records)
     }
 }
