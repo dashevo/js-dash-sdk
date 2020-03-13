@@ -1,26 +1,26 @@
 import { expect } from 'chai';
-import {SDK} from "./index";
+import {Client} from "./index";
 import 'mocha';
 import schema from '../../../tests/fixtures/dp1.schema.json'
 const mnemonic = 'agree country attract master mimic ball load beauty join gentle turtle hover';
 describe('DashJS - SDK', function suite() {
   this.timeout(10000);
   it('should provide expected class', function () {
-    expect(SDK.name).to.be.equal('SDK');
-    expect(SDK.constructor.name).to.be.equal('Function');
+    expect(Client.name).to.be.equal('SDK');
+    expect(Client.constructor.name).to.be.equal('Function');
   });
   it('should be instantiable', function () {
-    const sdk = new SDK();
+    const sdk = new Client();
     expect(sdk).to.exist;
     expect(sdk.network).to.be.equal('testnet');
     expect(sdk.getDAPIInstance().constructor.name).to.be.equal('DAPIClient');
   });
   it('should not initiate wallet lib without mnemonic', function () {
-    const sdk = new SDK();
+    const sdk = new Client();
     expect(sdk.wallet).to.be.equal(undefined);
   });
   it('should initiate wallet-lib with a mnemonic', async ()=>{
-    const sdk = new SDK({mnemonic});
+    const sdk = new Client({mnemonic});
     await sdk.isReady();
     expect(sdk.wallet).to.exist;
     expect(sdk.wallet!.offlineMode).to.be.equal(false);

@@ -1,4 +1,3 @@
-import {SDK as _SDK} from './SDK';
 import {
     Transaction as _Transaction,
     Address as _Address,
@@ -6,7 +5,6 @@ import {
     UnspentOutput as _UnspentOutput,
     HDPublicKey as _HDPublicKey,
     HDPrivateKey as _HDPrivateKey,
-    Message as _Message,
     Mnemonic as _Mnemonic,
     Network as _Network,
     Input as _Input,
@@ -16,10 +14,8 @@ import {
     PrivateKey as _PrivateKey
 } from '@dashevo/dashcore-lib';
 
-export namespace DashJS {
-    export let SDK = _SDK;
-
-    // Dashcore-lib primitives
+export namespace Core {
+    // Dashcore-lib L1 primitives
     export let Transaction = _Transaction;
 
     export let Address = _Address;
@@ -29,13 +25,10 @@ export namespace DashJS {
     export let HDPrivateKey = _HDPrivateKey;
     export let PublicKey = _PublicKey;
     export let PrivateKey = _PrivateKey;
-    export let Message = _Message;
     export let Mnemonic = _Mnemonic;
     export let Network = _Network;
     export let Script = _Script;
     export let Input = _Input;
     export let Output = _Output;
 }
-
-
-export {DashJS as default};
+export {Core as default};
