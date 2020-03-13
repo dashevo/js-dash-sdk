@@ -21,8 +21,8 @@ const sdkOpts = {
 describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite() {
   this.timeout(240000);
 
-  it('should init a SDK', async () => {
-    sdkInstance = new DashJS.SDK(sdkOpts);
+  it('should init a Client', async () => {
+    sdkInstance = new DashJS.Client(sdkOpts);
     expect(sdkInstance.network).to.equal('testnet');
     expect(sdkInstance.accountIndex).to.equal(0);
     expect(sdkInstance.apps).to.deep.equal({dpns: {contractId: "77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3"}});
@@ -52,7 +52,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     })
   });
   it('should have a balance', function (done) {
-    const balance = (sdkInstance.account.getConfirmedBalance());
+    const balance = (sdkInstance.account.getTotalBalance());
     if(balance<10000){
       return done(new Error(`You need to fund this address : ${sdkInstance.account.getUnusedAddress().address}. Insuffisiant balance: ${balance}`));
     }

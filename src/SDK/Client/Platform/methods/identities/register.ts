@@ -11,7 +11,7 @@ import {Platform} from "../../Platform";
 
 /**
  * Register identities to the platform
- * 
+ *
  * @param {Platform} this - bound instance class
  * @param {string} identityType - identity type (non case sensitive), default value is set to 'USER'
  * @returns registered identities
@@ -50,7 +50,7 @@ export async function register(this: Platform, identityType: string = 'USER'): P
         };
 
         const utxos = account.getUTXOS();
-        const balance = account.getConfirmedBalance();
+        const balance = account.getTotalBalance();
 
         if (balance < output.satoshis) {
             throw new Error(`Not enought balance (${balance}) to cover burn amount of ${burnAmount}`)
