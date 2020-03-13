@@ -21,11 +21,11 @@ const sdkOpts = {
 describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite() {
   this.timeout(240000);
 
-  it('should init a SDK', async () => {
-    sdkInstance = new DashJS.SDK(sdkOpts);
+  it('should init a Client', async () => {
+    sdkInstance = new DashJS.Client(sdkOpts);
     expect(sdkInstance.network).to.equal('testnet');
     expect(sdkInstance.accountIndex).to.equal(0);
-    expect(sdkInstance.apps).to.deep.equal({dpns: {contractId: "2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse"}});
+    expect(sdkInstance.apps).to.deep.equal({dpns: {contractId: "BSwrqgq7idvxgBWSHWsmxyoi1XHDXU1URoDVaRXFozhp"}});
     expect(sdkInstance.wallet.network).to.equal('testnet');
     expect(sdkInstance.wallet.offlineMode).to.equal(false);
     expect(sdkInstance.wallet.mnemonic).to.equal(fixtures.mnemonic);
@@ -46,13 +46,13 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
       expect(sdkInstance.account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
       expect(sdkInstance.state).to.deep.equal({isReady: true, isAccountReady: true});
       expect(sdkInstance.apps['dpns']).to.exist;
-      expect(sdkInstance.apps['dpns'].contractId).to.equal('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse');
-      expect(sdkInstance.apps['dpns'].contractId).to.equal('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse');
+      expect(sdkInstance.apps['dpns'].contractId).to.equal('BSwrqgq7idvxgBWSHWsmxyoi1XHDXU1URoDVaRXFozhp');
+      expect(sdkInstance.apps['dpns'].contractId).to.equal('BSwrqgq7idvxgBWSHWsmxyoi1XHDXU1URoDVaRXFozhp');
       return done();
     })
   });
   it('should have a balance', function (done) {
-    const balance = (sdkInstance.account.getConfirmedBalance());
+    const balance = (sdkInstance.account.getTotalBalance());
     if(balance<10000){
       return done(new Error(`You need to fund this address : ${sdkInstance.account.getUnusedAddress().address}. Insuffisiant balance: ${balance}`));
     }
@@ -96,7 +96,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(createDocument.action).to.equal(1);
     expect(createDocument.type).to.equal('domain');
     expect(createDocument.userId).to.equal(createdIdentityId);
-    expect(createDocument.contractId).to.equal('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse');
+    expect(createDocument.contractId).to.equal('BSwrqgq7idvxgBWSHWsmxyoi1XHDXU1URoDVaRXFozhp');
     expect(createDocument.data.label).to.equal(username)
     expect(createDocument.data.normalizedParentDomainName).to.equal('dash');
   });
@@ -112,7 +112,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(doc.revision).to.equal(1);
     expect(doc.type).to.equal('domain');
     expect(doc.userId).to.equal(createdIdentityId);
-    expect(doc.contractId).to.equal('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse');
+    expect(doc.contractId).to.equal('BSwrqgq7idvxgBWSHWsmxyoi1XHDXU1URoDVaRXFozhp');
     expect(doc.data.label).to.equal(username)
     expect(doc.data.normalizedParentDomainName).to.equal('dash');
   });

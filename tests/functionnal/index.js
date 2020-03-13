@@ -8,7 +8,7 @@ describe('SDK', () => {
     expect(DashJS).to.have.property('Client');
     expect(DashJS.Client.constructor.name).to.be.equal('Function')
   });
-  it('should create an instance', function () {
+  it('should create an instance', function (done) {
     instanceWithoutWallet = new DashJS.Client();
     expect(instanceWithoutWallet.network).to.equal('testnet');
     expect(instanceWithoutWallet.apps).to.deep.equal({
@@ -23,12 +23,16 @@ describe('SDK', () => {
         }
     );
     expect(instanceWithWallet.wallet.mnemonic).to.exist;
+    done();
   });
   it('should sign and verify a message', function () {
     const {account} = instanceWithWallet;
     const idKey = instanceWithWallet.account.getIdentityHDKey();
+    // This transforms from a Wallet-Lib.PrivateKey to a Dashcore-lib.PrivateKey.
+    // It will quickly be annoying to perform this, and we therefore need to find a better solution for that.
+    const privateKey = DashJS.Core.PrivateKey(idKey.privateKey);
     const message = DashJS.Core.Message('hello, world');
-    const signed = account.sign(message, idKey.privateKey);
+    const signed = message.sign(privateKey);
     const verify = message.verify(idKey.privateKey.toAddress().toString(), signed.toString());
     expect(verify).to.equal(true);
   });
