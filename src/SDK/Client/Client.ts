@@ -83,7 +83,7 @@ export class Client {
         this.network = (opts.network !== undefined) ? opts.network.toString() : 'testnet';
         this.apps = Object.assign({
             dpns: {
-                contractId: 'BSwrqgq7idvxgBWSHWsmxyoi1XHDXU1URoDVaRXFozhp'
+                contractId: '77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3'
             }
         }, opts.apps);
 
