@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import {Client} from "./index";
 import 'mocha';
-import schema from '../../../tests/fixtures/dp1.schema.json'
+
 const mnemonic = 'agree country attract master mimic ball load beauty join gentle turtle hover';
-describe('DashJS - SDK', function suite() {
+describe('DashJS - Client', function suite() {
   this.timeout(10000);
   it('should provide expected class', function () {
     expect(Client.name).to.be.equal('Client');
@@ -20,23 +20,16 @@ describe('DashJS - SDK', function suite() {
     expect(sdk.wallet).to.be.equal(undefined);
   });
   it('should initiate wallet-lib with a mnemonic', async ()=>{
-    const sdk = new Client({mnemonic});
-    await sdk.isReady();
-    expect(sdk.wallet).to.exist;
-    expect(sdk.wallet!.offlineMode).to.be.equal(false);
-    // @ts-ignore
-    await sdk.wallet.storage.stopWorker();
-    // @ts-ignore
-    await sdk.wallet.disconnect();
-    // @ts-ignore
-    await sdk.account.disconnect();
-  });
-  // it('should initiate platform and only set contract when schema provided', function () {
-  //   const sdkNoSchema= new SDK();
-  //   expect(sdkNoSchema.platform).to.not.have.property('contractId');
+    const client = new Client({mnemonic});
+    await client.isReady();
+    expect(client.wallet).to.exist;
+    expect(client.wallet!.offlineMode).to.be.equal(false);
 
-  //   const sdkWithSchema= new SDK({schemas: {dp1: schema}});
-  //   expect(sdkWithSchema.platform).to.exist;
-  //   expect(sdkWithSchema.platform!.contractId).to.equal('4bGwCHfGZYHkAi6ut4Ppm5qSUHSb7zcTFMmLKomrHLcg');
-  // });
+    // @ts-ignore
+    await client.wallet.storage.stopWorker();
+    // @ts-ignore
+    await client.wallet.disconnect();
+    // @ts-ignore
+    await client.account.disconnect();
+  });
 });
