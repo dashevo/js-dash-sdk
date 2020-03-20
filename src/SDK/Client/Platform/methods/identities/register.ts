@@ -81,7 +81,7 @@ export async function register(this: Platform, identityType: string = 'USER'): P
         const signedLockTransaction = lockTransaction.sign(signingKeys);
 
         // @ts-ignore
-        const txId = await account.broadcastTransaction(signedLockTransaction.serialize());
+        const txId = await account.broadcastTransaction(signedLockTransaction);
 
         // @ts-ignore
         const outPoint = signedLockTransaction.getOutPointBuffer(0).toString('base64');
