@@ -70,7 +70,7 @@ export async function register(this: Platform, identityType: string = 'USER'): P
             .change(changeAddress)
             .fee(selection.estimatedFee)
 
-        const UTXOHDPrivateKey = account.getPrivateKeys(selection.utxos.map((utxo: any) => utxo.address));
+        const UTXOHDPrivateKey = account.getPrivateKeys(selection.utxos.map((utxo: any) => utxo.address.toString()));
 
         // @ts-ignore
         const signingKeys = UTXOHDPrivateKey.map((hdprivateKey) => hdprivateKey.privateKey);
@@ -79,6 +79,7 @@ export async function register(this: Platform, identityType: string = 'USER'): P
         // FIXME : Seems to fail with addBurnOutput ?
         // const signedLockTransaction = account.sign(lockTransaction, signingKeys);
         const signedLockTransaction = lockTransaction.sign(signingKeys);
+
         // @ts-ignore
         const txId = await account.broadcastTransaction(signedLockTransaction.serialize());
 
