@@ -1,9 +1,10 @@
 const {expect} = require('chai');
 const DashJS = require('../../dist/dash.cjs.min');
 
-describe('SDK', () => {
-  let instanceWithoutWallet;
-  let instanceWithWallet;
+describe('SDK', function suite() {
+  this.timeout(10000);
+  let instanceWithoutWallet = {};
+  let instanceWithWallet = {};
   it('should provide expected class', function () {
     expect(DashJS).to.have.property('Client');
     expect(DashJS.Client.constructor.name).to.be.equal('Function')
@@ -27,7 +28,7 @@ describe('SDK', () => {
   });
   it('should sign and verify a message', function () {
     const {account} = instanceWithWallet;
-    const idKey = instanceWithWallet.account.getIdentityHDKey();
+    const idKey = account.getIdentityHDKey();
     // This transforms from a Wallet-Lib.PrivateKey to a Dashcore-lib.PrivateKey.
     // It will quickly be annoying to perform this, and we therefore need to find a better solution for that.
     const privateKey = DashJS.Core.PrivateKey(idKey.privateKey);
@@ -36,8 +37,9 @@ describe('SDK', () => {
     const verify = message.verify(idKey.privateKey.toAddress().toString(), signed.toString());
     expect(verify).to.equal(true);
   });
-  after(()=>{
-    instanceWithWallet.wallet.disconnect();
-    instanceWithoutWallet.disconnect();
+  after(async ()=>{
+    await instanceWithWallet.isReady();
+    await instanceWithWallet.disconnect();
+    await instanceWithoutWallet.disconnect();
   })
 });
