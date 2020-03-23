@@ -7,15 +7,16 @@ import Identity from "@dashevo/dpp/lib/identity/Identity";
 import {Record, StateTransitionBuilderTypes} from "./StateTransitionBuilder";
 
 const getTypeOfRecord = (record: Record) => {
-    switch (typeof record) {
-        case Document.prototype.name:
+    if(!record) return null;
+    switch (record.constructor.prototype) {
+        case Document.prototype:
             return StateTransitionBuilderTypes.DOCUMENT;
-        case DataContract.prototype.name:
+        case DataContract.prototype:
             return StateTransitionBuilderTypes.CONTRACT;
-        case Identity.prototype.name:
+        case Identity.prototype:
             return StateTransitionBuilderTypes.IDENTITY;
         default:
-            throw new Error('Invalid record type');
+            throw new Error('Unhandled record type');
     }
 }
 export default getTypeOfRecord;

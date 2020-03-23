@@ -35,13 +35,13 @@ export interface StateTransitionBuilderOpts {
  */
 export class StateTransitionBuilder {
     public records: Record[];
-    public type: StateTransitionBuilderTypes | undefined;
+    public type: null | StateTransitionBuilderTypes;
 
     private dpp: DashPlatformProtocol | undefined;
     private client: ClientDependency | undefined;
 
     constructor(opts: StateTransitionBuilderOpts) {
-        this.type = undefined;
+        this.type = null;
         if (opts.client) this.client = opts.client;
         if (opts.dpp === undefined) {
             throw new Error('Records requires a DPP instance for stateTransition creation');
