@@ -4,7 +4,7 @@ Assuming you have created an identity and attached a name to it (see how to [reg
 You will then be able to directly recover an identity from its names. See below: 
 
 ```js
-const sdk = new DashJS.SDK({
+const sdk = new DashJS.Client({
   mnemonic: ''// Your app mnemonic, which holds the app identity
 });
 

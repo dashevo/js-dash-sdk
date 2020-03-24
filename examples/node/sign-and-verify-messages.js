@@ -5,7 +5,7 @@ const sdkOpts = {
   mnemonic: null,
 };
 
-const sdk = new DashJS.SDK(sdkOpts);
+const sdk = new DashJS.Client(sdkOpts);
 
 const message = new DashJS.Message('hello, world');
 

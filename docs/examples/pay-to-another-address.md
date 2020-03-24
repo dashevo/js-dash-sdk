@@ -6,7 +6,7 @@ The below code will allow you to pay to a single address a specific amount of sa
 ```js
 const DashJS = require("dash");
 const mnemonic = ''// your mnemonic here.
-const sdk = new DashJS.SDK({
+const sdk = new DashJS.Client({
   mnemonic,
 });
 sdk.isReady().then(payToRecipient);

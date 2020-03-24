@@ -6,7 +6,7 @@ By default, the SDK will work on Evonet, the only network having DAPI at the tim
 ```js
 const DashJS = require("dash");
 const mnemonic = ''// your mnemonic here.
-const sdk = new DashJS.SDK({
+const sdk = new DashJS.Client({
   mnemonic,
 });
 ```

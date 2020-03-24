@@ -1,6 +1,6 @@
 ### About Wallet-lib 
 
-When DashJS.SDK is initiated with a `mnemonic` property, a wallet instance is automatically created accessible via `sdk.wallet` as well as an `sdk.account` instance. 
+When DashJS.Client is initiated with a `mnemonic` property, a wallet instance is automatically created accessible via `sdk.wallet` as well as an `sdk.account` instance. 
 
 In order to ensure the sync-up with the network has happened, you will need to wait for the method `sdk.isReady()` to resolve. 
 

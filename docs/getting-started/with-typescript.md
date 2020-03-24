@@ -8,7 +8,7 @@ const sdkOpts = {
   network: 'testnet',
   mnemonic: null,// Will generate a new address, you should keep it.
 };
-const sdk = new DashJS.SDK(sdkOpts);
+const sdk = new DashJS.Client(sdkOpts);
 
 sdk.isReady().then(()=> console.log('isReady'));
 ```

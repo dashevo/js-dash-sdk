@@ -38,7 +38,7 @@ For browser usage, you can also directly rely on unpkg :
 ```js
 const DashJS = require("dash");
 
-const sdk = new DashJS.SDK({
+const sdk = new DashJS.Client({
   network: "testnet",
   mnemonic: "arena light cheap control apple buffalo indicate rare motor valid accident isolate",
 });

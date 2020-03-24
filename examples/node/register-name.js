@@ -4,7 +4,7 @@ const sdkOpts = {
   mnemonic:'your mnemonic here'
 };
 const identityId = 'your identity id';
-const sdk = new DashJS.SDK(sdkOpts);
+const sdk = new DashJS.Client(sdkOpts);
 
 const registerName = async function () {
   let platform = sdk.platform;

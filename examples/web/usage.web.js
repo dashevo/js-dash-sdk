@@ -8,7 +8,7 @@ const opts = {
     }
   }
 };
-const sdk = new DashJS.SDK(opts);
+const sdk = new DashJS.Client(opts);
 sdk.isReady().then(()=>{
   const {account, platform} = sdk;
 

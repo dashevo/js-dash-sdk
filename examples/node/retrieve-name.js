@@ -3,7 +3,7 @@ const DashJS = require('dash');
 const sdkOpts = {
   network: 'testnet'
 };
-const sdk = new DashJS.SDK(sdkOpts);
+const sdk = new DashJS.Client(sdkOpts);
 
 const platform = sdk.platform;
 

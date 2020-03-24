@@ -4,7 +4,7 @@ A Wallet is actually a holders of multiple Account that hold the keys needed to 
 So the first thing will be on accessing your account : 
 
 ```js
-const sdk = new DashJS.SDK({
+const sdk = new DashJS.Client({
   mnemonic: "maximum blast eight orchard waste wood gospel siren parent deer athlete impact",
 });
 sdk.isReady().then(()=>{

@@ -3,7 +3,7 @@ const sdkOpts = {
   network: 'testnet',
   mnemonic:'your mnemonic here'
 };
-const sdk = new DashJS.SDK(sdkOpts);
+const sdk = new DashJS.Client(sdkOpts);
 
 const createIdentity = async function () {
   await sdk.isReady();

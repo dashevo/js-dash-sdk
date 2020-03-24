@@ -11,7 +11,7 @@ and [attached to a name](https://dashplatform.readme.io/docs/tutorial-register-a
 
 ```js
 const schema = {};// You JSON schema defining the app.
-const sdk = new DashJS.SDK({
+const sdk = new DashJS.Client({
   mnemonic: ''// Your app mnemonic, which holds the app identity
 });
 
@@ -39,7 +39,7 @@ async function registerContract() {
 const schema = {};// You JSON schema defining the app.
 
 // This is the name previously registered in DPNS.
-const sdk = new DashJS.SDK({
+const sdk = new DashJS.Client({
   mnemonic: "",// Your app mnemonic, which holds the app identity
   apps:{
     myapp:{

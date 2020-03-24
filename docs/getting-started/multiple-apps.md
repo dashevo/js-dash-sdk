@@ -6,7 +6,7 @@ Assuming a contract DashPay and having a following `contractId: "77w8Xqn25HwJhjo
 You can then pass it as an options.
 
 ```js
-const sdk = new DashJS.SDK({
+const sdk = new DashJS.Client({
   apps: {
     dashpay: {
       contractId: '77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3'

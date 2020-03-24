@@ -24,7 +24,7 @@ const opts = {
   },
   mnemonic: "arena light cheap control apple buffalo indicate rare motor valid accident isolate",
 };
-const sdk = new DashJS.SDK(opts);
+const sdk = new DashJS.Client(opts);
 sdk.isReady().then(()=>{
     const {account} = sdk;
     // Do something
