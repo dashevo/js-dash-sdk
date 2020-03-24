@@ -17,8 +17,9 @@ export async function broadcastRecords(this: Platform, records: [any], identity:
     });
     builder.addRecord(records);
 
-    const identityType = (builder.type == StateTransitionBuilderTypes.CONTRACT) ? 'application' : 'user';
-    if(identityType === 'application' && identity.getType() !== 2){
+    const identityType = (identity.getType() === 2) ? 'application' : 'user';
+
+    if(builder.type === StateTransitionBuilderTypes.CONTRACT && identityType !== 'application'){
         throw new Error('An Application Identity is required to broadcast.');
     }
     // @ts-ignore

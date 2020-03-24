@@ -5,7 +5,7 @@ const bs58 = require('bs58');
 
 /**
  * Register names to the platform
- * 
+ *
  * @param {Platform} this - bound instance class
  * @param {string} name - name
  * @param identity - identity
@@ -20,14 +20,16 @@ export async function register(this: Platform,
                                identity: {
                                     id: any;
                                     type: number,
-                                   publicKeys: [any]
+                                   publicKeys: [any],
+                                   getType():number,
                                    getPublicKeyById(number: number):any;
                                }
 ): Promise<any> {
     const {account, client,dpp } = this;
 
+    const identityType = (identity.getType() === 2) ? 'application' : 'user';
     // @ts-ignore
-    const identityHDPrivateKey = account.getIdentityHDKey(0, 'user');
+    const identityHDPrivateKey = account.getIdentityHDKey(0, identityType);
 
     // @ts-ignore
     const identityPrivateKey = identityHDPrivateKey.privateKey;
