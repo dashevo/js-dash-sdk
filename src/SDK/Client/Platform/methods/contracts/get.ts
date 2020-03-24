@@ -4,8 +4,8 @@ declare type ContractIdentifier = string;
 
 /**
  * Get contracts from the platform
- * 
- * @param {Platform} this - bound instance class 
+ *
+ * @param {Platform} this - bound instance class
  * @param {ContractIdentifier} identifier - identifier
  * @returns contracts
  */
@@ -25,8 +25,12 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
     } else {
         try {
             // @ts-ignore
-            const rawContract = await this.client.getDataContract(identifier)
-            const contract = this.dpp.dataContract.createFromSerialized(rawContract);
+            const rawContract = await this.client.getDataContract(identifier);
+            if(!rawContract){
+                return null;
+            }
+
+            const contract = await this.dpp.dataContract.createFromSerialized(rawContract);
             const app = {contractId: identifier, contract};
             // If we do not have even the identifier in this.apps, we add it with timestamp as key
             if (localContract === undefined) {
