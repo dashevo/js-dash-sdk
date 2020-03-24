@@ -1,5 +1,5 @@
 import {Platform} from "../../Platform";
-import StateTransitionBuilder from "../../StateTransitionBuilder/StateTransitionBuilder";
+import StateTransitionBuilder, {StateTransitionBuilderTypes} from "../../StateTransitionBuilder/StateTransitionBuilder";
 
 /**
  * Register the set of records provided by creating and broadcasting a stateTransition.
@@ -17,8 +17,13 @@ export async function broadcastRecords(this: Platform, records: [any], identity:
     });
     builder.addRecord(records);
 
+    const identityType = (builder.type == StateTransitionBuilderTypes.CONTRACT) ? 'application' : 'user';
+    if(identityType === 'application' && identity.getType() !== 2){
+        throw new Error('An Application Identity is required to broadcast.');
+    }
     // @ts-ignore
-    const identityPrivateKey = account.getIdentityHDKey(0, 'user').privateKey;
+    const identityPrivateKey = account.getIdentityHDKey(0, identityType).privateKey;
+
     await builder.register(identity, identityPrivateKey);
 }
 

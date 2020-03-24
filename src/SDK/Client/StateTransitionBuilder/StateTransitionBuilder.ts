@@ -78,9 +78,17 @@ export class StateTransitionBuilder {
         if (!dapiClient) {
             throw new Error('Requires a DAPIClient instance for stateTransition creation');
         }
-        let stateTransition = this.toStateTransition();
+        let stateTransition = await this.toStateTransition();
+        //
+        //ECDSA_SECP256K1
+        const identityPublicKey = identity.getPublicKeyById(1);
+        // @ts-ignore
+        stateTransition.sign(identityPublicKey, identityPrivateKey);
 
-        stateTransition.sign(identity.getPublicKeyById(1), identityPrivateKey);
+        const result = await this.dpp.stateTransition.validateStructure(stateTransition);
+        if(!result.isValid()){
+            throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
+        }
 
         // @ts-ignore
         await dapiClient.applyStateTransition(stateTransition);
@@ -91,9 +99,10 @@ export class StateTransitionBuilder {
      * Returns a StateTransition containing the records
      * @return {DataContractStateTransition|DocumentsStateTransition|IdentityCreateTransition}
      */
-    toStateTransition() {
-        if (!this.type) throw new Error('Need record to create a StateTransition');
-        return this.dpp[this.type].createStateTransition(this.records)
+    async toStateTransition() {
+        if (!this.type || !this.records.length) throw new Error('Need record to create a StateTransition');
+        const records = (this.type === StateTransitionBuilderTypes.CONTRACT) ? this.records[0] : this.records;
+        return this.dpp[this.type].createStateTransition(records);
     }
 }
 

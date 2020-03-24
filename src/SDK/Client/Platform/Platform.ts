@@ -116,7 +116,8 @@ export class Platform {
             get: getIdentity.bind(this),
         };
 
-        this.dpp = new DashPlatformProtocol(platformOpts);
+        const dataProvider = {fetchIdentity: getIdentity.bind(this), fetchDataContract: getContract.bind(this)};
+        this.dpp = new DashPlatformProtocol({...platformOpts, dataProvider});
         this.client = platformOpts.client;
         this.apps = platformOpts.apps;
         this.network = platformOpts.network;

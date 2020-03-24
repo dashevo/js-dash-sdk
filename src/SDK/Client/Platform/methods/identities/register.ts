@@ -29,7 +29,7 @@ export async function register(this: Platform, identityType: string = 'USER'): P
         throw new Error(`A initialized wallet is required to create an Identity.`);
     }
     //TODO : Here, we always use index 0. We might want to increment.
-    const identityHDPrivateKey = account.getIdentityHDKey(0, 'user');
+    const identityHDPrivateKey = account.getIdentityHDKey(0, identityType.toLowerCase());
 
     // @ts-ignore
     const identityPrivateKey = identityHDPrivateKey.privateKey;
@@ -103,11 +103,9 @@ export async function register(this: Platform, identityType: string = 'USER'): P
                 identityPublicKeyModel.toJSON(),
             ],
         });
-
         // FIXME : Need dpp to be a dependency of wallet-lib to deal with signing IdentityPublicKey (validation)
         // account.sign(identityPublicKeyModel, identityPrivateKey);
         identityCreateTransition.sign(identityPublicKeyModel, identityPrivateKey);
-
         // @ts-ignore
         await client.applyStateTransition(identityCreateTransition);
 
