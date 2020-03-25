@@ -8,9 +8,7 @@
 
 DashJS allows you to transact on L1 or fetch/register documents on L2 within a single library, including management and signing of your documents.
 
-Find more in the : 
-- [Documentation](https://dashevo.github.io/DashJS/#/)
-- [Examples & snippets](https://dashevo.github.io/DashJS/#/)
+Find more information in the [Documentation](https://dashevo.github.io/DashJS/#/).
 
 ## Install
 
