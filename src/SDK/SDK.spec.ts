@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import SDK from "./index";
 import 'mocha';
 
-describe('DashJS', () => {
+describe('Dash', () => {
 
   it('should provide expected class', function () {
     expect(SDK).to.have.property('Client');

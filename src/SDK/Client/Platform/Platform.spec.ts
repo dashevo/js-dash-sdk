@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import {Platform} from "./index";
 import 'mocha';
 
-describe('DashJS - Platform', () => {
+describe('Dash - Platform', () => {
 
   it('should provide expected class', function () {
     expect(Platform.name).to.be.equal('Platform')

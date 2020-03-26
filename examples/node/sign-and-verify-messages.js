@@ -1,16 +1,16 @@
-const DashJS = require('dash');
+const Dash = require('dash');
 
-const sdkOpts = {
+const clientOpts = {
   network: 'testnet',
   mnemonic: null,
 };
 
-const sdk = new DashJS.Client(sdkOpts);
+const client = new Dash.Client(clientOpts);
 
-const message = new DashJS.Message('hello, world');
+const message = new Dash.Core.Message('hello, world');
 
 const signAndVerify = async function () {
-  const {account, wallet} = sdk;
+  const {account, wallet} = client;
 
   const mnemonic = wallet.exportWallet();
   console.log('Mnemonic:', mnemonic);
@@ -23,5 +23,5 @@ const signAndVerify = async function () {
   const verify = message.verify(idAddress, signed.toString());
   console.log(verify);
 };
-sdk.isReady().then(signAndVerify);
+client.isReady().then(signAndVerify);
 
