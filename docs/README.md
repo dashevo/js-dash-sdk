@@ -61,5 +61,5 @@ sdk.isReady().then(async () => {
 
 ## Licence
 
-[MIT](https://github.com/dashevo/dashjs/blob/master/LICENCE.md) © Dash Core Group, Inc.
+[MIT](https://github.com/dashevo/dashjs/blob/master/LICENCE) © Dash Core Group, Inc.
 
