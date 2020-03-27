@@ -3,21 +3,21 @@ import {Client} from "./index";
 import 'mocha';
 
 const mnemonic = 'agree country attract master mimic ball load beauty join gentle turtle hover';
-describe('DashJS - Client', function suite() {
+describe('Dash - Client', function suite() {
   this.timeout(10000);
   it('should provide expected class', function () {
     expect(Client.name).to.be.equal('Client');
     expect(Client.constructor.name).to.be.equal('Function');
   });
   it('should be instantiable', function () {
-    const sdk = new Client();
-    expect(sdk).to.exist;
-    expect(sdk.network).to.be.equal('testnet');
-    expect(sdk.getDAPIInstance().constructor.name).to.be.equal('DAPIClient');
+    const client = new Client();
+    expect(client).to.exist;
+    expect(client.network).to.be.equal('testnet');
+    expect(client.getDAPIInstance().constructor.name).to.be.equal('DAPIClient');
   });
   it('should not initiate wallet lib without mnemonic', function () {
-    const sdk = new Client();
-    expect(sdk.wallet).to.be.equal(undefined);
+    const client = new Client();
+    expect(client.wallet).to.be.equal(undefined);
   });
   it('should initiate wallet-lib with a mnemonic', async ()=>{
     const client = new Client({mnemonic});
