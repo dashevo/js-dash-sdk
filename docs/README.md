@@ -47,12 +47,12 @@ sdk.isReady().then(async () => {
 
 
 ### Use-cases examples
-- [Generate a mnemonic](/examples/generate-a-new-mnemonic.md) 
-- [Receive money and display balance](/examples/receive-money-and-check-balance.md) 
-- [Pay to another address](/examples/pay-to-another-address.md) 
-- [Use a local evonet](/examples/use-local-evonet.md) 
-- [Publishing a new contract](/examples/publishing-a-new-contract.md) 
-- [Use another BIP44 account](/examples/use-different-account.md) 
+- [Generate a mnemonic](/docs/examples/generate-a-new-mnemonic.md) 
+- [Receive money and display balance](/docs/examples/receive-money-and-check-balance.md) 
+- [Pay to another address](/docs/examples/pay-to-another-address.md) 
+- [Use a local evonet](/docs/examples/use-local-evonet.md) 
+- [Publishing a new contract](/docs/examples/publishing-a-new-contract.md) 
+- [Use another BIP44 account](/docs/examples/use-different-account.md) 
     
 ### Tutorial
 - [Register an identity](https://dashplatform.readme.io/docs/tutorial-register-an-identity)
