@@ -16,7 +16,7 @@ declare interface fetchOpts {
 
 /**
  * Get documents from the platform
- * 
+ *
  * @param {Platform} this bound instance class
  * @param {string} typeLocator type locator
  * @param {fetchOpts} opts - MongoDB style query
@@ -48,6 +48,7 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
                 documents.push(doc);
             } catch (e) {
                 console.error('Document creation: failure', e);
+                throw e;
             }
         }
         return documents

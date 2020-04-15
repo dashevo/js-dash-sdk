@@ -112,6 +112,7 @@ export async function register(this: Platform, identityType: string = 'USER'): P
         // @ts-ignore
         return identityCreateTransition.getIdentityId();
     } catch (e) {
+        console.error(`Identity registration failed:`,e);
         throw e
     }
 }

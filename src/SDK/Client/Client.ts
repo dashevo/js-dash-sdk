@@ -147,6 +147,7 @@ export class Client {
             })
             .catch((e) => {
                 console.error('SDK apps fetching : failed to init', e);
+                throw e;
             });
 
     }
