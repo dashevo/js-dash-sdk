@@ -2,7 +2,6 @@ import {PublicKey, PrivateKey, Transaction} from "@dashevo/dashcore-lib";
 // @ts-ignore
 import {utils} from "@dashevo/wallet-lib";
 
-const Identity = require('@dashevo/dpp/lib/identity/Identity');
 const stateTransitionTypes = require('@dashevo/dpp/lib/stateTransition/stateTransitionTypes');
 const IdentityPublicKey = require('@dashevo/dpp/lib/identity/IdentityPublicKey');
 const IdentityCreateTransition = require('@dashevo/dpp/lib/identity/stateTransitions/identityCreateTransition/IdentityCreateTransition');
@@ -10,26 +9,22 @@ const IdentityCreateTransition = require('@dashevo/dpp/lib/identity/stateTransit
 import {Platform} from "../../Platform";
 
 /**
- * Register identities to the platform
+ * Register identities to the platformz
  *
  * @param {Platform} this - bound instance class
  * @param {string} identityType - identity type (non case sensitive), default value is set to 'USER'
  * @returns registered identities
  */
-export async function register(this: Platform, identityType: string = 'USER'): Promise<any> {
+export async function register(this: Platform): Promise<any> {
     const { account, client } = this;
 
     const burnAmount = 10000;
-
-    if (!Identity.TYPES[identityType.toUpperCase()]) {
-        throw new Error(`Create identity of ${identityType}. Wrong type. Expected one of ${Object.keys(Identity.TYPES)}`);
-    }
 
     if (account === undefined) {
         throw new Error(`A initialized wallet is required to create an Identity.`);
     }
     //TODO : Here, we always use index 0. We might want to increment.
-    const identityHDPrivateKey = account.getIdentityHDKey(0, identityType.toLowerCase());
+    const identityHDPrivateKey = account.getIdentityHDKey(0);
 
     // @ts-ignore
     const identityPrivateKey = identityHDPrivateKey.privateKey;
@@ -98,7 +93,6 @@ export async function register(this: Platform, identityType: string = 'USER'): P
             protocolVersion: 0,
             type: stateTransitionTypes.IDENTITY_CREATE,
             lockedOutPoint: outPoint,
-            identityType: Identity.TYPES[identityType.toUpperCase()],
             publicKeys: [
                 identityPublicKeyModel.toJSON(),
             ],
