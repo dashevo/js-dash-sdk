@@ -99,7 +99,7 @@ export async function register(this: Platform): Promise<any> {
         });
         // FIXME : Need dpp to be a dependency of wallet-lib to deal with signing IdentityPublicKey (validation)
         // account.sign(identityPublicKeyModel, identityPrivateKey);
-        identityCreateTransition.sign(identityPublicKeyModel, identityPrivateKey);
+        await identityCreateTransition.signByPrivateKey(identityPrivateKey);
         // @ts-ignore
         await client.applyStateTransition(identityCreateTransition);
 
