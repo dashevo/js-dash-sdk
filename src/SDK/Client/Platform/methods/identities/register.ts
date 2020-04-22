@@ -9,7 +9,7 @@ const IdentityCreateTransition = require('@dashevo/dpp/lib/identity/stateTransit
 import {Platform} from "../../Platform";
 
 /**
- * Register identities to the platformz
+ * Register identities to the platform
  *
  * @param {Platform} this - bound instance class
  * @param {string} identityType - identity type (non case sensitive), default value is set to 'USER'
