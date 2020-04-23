@@ -1,4 +1,4 @@
-**Usage**: `client.platform.document.broadcast(document, identity)`    
+**Usage**: `client.platform.document.broadcast(documents, identity)`    
 **Description**: This method will broadcast the document on the Application Chain
 
 Parameters: 
@@ -8,4 +8,4 @@ Parameters:
 | **document**              | Document  | yes            | A valid [created document](/platform/documents/create.md) |
 | **identity**              | Identity  | yes            | A valid [registered identity](/platform/identities/register.md) |
 
-Returns : void.
+Returns : document.
