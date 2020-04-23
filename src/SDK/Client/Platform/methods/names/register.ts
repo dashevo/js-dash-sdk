@@ -71,13 +71,9 @@ export async function register(this: Platform,
         },
     );
 
-    console.dir(preorderDocument.toJSON(), {depth:100});
-
     const preorderTransition = dpp.document.createStateTransition({
         create: [ preorderDocument ],
     });
-
-    console.dir(preorderTransition.toJSON(), {depth:100});
 
     await broadcastStateTransition(this, preorderTransition, identity);
 
@@ -94,8 +90,6 @@ export async function register(this: Platform,
             records,
         },
     );
-
-    console.dir({domainDocument});
 
     // 4. Create and send domain state transition
     const domainTransition = dpp.document.createStateTransition({
