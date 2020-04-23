@@ -17,4 +17,6 @@ export default async function broadcast(this: Platform, documents: { create: any
     const documentsBatchTransition = dpp.documents.createStateTransition(documents);
 
     await broadcastStateTransition(this, documentsBatchTransition, identity);
+
+    return documents;
 }

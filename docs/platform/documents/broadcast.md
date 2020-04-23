@@ -11,4 +11,4 @@ Parameters:
 | **documents.delete**       | Document[] | yes      | array of valid [created document](/platform/documents/create.md) to delete  |
 | **identity**               | Identity   | yes      | A valid [registered identity](/platform/identities/register.md)             |
 
-Returns : document.
+Returns : documents.
