@@ -3,9 +3,12 @@
 
 Parameters: 
 
-| parameters                | type      | required       | Description                                                       |  
-|---------------------------|-----------|----------------| -----------------------------------------------------------------	|
-| **document**              | Document  | yes            | A valid [created document](/platform/documents/create.md) |
-| **identity**              | Identity  | yes            | A valid [registered identity](/platform/identities/register.md) |
+| parameters                 | type       | required | Description                                                                 |  
+|----------------------------|------------|----------| ----------------------------------------------------------------------------|
+| **documents**              | Object     | yes      |                                                                             |
+| **documents.create**       | Document[] | yes      | array of valid [created document](/platform/documents/create.md) to create  |
+| **documents.replace**      | Document[] | yes      | array of valid [created document](/platform/documents/create.md) to replace |
+| **documents.delete**       | Document[] | yes      | array of valid [created document](/platform/documents/create.md) to delete  |
+| **identity**               | Identity   | yes      | A valid [registered identity](/platform/identities/register.md)             |
 
 Returns : document.
