@@ -1,4 +1,7 @@
 import {Platform} from "../../Platform";
+
+import broadcastStateTransition from '../../broadcastStateTransition';
+
 const entropy = require('@dashevo/dpp/lib/util/entropy');
 const { hash } = require('@dashevo/dpp/lib/util/multihashDoubleSHA256');
 const bs58 = require('bs58');
@@ -20,15 +23,11 @@ export async function register(this: Platform,
                                    getPublicKeyById(number: number):any;
                                }
 ): Promise<any> {
-    const {account, client,dpp } = this;
+    const { dpp } = this;
 
-    // @ts-ignore
-    const identityHDPrivateKey = account.getIdentityHDKey(0);
-
-    // @ts-ignore
-    const { privateKey: identityPrivateKey } = identityHDPrivateKey;
-
-    const records = {dashIdentity: identity.getId()};
+    const records = {
+        dashIdentity: identity.getId(),
+    };
 
     const nameSlice = name.indexOf('.');
     const normalizedParentDomainName = (
@@ -74,18 +73,7 @@ export async function register(this: Platform,
 
     const preorderTransition = dpp.document.createStateTransition({ create: [ preorderDocument ]});
 
-    preorderTransition.sign(
-        identity.getPublicKeyById(0),
-        identityPrivateKey
-    );
-
-    const preorderTransitionResult = await dpp.stateTransition.validateStructure(preorderTransition);
-
-    if (!preorderTransitionResult.isValid()) {
-        throw new Error(`StateTransition is invalid - ${JSON.stringify(preorderTransitionResult.getErrors())}`);
-    }
-
-    await client.applyStateTransition(preorderTransition);
+    await broadcastStateTransition(this, preorderTransition, identity);
 
     // 3. Create domain document
     const domainDocument = await this.documents.create(
@@ -108,20 +96,7 @@ export async function register(this: Platform,
         create: [domainDocument],
     });
 
-    domainTransition.sign(
-        identity.getPublicKeyById(0),
-        identityPrivateKey
-    );
-
-    console.dir({domainTransition}, { depth:10 });
-
-    const domainTransitionResult = await dpp.stateTransition.validateStructure(domainTransition);
-
-    if (!domainTransitionResult.isValid()) {
-        throw new Error(`StateTransition is invalid - ${JSON.stringify(domainTransitionResult.getErrors())}`);
-    }
-
-    await client.applyStateTransition(domainTransition);
+    await broadcastStateTransition(this, domainTransition, identity);
 
     return domainDocument;
 }

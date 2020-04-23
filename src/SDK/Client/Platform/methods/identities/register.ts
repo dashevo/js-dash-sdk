@@ -78,7 +78,7 @@ export async function register(this: Platform): Promise<any> {
         // @ts-ignore
         const outPoint = signedLockTransaction.getOutPointBuffer(0);
 
-        const identity = dpp.identity.create(outPoint, identityPublicKey);
+        const identity = dpp.identity.create(outPoint, [identityPublicKey]);
 
         const identityCreateTransition = dpp.identity.createIdentityCreateTransition(identity);
 
