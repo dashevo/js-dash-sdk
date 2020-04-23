@@ -2,8 +2,9 @@
  * Broadcast contract onto the platform
  *
  * @param {Platform} this - bound instance class
- * @param contract - contract
+ * @param dataContract - contract
  * @param identity - identity
+ * @return dataContract
  */
 import {Platform} from "../../Platform";
 import broadcastStateTransition from "../../broadcastStateTransition";
@@ -14,4 +15,6 @@ export default async function broadcast(this: Platform, dataContract: [any], ide
     const dataContractCreateTransition = dpp.dataContract.createStateTransition(dataContract);
 
     await broadcastStateTransition(this, dataContractCreateTransition, identity);
+
+    return dataContract;
 }
