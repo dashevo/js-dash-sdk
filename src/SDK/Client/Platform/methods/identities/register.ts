@@ -11,7 +11,7 @@ import {Platform} from "../../Platform";
  * @returns {Identity}
  */
 export async function register(this: Platform): Promise<any> {
-    const { account, client } = this;
+    const { account, client, dpp } = this;
 
     const burnAmount = 10000;
 
@@ -76,9 +76,9 @@ export async function register(this: Platform): Promise<any> {
         // @ts-ignore
         const outPoint = signedLockTransaction.getOutPointBuffer(0);
 
-        const identity = this.dpp.identity.create(outPoint, identityPublicKey);
+        const identity = dpp.identity.create(outPoint, identityPublicKey);
 
-        const identityCreateTransition = this.dpp.identity.createIdentityCreateTransition(identity);
+        const identityCreateTransition = dpp.identity.createIdentityCreateTransition(identity);
 
         // FIXME : Need dpp to be a dependency of wallet-lib to deal with signing IdentityPublicKey (validation)
         // account.sign(identityPublicKeyModel, identityPrivateKey);
