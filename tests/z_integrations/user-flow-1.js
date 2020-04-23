@@ -25,7 +25,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     clientInstance = new Dash.Client(clientOpts);
     expect(clientInstance.network).to.equal('testnet');
     expect(clientInstance.accountIndex).to.equal(0);
-    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: "77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3"}});
+    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: "295xRRRMGYyAruG39XdAibaU9jMAzxhknkkAxFE7uVkW"}});
     expect(clientInstance.wallet.network).to.equal('testnet');
     expect(clientInstance.wallet.offlineMode).to.equal(false);
     expect(clientInstance.wallet.mnemonic).to.equal(fixtures.mnemonic);
@@ -46,8 +46,8 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
       expect(clientInstance.account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
       expect(clientInstance.state).to.deep.equal({isReady: true, isAccountReady: true});
       expect(clientInstance.apps['dpns']).to.exist;
-      expect(clientInstance.apps['dpns'].contractId).to.equal('77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3');
-      expect(clientInstance.apps['dpns'].contractId).to.equal('77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3');
+      expect(clientInstance.apps['dpns'].contractId).to.equal('295xRRRMGYyAruG39XdAibaU9jMAzxhknkkAxFE7uVkW');
+      expect(clientInstance.apps['dpns'].contractId).to.equal('295xRRRMGYyAruG39XdAibaU9jMAzxhknkkAxFE7uVkW');
       return done();
     })
   });
@@ -108,12 +108,12 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     const [doc] = await clientInstance.platform.documents.get('dpns.domain', {where:[
         ["normalizedParentDomainName","==","dash"],
         ["normalizedLabel","==",username.toLowerCase()],
-      ]})
+      ]});
     expect(doc.revision).to.equal(1);
     expect(doc.type).to.equal('domain');
     expect(doc.userId).to.equal(createdIdentityId);
     expect(doc.contractId).to.equal('77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3');
-    expect(doc.data.label).to.equal(username)
+    expect(doc.data.label).to.equal(username);
     expect(doc.data.normalizedParentDomainName).to.equal('dash');
   });
   it('should disconnect', async function () {

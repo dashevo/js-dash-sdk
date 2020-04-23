@@ -10,31 +10,25 @@ const bs58 = require('bs58');
  * @param {string} name - name
  * @param identity - identity
  * @param {any} [identity.id] - identity ID
- * @param {number} [identity.type] - identity type
- * @param {[any]} [identity.publicKeys] - identity public keys
  * @param {function(number):any} - get public key by ID
  * @returns registered names
  */
 export async function register(this: Platform,
                                name: string,
                                identity: {
-                                    id: any;
-                                    type: number,
-                                   publicKeys: [any],
-                                   getType():number,
+                                   getId(): string;
                                    getPublicKeyById(number: number):any;
                                }
 ): Promise<any> {
     const {account, client,dpp } = this;
 
-    const identityType = (identity.getType() === 2) ? 'application' : 'user';
     // @ts-ignore
-    const identityHDPrivateKey = account.getIdentityHDKey(0, identityType);
+    const identityHDPrivateKey = account.getIdentityHDKey(0);
 
     // @ts-ignore
-    const identityPrivateKey = identityHDPrivateKey.privateKey;
+    const { privateKey: identityPrivateKey } = identityHDPrivateKey;
 
-    const records = {dashIdentity: identity.id};
+    const records = {dashIdentity: identity.getId()};
 
     const nameSlice = name.indexOf('.');
     const normalizedParentDomainName = (
@@ -65,9 +59,10 @@ export async function register(this: Platform,
         saltedDomainHashBuffer,
     ).toString('hex');
 
-    if(!this.apps.dpns.contractId){
+    if (!this.apps.dpns.contractId) {
         throw new Error('DPNS is required to register a new name.');
     }
+
     // 1. Create preorder document
     const preorderDocument = await this.documents.create(
         'dpns.preorder',
@@ -77,10 +72,19 @@ export async function register(this: Platform,
         },
     );
 
-    const preorderTransition = dpp.document.createStateTransition([preorderDocument]);
-    preorderTransition.sign(identity.getPublicKeyById(1), identityPrivateKey);
+    const preorderTransition = dpp.document.createStateTransition({ create: [ preorderDocument ]});
 
-    // @ts-ignore
+    preorderTransition.sign(
+        identity.getPublicKeyById(0),
+        identityPrivateKey
+    );
+
+    const preorderTransitionResult = await dpp.stateTransition.validateStructure(preorderTransition);
+
+    if (!preorderTransitionResult.isValid()) {
+        throw new Error(`StateTransition is invalid - ${JSON.stringify(preorderTransitionResult.getErrors())}`);
+    }
+
     await client.applyStateTransition(preorderTransition);
 
     // 3. Create domain document
@@ -97,19 +101,29 @@ export async function register(this: Platform,
         },
     );
 
-    console.dir({domainDocument})
+    console.dir({domainDocument});
 
     // 4. Create and send domain state transition
-    const domainTransition = dpp.document.createStateTransition([domainDocument]);
-    domainTransition.sign(identity.getPublicKeyById(1), identityPrivateKey);
+    const domainTransition = dpp.document.createStateTransition({
+        create: [domainDocument],
+    });
 
-    console.dir({domainTransition}, {depth:10})
+    domainTransition.sign(
+        identity.getPublicKeyById(0),
+        identityPrivateKey
+    );
 
-    // @ts-ignore
+    console.dir({domainTransition}, { depth:10 });
+
+    const domainTransitionResult = await dpp.stateTransition.validateStructure(domainTransition);
+
+    if (!domainTransitionResult.isValid()) {
+        throw new Error(`StateTransition is invalid - ${JSON.stringify(domainTransitionResult.getErrors())}`);
+    }
+
     await client.applyStateTransition(domainTransition);
 
     return domainDocument;
-
 }
 
 export default register;
