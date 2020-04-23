@@ -101,7 +101,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     const createDocument = await clientInstance.platform.names.register(username, createdIdentity);
     expect(createDocument.getType()).to.equal('domain');
     expect(createDocument.getOwnerId()).to.equal(createdIdentityId);
-    expect(createDocument.getDataContractId()).to.equal('77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3');
+    expect(createDocument.getDataContractId()).to.equal('295xRRRMGYyAruG39XdAibaU9jMAzxhknkkAxFE7uVkW');
     expect(createDocument.get('label')).to.equal(username);
     expect(createDocument.get('normalizedParentDomainName')).to.equal('dash');
   });
@@ -116,11 +116,11 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
         ["normalizedLabel","==",username.toLowerCase()],
       ]});
 
-    expect(doc).to.exist();
+    expect(doc).to.exist;
     expect(doc.getRevision()).to.equal(1);
     expect(doc.getType()).to.equal('domain');
     expect(doc.getOwnerId()).to.equal(createdIdentityId);
-    expect(doc.getDataContractId()).to.equal('77w8Xqn25HwJhjodrHW133aXhjuTsTv9ozQaYpSHACE3');
+    expect(doc.getDataContractId()).to.equal('295xRRRMGYyAruG39XdAibaU9jMAzxhknkkAxFE7uVkW');
     expect(doc.get('label')).to.equal(username);
     expect(doc.get('normalizedParentDomainName')).to.equal('dash');
   });

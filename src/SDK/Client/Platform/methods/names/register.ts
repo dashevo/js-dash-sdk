@@ -71,7 +71,13 @@ export async function register(this: Platform,
         },
     );
 
-    const preorderTransition = dpp.document.createStateTransition({ create: [ preorderDocument ]});
+    console.dir(preorderDocument.toJSON(), {depth:100});
+
+    const preorderTransition = dpp.document.createStateTransition({
+        create: [ preorderDocument ],
+    });
+
+    console.dir(preorderTransition.toJSON(), {depth:100});
 
     await broadcastStateTransition(this, preorderTransition, identity);
 
