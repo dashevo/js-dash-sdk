@@ -3,6 +3,7 @@ const Dash = require('../../dist/dash.cjs.min.js');
 const fixtures = require('../fixtures/user-flow-1');
 const Chance = require('chance');
 const chance = new Chance();
+const DataContract = require('@dashevo/dpp/lib/dataContract/DataContract');
 
 let clientInstance;
 let hasBalance=false;
@@ -123,6 +124,35 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(doc.getDataContractId()).to.equal('295xRRRMGYyAruG39XdAibaU9jMAzxhknkkAxFE7uVkW');
     expect(doc.get('label')).to.equal(username);
     expect(doc.get('normalizedParentDomainName')).to.equal('dash');
+  });
+  it('should create and broadcast contract', async () => {
+    if(!createdIdentity){
+      throw new Error('Can\'t perform the test. Failed to fetch identity & did not reg name');
+    }
+
+    const documentsDefinition = {
+      test: {
+        properties: {
+          testProperty: {
+            type: "string"
+          }
+        },
+        additionalProperties: false,
+      }
+    }
+
+    const contract = await clientInstance.platform.contracts.create(documentsDefinition, createdIdentity);
+
+    expect(contract).to.exist;
+    expect(contract).to.be.instanceOf(DataContract);
+
+    await clientInstance.platform.contracts.broadcast(contract, createdIdentity);
+
+    const fetchedContract = await clientInstance.platform.contracts.get(contract.getId());
+
+    expect(fetchedContract).to.exist;
+    expect(fetchedContract).to.be.instanceOf(DataContract);
+    expect(fetchedContract.toJSON()).to.be.deep.equal(contract.toJSON());
   });
   it('should disconnect', async function () {
     await clientInstance.disconnect();
