@@ -105,7 +105,16 @@ export class Client {
         // We accept null as parameter for a new generated mnemonic
         if (opts.wallet !== undefined) {
             // @ts-ignore
-            this.wallet = new Wallet({...opts.wallet, transporter: this.clients.dapi});
+            this.wallet = new Wallet({
+                transporter: {
+                    seeds: seeds,
+                    timeout: 1000,
+                    retries: 5,
+                    network: this.network,
+                    type: 'dapi',
+                },
+                ...opts.wallet,
+            });
             if (this.wallet) {
                 let accountIndex = (opts.accountIndex !== undefined) ? opts.accountIndex : 0;
                 this.account = this.wallet.getAccount({index: accountIndex});
