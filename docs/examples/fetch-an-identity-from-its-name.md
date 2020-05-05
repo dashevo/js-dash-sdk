@@ -6,7 +6,7 @@ You will then be able to directly recover an identity from its names. See below:
 ```js
 const client = new Dash.Client({
   wallet: {
-    mnemonic: '', // Your app mnemonic, which holds the app identity
+    mnemonic: '', // Your app mnemonic, which holds the identity
   },
 });
 
