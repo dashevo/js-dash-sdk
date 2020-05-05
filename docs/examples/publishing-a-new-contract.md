@@ -13,7 +13,7 @@ and [attached to a name](https://dashplatform.readme.io/docs/tutorial-register-a
 const schema = {};// You JSON schema defining the app.
 const client = new Dash.Client({
   wallet: {
-    mnemonic: '', // Your app mnemonic, which holds the app identity
+    mnemonic: '', // Your app mnemonic, which holds the identity
   },
 });
 
