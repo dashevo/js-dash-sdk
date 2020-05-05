@@ -43,7 +43,7 @@ const schema = {};// You JSON schema defining the app.
 // This is the name previously registered in DPNS.
 const client = new Dash.Client({
   wallet: {
-    mnemonic: "", // Your app mnemonic, which holds the app identity
+    mnemonic: "", // Your app mnemonic, which holds the identity
   },
   apps:{
     myapp:{
