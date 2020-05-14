@@ -4074,6 +4074,19 @@ declare module "@dashevo/dashcore-lib" {
          * @return {Number}
          */
         getExtraPayloadSize(): number;
+        
+        /**
+         * @param {number} satoshisToBurn
+         * @param {Buffer} publicKeyHash
+         * @return {Transaction}
+         */
+        addBurnOutput(satoshisToBurn: number, publicKeyHash: Buffer): Transaction;
+        
+        /**
+        * @param {number} fundingAmount
+        * @return {Transaction}
+        */
+        addFundingOutput(fundingAmount: number): Transaction;
     }
 
     export namespace Transaction {
