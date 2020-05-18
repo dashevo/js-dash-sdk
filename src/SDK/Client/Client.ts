@@ -133,23 +133,13 @@ export class Client {
             account: this.account,
         })
 
-        const promises = [];
-        for (let appName in this.apps) {
-            const app = this.apps[appName];
-            const p = this.platform?.contracts.get(app.contractId);
-            // @ts-ignore
-            promises.push(p);
-        }
-        Promise
-            .all(promises)
-            .then((res) => {
+        this.platform
+            .prepare()
+            .then(() => {
                 this.state.isReady = true
             })
-            .catch((e) => {
-                throw e;
-            });
-
     }
+
 
     /**
      * disconnect wallet from Dapi
