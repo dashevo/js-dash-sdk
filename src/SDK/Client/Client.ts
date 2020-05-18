@@ -146,7 +146,6 @@ export class Client {
                 this.state.isReady = true
             })
             .catch((e) => {
-                console.error('SDK apps fetching : failed to init', e);
                 throw e;
             });
 
