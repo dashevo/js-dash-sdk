@@ -83,7 +83,7 @@ export class Client {
         this.network = (opts.network !== undefined) ? opts.network.toString() : 'testnet';
         this.apps = Object.assign({
             dpns: {
-                contractId: '295xRRRMGYyAruG39XdAibaU9jMAzxhknkkAxFE7uVkW'
+                contractId: '6ZUuL9eX6Hgu2kwjpRATLgt1WYui4JB7dQ6NYNB2Z2We'
             }
         }, opts.apps);
 
@@ -133,24 +133,13 @@ export class Client {
             account: this.account,
         })
 
-        const promises = [];
-        for (let appName in this.apps) {
-            const app = this.apps[appName];
-            const p = this.platform?.contracts.get(app.contractId);
-            // @ts-ignore
-            promises.push(p);
-        }
-        Promise
-            .all(promises)
-            .then((res) => {
+        this.platform
+            .prepare()
+            .then(() => {
                 this.state.isReady = true
             })
-            .catch((e) => {
-                console.error('SDK apps fetching : failed to init', e);
-                throw e;
-            });
-
     }
+
 
     /**
      * disconnect wallet from Dapi
