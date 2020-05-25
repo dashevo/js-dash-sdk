@@ -15,16 +15,13 @@ const defaultSeeds = [
     '34.212.245.91',
 ].map(ip => ({service: `${ip}:3000`}));
 
-
-export type DPASchema = object
-
 /**
  * Interface Client Options
  *
  * @param {[string]?} [seeds] - wallet seeds
  * @param {Network? | string?} [network] - evonet network
  * @param {Mnemonic? | string? | null?} [mnemonic] - mnemonic passphrase
- * @param {SDKApps?} [apps] - applications
+ * @param {ClientApps?} [apps] - applications
  * @param {number?} [accountIndex] - account index number
  */
 export interface ClientOpts {
@@ -54,7 +51,6 @@ export interface ClientDependencies {
 export interface ClientApps {
     [name: string]: {
         contractId: string,
-        contract: DPASchema
     }
 }
 
