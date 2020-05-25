@@ -10,10 +10,12 @@ import isReady from "./methods/isReady";
  * default seed passed to SDK options
  */
 const defaultSeeds = [
-    '52.24.198.145',
-    '52.13.92.167',
-    '34.212.245.91',
-].map(ip => ({service: `${ip}:3000`}));
+    { service: 'seed-1.evonet.networks.dash.org' },
+    { service: 'seed-2.evonet.networks.dash.org' },
+    { service: 'seed-3.evonet.networks.dash.org' },
+    { service: 'seed-4.evonet.networks.dash.org' },
+    { service: 'seed-5.evonet.networks.dash.org' },
+];
 
 
 export type DPASchema = object
