@@ -15,6 +15,15 @@ const defaultSeeds = [
     '34.212.245.91',
 ].map(ip => ({service: `${ip}:3000`}));
 
+
+/**
+ * Interface for DAPIClientSeed
+ * @param {string} service - service seed, can be an IP, HTTP or DNS Seed
+ */
+export interface DAPIClientSeed {
+    service: string,
+}
+
 /**
  * Interface Client Options
  *
@@ -25,7 +34,7 @@ const defaultSeeds = [
  * @param {number?} [accountIndex] - account index number
  */
 export interface ClientOpts {
-    seeds?: [string];
+    seeds?: DAPIClientSeed[];
     network?: Network | string,
     mnemonic?: Mnemonic | string | null,
     apps?: ClientApps,
