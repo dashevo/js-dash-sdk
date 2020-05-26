@@ -6,17 +6,17 @@ node_js:
   - "12"
   - "14"
 
+branches:
+  only:
+    - master
+    - develop
+
 before_install:
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
 
-install:
-  - npm ci
-
-after_install:
-  - npm run build:prod
-
 script:
   - npm run check-package
+  - npm run build:prod
   - npm run test
 
 deploy:
@@ -25,4 +25,4 @@ deploy:
     script: bash scripts/travis-deploy.sh
     on:
       repo: dashevo/DashJS
-      tags: true
+      branch: master
