@@ -3,9 +3,8 @@ module.exports = (config) => {
     frameworks: ['mocha', 'chai'],
     files: [
       'dist/dash.min.js',
-      {
-        pattern: 'tests/functional/browser.js', watched: true,
-      }],
+      'tests/functional/browser.js',
+    ],
     reporters: ['mocha'],
     port: 9876,
     colors: true,
