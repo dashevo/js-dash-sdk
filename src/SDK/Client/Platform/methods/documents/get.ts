@@ -13,7 +13,20 @@ declare interface fetchOpts {
     startAt: number;
     startAfter: number;
 }
-
+/**
+ * Prefetch contracts
+ *
+ * @param {Platform} this bound instance class
+ */
+const ensureAppsContracts = async function(this: Platform){
+    for (let appName in this.apps) {
+        if(!this.apps[appName].contract){
+            const app = this.apps[appName];
+            // contracts.get deals with settings contract into this.apps[appName]
+            await this.contracts.get(app.contractId);
+        }
+    }
+}
 /**
  * Get documents from the platform
  *
@@ -23,6 +36,8 @@ declare interface fetchOpts {
  * @returns documents
  */
 export async function get(this: Platform, typeLocator: string, opts: fetchOpts): Promise<any> {
+    await ensureAppsContracts.call(this);
+
     const appNames = Object.keys(this.apps);
 
     //We can either provide of type `dashpay.profile` or if only one schema provided, of type `profile`.
