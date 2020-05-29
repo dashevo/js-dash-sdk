@@ -10,10 +10,12 @@ import isReady from "./methods/isReady";
  * default seed passed to SDK options
  */
 const defaultSeeds = [
-    '52.24.198.145',
-    '52.13.92.167',
-    '34.212.245.91',
-].map(ip => ({service: `${ip}:3000`}));
+    { service: 'seed-1.evonet.networks.dash.org' },
+    { service: 'seed-2.evonet.networks.dash.org' },
+    { service: 'seed-3.evonet.networks.dash.org' },
+    { service: 'seed-4.evonet.networks.dash.org' },
+    { service: 'seed-5.evonet.networks.dash.org' },
+];
 
 
 export type DPASchema = object
@@ -23,14 +25,14 @@ export type DPASchema = object
  *
  * @param {[string]?} [seeds] - wallet seeds
  * @param {Network? | string?} [network] - evonet network
- * @param {Mnemonic? | string? | null?} [mnemonic] - mnemonic passphrase
+ * @param {Wallet.Options? | null?} [wallet] - wallet options
  * @param {SDKApps?} [apps] - applications
  * @param {number?} [accountIndex] - account index number
  */
 export interface ClientOpts {
     seeds?: [string];
     network?: Network | string,
-    mnemonic?: Mnemonic | string | null,
+    wallet?: Wallet.Options | null,
     apps?: ClientApps,
     accountIndex?: number,
 }
@@ -83,7 +85,7 @@ export class Client {
         this.network = (opts.network !== undefined) ? opts.network.toString() : 'testnet';
         this.apps = Object.assign({
             dpns: {
-                contractId: '295xRRRMGYyAruG39XdAibaU9jMAzxhknkkAxFE7uVkW'
+                contractId: '7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM'
             }
         }, opts.apps);
 
@@ -101,10 +103,20 @@ export class Client {
                 network: this.network
             })
         };
+
         // We accept null as parameter for a new generated mnemonic
-        if (opts.mnemonic !== undefined) {
+        if (opts.wallet !== undefined) {
             // @ts-ignore
-            this.wallet = new Wallet({...opts, transport: this.clients.dapi});
+            this.wallet = new Wallet({
+                transporter: {
+                    seeds: seeds,
+                    timeout: 1000,
+                    retries: 5,
+                    network: this.network,
+                    type: 'dapi',
+                },
+                ...opts.wallet,
+            });
             if (this.wallet) {
                 let accountIndex = (opts.accountIndex !== undefined) ? opts.accountIndex : 0;
                 this.account = this.wallet.getAccount({index: accountIndex});

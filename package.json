@@ -15,7 +15,8 @@
     "test": "npm run test:ts && npm run build:prod && npm run test:js && npm run test:browsers",
     "test:browsers": "karma start ./karma.conf.js --single-run",
     "test:ts": "mocha -r ts-node/register \"src/**/*.spec.ts\"",
-    "test:js": "mocha --recursive tests/**/*.js"
+    "test:js": "mocha --recursive tests/**/*.js",
+    "prepare": "npm run build:dev"
   },
   "repository": {
     "type": "git",

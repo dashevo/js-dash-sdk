@@ -11,13 +11,17 @@ branches:
     - master
     - develop
 
-before_install:
-  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
+install:
+  - npm ci
 
 script:
   - npm run check-package
   - npm run build:prod
   - npm run test
+
+before_deploy:
+  # Add token for @dashevo private npm registry
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
 
 deploy:
   - provider: script
