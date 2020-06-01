@@ -26,7 +26,7 @@ const getDataContract = async (id) => {
 };
 const client = {
     getDAPIClient: () => {
-        return { client: { getDataContract } };
+        return { getDataContract };
     }
 };
 const apps = {};
