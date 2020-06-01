@@ -150,7 +150,14 @@ export class Client {
             account: this.account,
         })
 
+
+        this.platform
+            .prepare()
+            .then(() => {
+                this.state.isReady = true
+            })
     }
+
 
     /**
      * disconnect wallet from Dapi
