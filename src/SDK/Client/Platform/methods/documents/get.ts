@@ -63,17 +63,11 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
         const documents: any[] = [];
 
         for (const rawData of rawDataList) {
-            try {
-                const doc = await this.dpp.document.createFromSerialized(rawData, {skipValidation: true});
-                documents.push(doc);
-            } catch (e) {
-                console.error('Document creation: failure', e);
-                throw e;
-            }
+            const doc = await this.dpp.document.createFromSerialized(rawData, {skipValidation: true});
+            documents.push(doc);
         }
         return documents
     } catch (e) {
-        console.error(`Document creation: unable to get documents of ${contractId}`);
         throw e;
     }
 }

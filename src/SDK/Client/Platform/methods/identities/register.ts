@@ -98,7 +98,6 @@ export async function register(this: Platform): Promise<any> {
         // @ts-ignore
         return identity;
     } catch (e) {
-        console.error(`Identity registration failed:`,e);
         throw e;
     }
 }
