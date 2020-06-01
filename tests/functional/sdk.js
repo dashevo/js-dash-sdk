@@ -1,15 +1,15 @@
 const {expect} = require('chai');
-const Dash = require('../../dist/dash.cjs.min');
+const Dash = require('../../');
 
 describe('SDK', function suite() {
-  this.timeout(10000);
+  this.timeout(40000);
   let instanceWithoutWallet = {};
   let instanceWithWallet = {};
   it('should provide expected class', function () {
     expect(Dash).to.have.property('Client');
     expect(Dash.Client.constructor.name).to.be.equal('Function')
   });
-  it('should create an instance', function (done) {
+  it('should create an instance', async function () {
     instanceWithoutWallet = new Dash.Client();
     expect(instanceWithoutWallet.network).to.equal('testnet');
     expect(instanceWithoutWallet.apps).to.deep.equal({
@@ -22,13 +22,13 @@ describe('SDK', function suite() {
         mnemonic: null,
       },
     });
+    await instanceWithWallet.isReady();
     expect(instanceWithWallet.network).to.equal('testnet');
     expect(instanceWithWallet.apps).to.deep.equal({
           dpns: { contractId: '7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM' }
         }
     );
     expect(instanceWithWallet.wallet.mnemonic).to.exist;
-    done();
   });
   it('should sign and verify a message', function () {
     const {account} = instanceWithWallet;
@@ -42,7 +42,6 @@ describe('SDK', function suite() {
     expect(verify).to.equal(true);
   });
   after(async ()=>{
-    await instanceWithWallet.isReady();
     await instanceWithWallet.disconnect();
     await instanceWithoutWallet.disconnect();
   })
