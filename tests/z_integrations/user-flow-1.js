@@ -77,6 +77,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
 
   it('should init a Client', async () => {
     clientInstance = new Dash.Client(clientOpts);
+    await clientInstance.isReady();
     expect(clientInstance.network).to.equal('testnet');
     expect(clientInstance.accountIndex).to.equal(0);
     expect(clientInstance.apps).to.deep.equal({dpns: {contractId: "7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM"}});
@@ -94,7 +95,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     clientInstance.isReady().then(() => {
       clearTimeout(timer);
       expect(clientInstance.account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
-      expect(clientInstance.state).to.deep.equal({isReady: true, isAccountReady: true});
+      expect(clientInstance.state).to.deep.equal({isReady: true, isAccountWaiting: false, isAccountReady: true});
       expect(clientInstance.apps['dpns']).to.exist;
       expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
       expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
