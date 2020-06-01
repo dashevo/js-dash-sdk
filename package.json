@@ -4,6 +4,7 @@
   "description": "Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)",
   "main": "dist/dash.cjs.min.js",
   "unpkg": "dist/dash.min.js",
+  "browser": "dist/dash.min.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "start:dev": "nodemon --exec 'npm run build:dev && npm run test:ts'",
@@ -47,6 +48,7 @@
     "karma-firefox-launcher": "^1.3.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
+    "karma-webpack": "^4.0.2",
     "mocha": "^6.2.2",
     "nodemon": "^2.0.1",
     "rimraf": "^3.0.0",
