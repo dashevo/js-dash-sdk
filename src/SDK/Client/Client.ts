@@ -71,7 +71,11 @@ export class Client {
     public accountIndex: number = 0;
     private readonly clients: ClientDependencies;
     private readonly apps: ClientApps;
-    public state: { isReady: boolean, isAccountReady: boolean };
+    public state: {
+        isAccountWaiting: boolean;
+        isReady: boolean,
+        isAccountReady: boolean
+    };
     public isReady: Function;
 
     /**
@@ -91,6 +95,7 @@ export class Client {
 
         this.state = {
             isReady: false,
+            isAccountWaiting: false,
             isAccountReady: false
         };
         const seeds = (opts.seeds) ? opts.seeds : defaultSeeds;
@@ -106,7 +111,6 @@ export class Client {
 
         // We accept null as parameter for a new generated mnemonic
         if (opts.wallet !== undefined) {
-            // @ts-ignore
             this.wallet = new Wallet({
                 transporter: {
                     seeds: seeds,
@@ -117,28 +121,24 @@ export class Client {
                 },
                 ...opts.wallet,
             });
-            if (this.wallet) {
-                let accountIndex = (opts.accountIndex !== undefined) ? opts.accountIndex : 0;
-                this.account = this.wallet.getAccount({index: accountIndex});
-            }
+            const self = this;
+            let accountIndex = (opts.accountIndex !== undefined) ? opts.accountIndex : 0;
+            self.state.isAccountWaiting = true;
+            //@ts-ignore
+            self.wallet
+                .getAccount({index: accountIndex})
+                .then((account) => {
+                    self.account = account;
+                    self.state.isAccountWaiting = false;
+                    self.state.isAccountReady = true;
+                })
         }
 
         let platformOpts: PlatformOpts = {
             client: this.getDAPIInstance(),
             apps: this.getApps()
         };
-        const self = this;
-        if (this.account) {
-            this.account
-                .isReady()
-                .then(() => {
-                    // @ts-ignore
-                    self.state.isAccountReady = true;
-                })
-        } else {
-            // @ts-ignore
-            this.state.isAccountReady = true;
-        }
+
         this.platform = new Platform({
             ...platformOpts,
             network: this.network,
