@@ -1,9 +1,9 @@
-import { Account, Wallet,  } from "@dashevo/wallet-lib";
+import { Account, Wallet } from "@dashevo/wallet-lib";
 import { DAPIClient } from "@dashevo/wallet-lib/src/transporters"
 // FIXME: use dashcorelib types
-import {Platform} from './Platform';
+import { Platform } from './Platform';
 // @ts-ignore
-import {Network} from "@dashevo/dashcore-lib";
+import { Network } from "@dashevo/dashcore-lib";
 
 /**
  * default seed passed to SDK options
