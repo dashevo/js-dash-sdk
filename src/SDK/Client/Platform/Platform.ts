@@ -1,7 +1,7 @@
 // @ts-ignore
 import DashPlatformProtocol from "@dashevo/dpp";
 
-import {ClientDependencies, ClientApps} from "../Client";
+import Client, {ClientDependencies, ClientApps} from "../Client";
 
 import broadcastDocument from "./methods/documents/broadcast";
 import createDocument from "./methods/documents/create";
@@ -18,9 +18,6 @@ import registerIdentity from "./methods/identities/register";
 import getName from "./methods/names/get";
 import registerName from "./methods/names/register";
 
-// @ts-ignore
-import {Account} from "@dashevo/wallet-lib";
-
 /**
  * Interface for PlatformOpts
  *
@@ -29,9 +26,8 @@ import {Account} from "@dashevo/wallet-lib";
  * optional parameters include { ..., account?, network? }
  */
 export interface PlatformOpts {
-    client: ClientDependencies,
+    client: Client,
     apps: ClientApps
-    account?: Account,
     network?: string
 }
 
@@ -44,7 +40,7 @@ interface Records {
     broadcast: Function,
     create: Function,
     get: Function,
-};
+}
 
 /**
  * @param {Function} broadcast - broadcast credentials onto the platform
@@ -83,17 +79,17 @@ export class Platform {
      * @param {Function} register - register contracts on the platform
      */
     public contracts: Records;
-    client: ClientDependencies;
+
+    client: Client;
     apps: ClientApps;
-    account?: Account;
     network?: string;
 
     /**
      * Construct some instance of Platform
      *
-     * @param {platformOpts} - options for Platform
+     * @param {PlatformOpts} options - options for Platform
      */
-    constructor(platformOpts: PlatformOpts) {
+    constructor(options: PlatformOpts) {
         this.documents = {
             broadcast: broadcastDocument.bind(this),
             create: createDocument.bind(this),
@@ -119,35 +115,12 @@ export class Platform {
         };
 
         this.dpp = new DashPlatformProtocol({
-            ...platformOpts,
+            ...options,
             stateRepository,
         });
 
-        this.client = platformOpts.client;
-        this.apps = platformOpts.apps;
-        this.network = platformOpts.network;
-
-        if (platformOpts.account) {
-            this.account = platformOpts.account;
-        }
-    }
-
-    /**
-     *  In order to provide support for our dot locator get documents method
-     * we need to know in advance the field of the apps, therefore we prefetch them
-     *
-     * @param this bound class instance
-     * @returns true when succeeded
-     */
-    async prepare() {
-        const promises = [];
-        for (let appName in this.apps) {
-            const app = this.apps[appName];
-            const p = this.contracts.get(app.contractId);
-            // @ts-ignore
-            promises.push(p);
-        }
-        await Promise.all(promises)
-        return true;
+        this.client = options.client;
+        this.apps = options.apps;
+        this.network = options.network;
     }
 }

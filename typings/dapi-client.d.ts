@@ -229,6 +229,14 @@ declare module "@dashevo/dapi-client" {
         sendRawTransition(rawStateTransition: string, rawSTPacket: string): Promise<string>;
 
         /**
+         * Send State Transition to machine
+         *
+         * @param {AbstractStateTransition} stateTransition
+         * @returns {Promise<!ApplyStateTransitionResponse>}
+         */
+        applyStateTransition(stateTransition : any) : Promise<any>;
+
+        /**
          * @param {Object} bloomFilter
          * @param {Uint8Array|string} bloomFilter.vData - The filter itself is simply a bit
          * field of arbitrary byte-aligned size. The maximum size is 36,000 bytes.
