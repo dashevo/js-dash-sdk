@@ -3,6 +3,7 @@ const Dash = require('../../dist/dash.cjs.min.js');
 const fixtures = require('../fixtures/user-flow-1');
 const Chance = require('chance');
 const chance = new Chance();
+const DataContract = require('@dashevo/dpp/lib/dataContract/DataContract');
 
 let clientInstance;
 let hasBalance=false;
@@ -25,6 +26,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
 
   it('should init a Client', async () => {
     clientInstance = new Dash.Client(clientOpts);
+    await clientInstance.isReady();
     expect(clientInstance.network).to.equal('testnet');
     expect(clientInstance.accountIndex).to.equal(0);
     expect(clientInstance.apps).to.deep.equal({dpns: {contractId: "7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM"}});
@@ -46,7 +48,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     clientInstance.isReady().then(() => {
       clearTimeout(timer);
       expect(clientInstance.account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
-      expect(clientInstance.state).to.deep.equal({isReady: true, isAccountReady: true});
+      expect(clientInstance.state).to.deep.equal({isReady: true, isAccountWaiting: false, isAccountReady: true});
       expect(clientInstance.apps['dpns']).to.exist;
       expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
       expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
@@ -125,6 +127,35 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(doc.getDataContractId()).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
     expect(doc.get('label')).to.equal(username);
     expect(doc.get('normalizedParentDomainName')).to.equal('dash');
+  });
+  it('should create and broadcast contract', async () => {
+    if(!createdIdentity){
+      throw new Error('Can\'t perform the test. Failed to fetch identity & did not reg name');
+    }
+
+    const documentsDefinition = {
+      test: {
+        properties: {
+          testProperty: {
+            type: "string"
+          }
+        },
+        additionalProperties: false,
+      }
+    }
+
+    const contract = await clientInstance.platform.contracts.create(documentsDefinition, createdIdentity);
+
+    expect(contract).to.exist;
+    expect(contract).to.be.instanceOf(DataContract);
+
+    await clientInstance.platform.contracts.broadcast(contract, createdIdentity);
+
+    const fetchedContract = await clientInstance.platform.contracts.get(contract.getId());
+
+    expect(fetchedContract).to.exist;
+    expect(fetchedContract).to.be.instanceOf(DataContract);
+    expect(fetchedContract.toJSON()).to.be.deep.equal(contract.toJSON());
   });
   it('should disconnect', async function () {
     await clientInstance.disconnect();

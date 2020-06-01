@@ -18,19 +18,25 @@ const defaultSeeds = [
 ];
 
 
-export type DPASchema = object
+/**
+ * Interface for DAPIClientSeed
+ * @param {string} service - service seed, can be an IP, HTTP or DNS Seed
+ */
+export interface DAPIClientSeed {
+    service: string,
+}
 
 /**
  * Interface Client Options
  *
  * @param {[string]?} [seeds] - wallet seeds
  * @param {Network? | string?} [network] - evonet network
- * @param {Wallet.Options? | null?} [wallet] - wallet options
- * @param {SDKApps?} [apps] - applications
+ * @param {Mnemonic? | string? | null?} [mnemonic] - mnemonic passphrase
+ * @param {ClientApps?} [apps] - applications
  * @param {number?} [accountIndex] - account index number
  */
 export interface ClientOpts {
-    seeds?: [string];
+    seeds?: DAPIClientSeed[];
     network?: Network | string,
     wallet?: Wallet.Options | null,
     apps?: ClientApps,
@@ -56,7 +62,6 @@ export interface ClientDependencies {
 export interface ClientApps {
     [name: string]: {
         contractId: string,
-        contract: DPASchema
     }
 }
 
@@ -71,7 +76,11 @@ export class Client {
     public accountIndex: number = 0;
     private readonly clients: ClientDependencies;
     private readonly apps: ClientApps;
-    public state: { isReady: boolean, isAccountReady: boolean };
+    public state: {
+        isAccountWaiting: boolean;
+        isReady: boolean,
+        isAccountReady: boolean
+    };
     public isReady: Function;
 
     /**
@@ -91,6 +100,7 @@ export class Client {
 
         this.state = {
             isReady: false,
+            isAccountWaiting: false,
             isAccountReady: false
         };
         const seeds = (opts.seeds) ? opts.seeds : defaultSeeds;
@@ -106,7 +116,6 @@ export class Client {
 
         // We accept null as parameter for a new generated mnemonic
         if (opts.wallet !== undefined) {
-            // @ts-ignore
             this.wallet = new Wallet({
                 transporter: {
                     seeds: seeds,
@@ -117,52 +126,38 @@ export class Client {
                 },
                 ...opts.wallet,
             });
-            if (this.wallet) {
-                let accountIndex = (opts.accountIndex !== undefined) ? opts.accountIndex : 0;
-                this.account = this.wallet.getAccount({index: accountIndex});
-            }
+            const self = this;
+            let accountIndex = (opts.accountIndex !== undefined) ? opts.accountIndex : 0;
+            self.state.isAccountWaiting = true;
+            //@ts-ignore
+            self.wallet
+                .getAccount({index: accountIndex})
+                .then((account) => {
+                    self.account = account;
+                    self.state.isAccountWaiting = false;
+                    self.state.isAccountReady = true;
+                })
         }
 
         let platformOpts: PlatformOpts = {
             client: this.getDAPIInstance(),
             apps: this.getApps()
         };
-        const self = this;
-        if (this.account) {
-            this.account
-                .isReady()
-                .then(() => {
-                    // @ts-ignore
-                    self.state.isAccountReady = true;
-                })
-        } else {
-            // @ts-ignore
-            this.state.isAccountReady = true;
-        }
+
         this.platform = new Platform({
             ...platformOpts,
             network: this.network,
             account: this.account,
         })
 
-        const promises = [];
-        for (let appName in this.apps) {
-            const app = this.apps[appName];
-            const p = this.platform?.contracts.get(app.contractId);
-            // @ts-ignore
-            promises.push(p);
-        }
-        Promise
-            .all(promises)
-            .then((res) => {
+
+        this.platform
+            .prepare()
+            .then(() => {
                 this.state.isReady = true
             })
-            .catch((e) => {
-                console.error('SDK apps fetching : failed to init', e);
-                throw e;
-            });
-
     }
+
 
     /**
      * disconnect wallet from Dapi

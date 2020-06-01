@@ -41,9 +41,9 @@ export interface PlatformOpts {
  * @param {Function} get - get records from the platform
  */
 interface Records {
-    broadcast:Function,
-    create:Function,
-    get:Function,
+    broadcast: Function,
+    create: Function,
+    get: Function,
 };
 
 /**
@@ -51,8 +51,8 @@ interface Records {
  * @param {Function} get - get credentials from the platform
  */
 interface Credentials {
-    get:Function,
-    register:Function,
+    get: Function,
+    register: Function,
 }
 
 interface Identities {
@@ -134,8 +134,27 @@ export class Platform {
         this.apps = platformOpts.apps;
         this.network = platformOpts.network;
 
-        if(platformOpts.account){
+        if (platformOpts.account) {
             this.account = platformOpts.account;
         }
+    }
+
+    /**
+     *  In order to provide support for our dot locator get documents method
+     * we need to know in advance the field of the apps, therefore we prefetch them
+     *
+     * @param this bound class instance
+     * @returns true when succeeded
+     */
+    async prepare() {
+        const promises = [];
+        for (let appName in this.apps) {
+            const app = this.apps[appName];
+            const p = this.contracts.get(app.contractId);
+            // @ts-ignore
+            promises.push(p);
+        }
+        await Promise.all(promises)
+        return true;
     }
 }
