@@ -18,19 +18,25 @@ const defaultSeeds = [
 ];
 
 
-export type DPASchema = object
+/**
+ * Interface for DAPIClientSeed
+ * @param {string} service - service seed, can be an IP, HTTP or DNS Seed
+ */
+export interface DAPIClientSeed {
+    service: string,
+}
 
 /**
  * Interface Client Options
  *
  * @param {[string]?} [seeds] - wallet seeds
  * @param {Network? | string?} [network] - evonet network
- * @param {Wallet.Options? | null?} [wallet] - wallet options
- * @param {SDKApps?} [apps] - applications
+ * @param {Mnemonic? | string? | null?} [mnemonic] - mnemonic passphrase
+ * @param {ClientApps?} [apps] - applications
  * @param {number?} [accountIndex] - account index number
  */
 export interface ClientOpts {
-    seeds?: [string];
+    seeds?: DAPIClientSeed[];
     network?: Network | string,
     wallet?: Wallet.Options | null,
     apps?: ClientApps,
@@ -56,7 +62,6 @@ export interface ClientDependencies {
 export interface ClientApps {
     [name: string]: {
         contractId: string,
-        contract: DPASchema
     }
 }
 
