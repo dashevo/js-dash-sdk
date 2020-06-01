@@ -1,5 +1,5 @@
 const {expect} = require('chai');
-const Dash = require('../../src');
+const Dash = require('../../');
 
 describe('SDK', function suite() {
   this.timeout(40000);
