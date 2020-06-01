@@ -10,7 +10,6 @@ branches:
   only:
     - master
     - develop
-    - /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
 
 install:
   - npm ci
