@@ -1,10 +1,17 @@
+const webpackConfig = require("./webpack.base.config");
+
 module.exports = (config) => {
   config.set({
     frameworks: ['mocha', 'chai'],
     files: [
-      'dist/dash.min.js',
-      'tests/functional/browser.js',
+      'src/index.ts',
+      'tests/functional/sdk.js',
     ],
+    preprocessors: {
+      'src/index.ts': ['webpack'],
+      'tests/functional/sdk.js': ['webpack'],
+    },
+    webpack: {...webpackConfig, target:'web'},
     reporters: ['mocha'],
     port: 9876,
     colors: true,
@@ -19,6 +26,7 @@ module.exports = (config) => {
       'karma-chai',
       'karma-chrome-launcher',
       'karma-firefox-launcher',
+      'karma-webpack',
     ],
     customLaunchers: {
       FirefoxHeadless: {
