@@ -38,23 +38,21 @@ const isSelfReady = async function(this: any): Promise<boolean>{
 }
 
 /**
+
  * Check if this instance state is reported ready
  *
  * @param this bound class instance
  * @returns true only if this is ready
  */
 async function isReady(this: any) {
-    const {state, account, wallet} = this;
-    if (state.isAccountReady && state.isReady) {
+    const {state, account} = this;
+    if (state.isAccountReady) {
         return true;
     };
     let promises: Promise<boolean>[] = []
     if(!state.isAccountReady && state.isAccountWaiting){
         // @ts-ignore
         promises.push(isAccountReady.call(this));
-    }
-    if(!state.isReady){
-        promises.push(isSelfReady.call(this));
     }
 
     await Promise.all(promises);
