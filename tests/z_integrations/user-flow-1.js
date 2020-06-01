@@ -148,6 +148,24 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(fetchedContract).to.be.instanceOf(DataContract);
     expect(fetchedContract.toJSON()).to.be.deep.equal(contract.toJSON());
   });
+  it('should top up identity', async function () {
+    const identityId = createdIdentity.getId();
+
+    const identityBeforeTopUp = await clientInstance.platform.identities.get(identityId);
+    const balanceBeforeTopUp = identityBeforeTopUp.getBalance();
+
+    try {
+      await clientInstance.platform.identities.topUp(identityId, 10000);
+    } catch (e) {
+      console.dir(e, {depth: 100});
+    }
+
+    const identity = await clientInstance.platform.identities.get(identityId);
+
+    expect(identity.getId()).to.be.equal(identityId);
+    expect(identity.getBalance()).to.be.equal(balanceBeforeTopUp + 10000);
+    expect(identity.getBalance()).to.be.greaterThan(10000);
+  })
   it('should disconnect', async function () {
     await clientInstance.disconnect();
   });
