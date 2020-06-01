@@ -15,11 +15,19 @@ const year = chance.birthday({string: true}).slice(-2);
 const firstname = chance.first();
 const username = `test-${firstname}${year}`;
 
+const dpnsContractId = 'E56D2XC5oh5bw9o8n4Vtk9QRZczSWXweMNzbphtKSfzk';
+
 const clientOpts = {
   network: fixtures.network,
   wallet: {
     mnemonic: fixtures.mnemonic,
   },
+  seeds: [{service: '54.188.88.39:3000'}],
+  apps: {
+    dpns: {
+      contractId: dpnsContractId
+    }
+  }
 };
 let account;
 describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite() {
@@ -29,7 +37,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     clientInstance = new Dash.Client(clientOpts);
     expect(clientInstance.network).to.equal('testnet');
     expect(clientInstance.walletAccountIndex).to.equal(0);
-    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: "7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM"}});
+    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: dpnsContractId}});
     expect(clientInstance.wallet.network).to.equal('testnet');
     expect(clientInstance.wallet.offlineMode).to.equal(false);
     expect(clientInstance.wallet.mnemonic).to.equal(fixtures.mnemonic);
@@ -40,9 +48,6 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(account.walletId).to.equal('6afaad2189');
     expect(account.getUnusedAddress().address).to.not.equal('yj8sq7ogzz6JtaxpBQm5Hg9YaB5cKExn5T');
     expect(account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
-    expect(clientInstance.apps['dpns']).to.exist;
-    expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
-    expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
     expect(clientInstance.platform.dpp).to.exist;
     expect(clientInstance.platform.client).to.exist;
   });
