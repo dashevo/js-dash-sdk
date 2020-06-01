@@ -21,7 +21,6 @@ describe('Dash - Client', function suite() {
   });
   it('should initiate wallet-lib with a mnemonic', async ()=>{
     const client = new Client({ wallet: { mnemonic } });
-    await client.isReady();
     expect(client.wallet).to.exist;
     expect(client.wallet!.offlineMode).to.be.equal(false);
 
@@ -29,7 +28,8 @@ describe('Dash - Client', function suite() {
     await client.wallet.storage.stopWorker();
     // @ts-ignore
     await client.wallet.disconnect();
-    // @ts-ignore
-    await client.account.disconnect();
+
+    const account = await client.getWalletAccount();
+    await account.disconnect();
   });
 });

@@ -25,6 +25,7 @@ export default async function broadcastStateTransition(platform: Platform, state
     // if (!result.isValid()) {
     //     throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     // }
+    const { client: dapiClient } = await client.getDAPIClient();
 
-    await client.getDAPIClient().applyStateTransition(stateTransition);
+    await dapiClient.applyStateTransition(stateTransition);
 }

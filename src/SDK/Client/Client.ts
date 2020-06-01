@@ -1,8 +1,8 @@
-import { Account, Wallet } from "@dashevo/wallet-lib";
+import { Account, Wallet,  } from "@dashevo/wallet-lib";
+import { DAPIClient } from "@dashevo/wallet-lib/src/transporters"
 // FIXME: use dashcorelib types
 import {Platform} from './Platform';
 // @ts-ignore
-import DAPIClient from "@dashevo/dapi-client"
 import {Network} from "@dashevo/dashcore-lib";
 
 /**
@@ -48,6 +48,7 @@ export interface ClientOpts {
 export interface ClientApps {
     [name: string]: {
         contractId: string,
+        contract?: any
     }
 }
 

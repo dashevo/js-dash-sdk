@@ -22,7 +22,6 @@ describe('SDK', function suite() {
         mnemonic: null,
       },
     });
-    await instanceWithWallet.isReady();
     expect(instanceWithWallet.network).to.equal('testnet');
     expect(instanceWithWallet.apps).to.deep.equal({
           dpns: { contractId: '7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM' }
@@ -30,8 +29,8 @@ describe('SDK', function suite() {
     );
     expect(instanceWithWallet.wallet.mnemonic).to.exist;
   });
-  it('should sign and verify a message', function () {
-    const {account} = instanceWithWallet;
+  it('should sign and verify a message', async function () {
+    const account = await instanceWithWallet.getWalletAccount();
     const idKey = account.getIdentityHDKey();
     // This transforms from a Wallet-Lib.PrivateKey to a Dashcore-lib.PrivateKey.
     // It will quickly be annoying to perform this, and we therefore need to find a better solution for that.

@@ -265,5 +265,12 @@ declare module "@dashevo/dapi-client" {
             fromBlockHeight?: number;
             count?: number;
         }): Promise<any>;
+
+        /**
+         * Fetch Data Contract by id
+         * @param {string} contractId
+         * @returns {Promise<Buffer>}
+         */
+        getDataContract(contractId: string): Promise<Buffer>;
     }
 }
