@@ -8,18 +8,18 @@ import {Platform} from "../../Platform";
  * Register identities to the platform
  *
  * @param {Platform} this - bound instance class
- * @returns {Identity}
+ * @param {string} identityId - id of the identity to top up
+ * @param {number} amount - amount to top up in duffs
+ * @returns {boolean}
  */
-export async function topUp(this: Platform): Promise<any> {
+export async function topUp(this: Platform, identityId: string, amount: number): Promise<any> {
     const { account, client, dpp } = this;
-
-    const burnAmount = 10000;
 
     if (account === undefined) {
         throw new Error(`A initialized wallet is required to create an Identity.`);
     }
 
-    //TODO : Here, we always use index 0. We might want to increment.
+    // TODO: this key needs to be incremented, but there's no agreement on how to derived it currently
     // @ts-ignore
     const identityHDPrivateKey = account.getIdentityHDKey(0);
 
@@ -37,7 +37,7 @@ export async function topUp(this: Platform): Promise<any> {
         const lockTransaction = new Transaction();
 
         const output = {
-            satoshis: burnAmount,
+            satoshis: amount,
             address: identityAddress
         };
 
@@ -45,7 +45,7 @@ export async function topUp(this: Platform): Promise<any> {
         const balance = account.getTotalBalance();
 
         if (balance < output.satoshis) {
-            throw new Error(`Not enought balance (${balance}) to cover burn amount of ${burnAmount}`)
+            throw new Error(`Not enought balance (${balance}) to cover burn amount of ${amount}`)
         }
 
         selection = utils.coinSelection(utxos, [output]);
@@ -76,29 +76,27 @@ export async function topUp(this: Platform): Promise<any> {
         await account.broadcastTransaction(signedLockTransaction);
 
         // @ts-ignore
-        const outPoint = signedLockTransaction.getOutPointBuffer(0);
+        const outPointBuffer = signedLockTransaction.getOutPointBuffer(0);
 
-        const identity = dpp.identity.create(outPoint, [identityPublicKey]);
-
-        const identityCreateTransition = dpp.identity.createIdentityCreateTransition(identity);
+        const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(identityId, outPointBuffer);
 
         // FIXME : Need dpp to be a dependency of wallet-lib to deal with signing IdentityPublicKey (validation)
         // account.sign(identityPublicKeyModel, identityPrivateKey);
 
-        identityCreateTransition.signByPrivateKey(identityPrivateKey);
+        identityTopUpTransition.signByPrivateKey(identityPrivateKey);
 
-        const result = await dpp.stateTransition.validateStructure(identityCreateTransition);
+        const result = await dpp.stateTransition.validateStructure(identityTopUpTransition);
 
         if (!result.isValid()) {
             throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
         }
 
-        await client.applyStateTransition(identityCreateTransition);
+        await client.applyStateTransition(identityTopUpTransition);
 
         // @ts-ignore
-        return identity;
+        return true;
     } catch (e) {
-        console.error(`Identity registration failed:`,e);
+        console.error(`Identity top-up failed:`, e);
         throw e;
     }
 }
