@@ -23,7 +23,7 @@ declare interface fetchOpts {
  */
 const ensureAppContractFetched = async function (this: Platform, appName) {
     if (this.apps[appName]) {
-        if (!this.apps[appName].contract) {
+        if (!this.apps[appName].contractId) {
             const app = this.apps[appName];
             // contracts.get deals with settings contract into this.apps[appName]
             await this.contracts.get(app.contractId);
