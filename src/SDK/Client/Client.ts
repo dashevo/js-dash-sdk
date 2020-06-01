@@ -1,9 +1,10 @@
 import { Account, Wallet } from "@dashevo/wallet-lib";
-import { DAPIClient } from "@dashevo/wallet-lib/src/transporters"
+import { DAPIClient as DAPIClientWrapper } from "@dashevo/wallet-lib/src/transporters"
 // FIXME: use dashcorelib types
 import { Platform } from './Platform';
 // @ts-ignore
 import { Network } from "@dashevo/dashcore-lib";
+import DAPIClient from "@dashevo/dapi-client";
 
 /**
  * default seed passed to SDK options
@@ -61,7 +62,7 @@ export class Client {
     public account: Account | undefined;
     public platform: Platform | undefined;
     public walletAccountIndex: number = 0;
-    private readonly dapiClient: DAPIClient;
+    private readonly dapiClientWrapper: DAPIClientWrapper;
     private readonly apps: ClientApps;
     private options: ClientOpts;
 
@@ -87,7 +88,7 @@ export class Client {
             }
         }, this.options.apps);
 
-        this.dapiClient = new DAPIClient({
+        this.dapiClientWrapper = new DAPIClientWrapper({
             seeds: this.options.seeds || defaultSeeds,
             timeout: 1000,
             retries: 5,
@@ -97,7 +98,7 @@ export class Client {
         // We accept null as parameter for a new generated mnemonic
         if (this.options.wallet !== undefined) {
             this.wallet = new Wallet({
-                transporter: this.dapiClient,
+                transporter: this.dapiClientWrapper,
                 ...this.options.wallet,
             });
         }
@@ -147,7 +148,7 @@ export class Client {
      * @returns {DAPIClient}
      */
     getDAPIClient() : DAPIClient {
-        return this.dapiClient;
+        return this.dapiClientWrapper.client;
     }
 
     /**

@@ -11,7 +11,6 @@ declare type ContractIdentifier = string;
  */
 export async function get(this: Platform, identifier: ContractIdentifier): Promise<any> {
     let localContract;
-    const { client: dapiClient } = await this.client.getDAPIClient();
 
     for (let appName in this.apps) {
         const app = this.apps[appName];
@@ -24,7 +23,7 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
     if (localContract && localContract.contract) {
         return localContract.contract;
     } else {
-        const rawContract = await dapiClient.getDataContract(identifier);
+        const rawContract = await this.client.getDAPIClient().getDataContract(identifier);
         if(!rawContract){
             return null;
         }
