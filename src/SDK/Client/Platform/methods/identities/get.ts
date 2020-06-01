@@ -8,8 +8,9 @@ import {Platform} from "../../Platform";
  * @returns identites
  */
 export async function get(this: Platform, id: string): Promise<any> {
-    // @ts-ignore
-    const identityBuffer = await this.client.getDAPIClient().getIdentity(id);
+    const { client: dapiClient } = await this.client.getDAPIClient();
+
+    const identityBuffer = await dapiClient.getIdentity(id);
 
     if (identityBuffer === null) {
         return null;

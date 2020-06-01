@@ -1,7 +1,7 @@
 // @ts-ignore
 import DashPlatformProtocol from "@dashevo/dpp";
 
-import Client, {ClientDependencies, ClientApps} from "../Client";
+import Client, { ClientApps } from "../Client";
 
 import broadcastDocument from "./methods/documents/broadcast";
 import createDocument from "./methods/documents/create";
