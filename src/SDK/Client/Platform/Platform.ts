@@ -11,9 +11,9 @@ import broadcastContract from "./methods/contracts/broadcast";
 import createContract from "./methods/contracts/create";
 import getContract from "./methods/contracts/get";
 
-
 import getIdentity from "./methods/identities/get";
 import registerIdentity from "./methods/identities/register";
+import topUpIdentity from "./methods/identities/topUp";
 
 import getName from "./methods/names/get";
 import registerName from "./methods/names/register";
@@ -55,6 +55,12 @@ interface Credentials {
     register:Function,
 }
 
+interface Identities {
+    get:Function,
+    register:Function,
+    topUp:Function,
+}
+
 /**
  * Class for Dash Platform
  *
@@ -71,7 +77,7 @@ export class Platform {
      * @param {Function} get - get identities from the platform
      * @param {Function} register - register identities on the platform
      */
-    public identities: Credentials;
+    public identities: Identities;
     /**
      * @param {Function} get - get names from the platform
      * @param {Function} register - register names on the platform
@@ -91,7 +97,7 @@ export class Platform {
     /**
      * Construct some instance of Platform
      *
-     * @param {platformOpts} - options for Platform
+     * @param {PlatformOpts} platformOpts - options for Platform
      */
     constructor(platformOpts: PlatformOpts) {
         this.documents = {
@@ -111,6 +117,7 @@ export class Platform {
         this.identities = {
             register: registerIdentity.bind(this),
             get: getIdentity.bind(this),
+            topUp: topUpIdentity.bind(this),
         };
 
         const stateRepository = {
