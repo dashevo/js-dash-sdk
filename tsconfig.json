@@ -10,8 +10,10 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "declaration": true,
+    "declarationDir": "./dist"
   },
-  "exclude": ["node_modules", "**/*.test.ts", "examples", "tests", "lib"],
+  "exclude": ["node_modules", "examples"],
   "typeRoots": ["node_modules/@types", "./typings"]
 }
