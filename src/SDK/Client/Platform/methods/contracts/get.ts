@@ -34,7 +34,7 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
 
         // If we do not have even the identifier in this.apps, we add it with timestamp as key
         if (localContract === undefined || !localContract.contract) {
-            this.apps[Date.now()] = app
+            this.apps[Date.now()] = app;
         }
         return app.contract;
     }
