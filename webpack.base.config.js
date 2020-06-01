@@ -24,11 +24,6 @@ const baseConfig = {
   },
   resolve: {
     extensions: ['.ts', '.js', '.json'],
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
-  ],
+  }
 }
 module.exports = baseConfig;
