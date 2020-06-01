@@ -89,9 +89,7 @@ export async function register(this: Platform): Promise<any> {
         throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     }
 
-    const { client: dapiClient } = await this.client.getDAPIClient();
-
-    await dapiClient.applyStateTransition(identityCreateTransition);
+    await this.client.getDAPIClient().applyStateTransition(identityCreateTransition);
 
     // @ts-ignore
     return identity;
