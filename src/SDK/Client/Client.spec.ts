@@ -13,7 +13,7 @@ describe('Dash - Client', function suite() {
     const client = new Client();
     expect(client).to.exist;
     expect(client.network).to.be.equal('testnet');
-    expect(client.getDAPIInstance().constructor.name).to.be.equal('DAPIClient');
+    expect(client.getDAPIClient().constructor.name).to.be.equal('DAPIClient');
   });
   it('should not initiate wallet lib without mnemonic', function () {
     const client = new Client();
