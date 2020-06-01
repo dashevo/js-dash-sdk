@@ -71,7 +71,7 @@ export class Client {
     public accountIndex: number = 0;
     private readonly clients: ClientDependencies;
     private readonly apps: ClientApps;
-    public state: { isReady: boolean, isAccountReady: boolean };
+    public state: { isAccountReady: boolean };
     public isReady: Function;
 
     /**
@@ -90,7 +90,6 @@ export class Client {
         }, opts.apps);
 
         this.state = {
-            isReady: false,
             isAccountReady: false
         };
         const seeds = (opts.seeds) ? opts.seeds : defaultSeeds;
@@ -144,23 +143,6 @@ export class Client {
             network: this.network,
             account: this.account,
         })
-
-        const promises = [];
-        for (let appName in this.apps) {
-            const app = this.apps[appName];
-            const p = this.platform?.contracts.get(app.contractId);
-            // @ts-ignore
-            promises.push(p);
-        }
-        Promise
-            .all(promises)
-            .then((res) => {
-                this.state.isReady = true
-            })
-            .catch((e) => {
-                console.error('SDK apps fetching : failed to init', e);
-                throw e;
-            });
 
     }
 
