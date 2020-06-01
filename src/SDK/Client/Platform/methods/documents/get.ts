@@ -1,4 +1,5 @@
 import {Platform} from "../../Platform";
+
 /**
  * @param {any} [where] - where
  * @param {any} [orderBy] - order by
@@ -13,20 +14,23 @@ declare interface fetchOpts {
     startAt: number;
     startAfter: number;
 }
+
 /**
- * Prefetch contracts
+ * Prefetch contract
  *
  * @param {Platform} this bound instance class
+ * @param {string} appName of the contract to fetch
  */
-const ensureAppsContracts = async function(this: Platform){
-    for (let appName in this.apps) {
-        if(!this.apps[appName].contract){
+const ensureAppContractFetched = async function (this: Platform, appName) {
+    if (this.apps[appName]) {
+        if (!this.apps[appName].contract) {
             const app = this.apps[appName];
             // contracts.get deals with settings contract into this.apps[appName]
             await this.contracts.get(app.contractId);
         }
     }
 }
+
 /**
  * Get documents from the platform
  *
@@ -36,12 +40,10 @@ const ensureAppsContracts = async function(this: Platform){
  * @returns documents
  */
 export async function get(this: Platform, typeLocator: string, opts: fetchOpts): Promise<any> {
-    await ensureAppsContracts.call(this);
+    if (!typeLocator.includes('.')) throw new Error('Accessing to field is done using format: appName.fieldName');
 
-    const appNames = Object.keys(this.apps);
-
-    //We can either provide of type `dashpay.profile` or if only one schema provided, of type `profile`.
-    const [appName, fieldType] = (typeLocator.includes('.')) ? typeLocator.split('.') : [appNames[0], typeLocator];
+    // locator is of `dashpay.profile` with dashpay the app and profile the field.
+    const [appName, fieldType] = typeLocator.split('.');
     // FIXME: we may later want a hashmap of schemas and contract IDs
 
     if (!this.apps[appName]) {
@@ -51,8 +53,11 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
     if (!app.contractId) {
         throw new Error(`Missing contract ID for ${appName}`)
     }
+
     const contractId = app.contractId;
-    try{
+    try {
+        // If not present, will fetch contract based on appName and contractId store in this.apps.
+        await ensureAppContractFetched.call(this, appName);
         // @ts-ignore
         const rawDataList = await this.client.getDocuments(contractId, fieldType, opts);
         const documents: any[] = [];
