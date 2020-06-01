@@ -69,7 +69,7 @@ export class Client {
     public accountIndex: number = 0;
     private readonly clients: ClientDependencies;
     private readonly apps: ClientApps;
-    public state: { isReady: boolean, isAccountReady: boolean };
+    public state: { isAccountReady: boolean };
     public isReady: Function;
 
     /**
@@ -88,7 +88,6 @@ export class Client {
         }, opts.apps);
 
         this.state = {
-            isReady: false,
             isAccountReady: false
         };
         const seeds = (opts.seeds) ? opts.seeds : defaultSeeds;
@@ -133,7 +132,6 @@ export class Client {
             account: this.account,
         })
 
-        this.state.isReady = true;
     }
 
     /**
