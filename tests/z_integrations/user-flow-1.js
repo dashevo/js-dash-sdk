@@ -28,7 +28,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     clientInstance = new Dash.Client(clientOpts);
     await clientInstance.isReady();
     expect(clientInstance.network).to.equal('testnet');
-    expect(clientInstance.accountIndex).to.equal(0);
+    expect(clientInstance.walletAccountIndex).to.equal(0);
     expect(clientInstance.apps).to.deep.equal({dpns: {contractId: "7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM"}});
     expect(clientInstance.wallet.network).to.equal('testnet');
     expect(clientInstance.wallet.offlineMode).to.equal(false);
