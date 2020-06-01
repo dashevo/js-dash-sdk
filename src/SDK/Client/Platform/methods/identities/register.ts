@@ -40,9 +40,9 @@ export async function register(this: Platform): Promise<any> {
     const utxos = account.getUTXOS();
     const balance = account.getTotalBalance();
 
-    if (balance < output.satoshis) {
-        throw new Error(`Not enought balance (${balance}) to cover burn amount of ${burnAmount}`);
-    }
+        if (balance < output.satoshis) {
+            throw new Error(`Not enough balance (${balance}) to cover burn amount of ${burnAmount}`);
+        }
 
     const selection = utils.coinSelection(utxos, [output]);
 
