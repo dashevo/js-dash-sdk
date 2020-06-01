@@ -55,21 +55,18 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
     }
 
     const contractId = app.contractId;
-    try {
-        // If not present, will fetch contract based on appName and contractId store in this.apps.
-        await ensureAppContractFetched.call(this, appName);
-        // @ts-ignore
-        const rawDataList = await this.client.getDocuments(contractId, fieldType, opts);
-        const documents: any[] = [];
+    // If not present, will fetch contract based on appName and contractId store in this.apps.
+    await ensureAppContractFetched.call(this, appName);
+    const { client: dapiClient } = await this.client.getDAPIClient();
+    // @ts-ignore
+    const rawDataList = await dapiClient.getDocuments(contractId, fieldType, opts);
+    const documents: any[] = [];
 
-        for (const rawData of rawDataList) {
-            const doc = await this.dpp.document.createFromSerialized(rawData, {skipValidation: true});
-            documents.push(doc);
-        }
-        return documents
-    } catch (e) {
-        throw e;
+    for (const rawData of rawDataList) {
+        const doc = await this.dpp.document.createFromSerialized(rawData, {skipValidation: true});
+        documents.push(doc);
     }
+    return documents
 }
 
 export default get;

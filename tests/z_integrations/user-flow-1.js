@@ -21,49 +21,40 @@ const clientOpts = {
     mnemonic: fixtures.mnemonic,
   },
 };
+let account;
 describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite() {
   this.timeout(240000);
 
   it('should init a Client', async () => {
     clientInstance = new Dash.Client(clientOpts);
-    await clientInstance.isReady();
     expect(clientInstance.network).to.equal('testnet');
-    expect(clientInstance.accountIndex).to.equal(0);
+    expect(clientInstance.walletAccountIndex).to.equal(0);
     expect(clientInstance.apps).to.deep.equal({dpns: {contractId: "7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM"}});
     expect(clientInstance.wallet.network).to.equal('testnet');
     expect(clientInstance.wallet.offlineMode).to.equal(false);
     expect(clientInstance.wallet.mnemonic).to.equal(fixtures.mnemonic);
     expect(clientInstance.wallet.walletId).to.equal('6afaad2189');
-    expect(clientInstance.account.index).to.equal(0);
-    expect(clientInstance.account.walletId).to.equal('6afaad2189');
-    expect(clientInstance.account.getUnusedAddress().address).to.equal('yj8sq7ogzz6JtaxpBQm5Hg9YaB5cKExn5T');
 
+    account = await clientInstance.getWalletAccount();
+    expect(account.index).to.equal(0);
+    expect(account.walletId).to.equal('6afaad2189');
+    expect(account.getUnusedAddress().address).to.not.equal('yj8sq7ogzz6JtaxpBQm5Hg9YaB5cKExn5T');
+    expect(account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
+    expect(clientInstance.apps['dpns']).to.exist;
+    expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
+    expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
     expect(clientInstance.platform.dpp).to.exist;
     expect(clientInstance.platform.client).to.exist;
   });
-  it('should be ready quickly', (done) => {
-    let timer = setTimeout(() => {
-      done(new Error('Should have been initialized in time'));
-    }, 15000);
-    clientInstance.isReady().then(() => {
-      clearTimeout(timer);
-      expect(clientInstance.account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
-      expect(clientInstance.state).to.deep.equal({isReady: true, isAccountWaiting: false, isAccountReady: true});
-      expect(clientInstance.apps['dpns']).to.exist;
-      expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
-      expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
-      return done();
-    })
-  });
   it('should have a balance', function (done) {
-    const balance = (clientInstance.account.getTotalBalance());
+    const balance = (account.getTotalBalance());
     if(balance<10000){
-      return done(new Error(`You need to fund this address : ${clientInstance.account.getUnusedAddress().address}. Insuffisiant balance: ${balance}`));
+      return done(new Error(`You need to fund this address : ${account.getUnusedAddress().address}. Insuffisiant balance: ${balance}`));
     }
     hasBalance = true;
     return done();
   });
-  it('should check it\'s DPNS reg is available' , async function () {
+  it('should check if name is available' , async function () {
     const getDocument = await clientInstance.platform.names.get(username);
     expect(getDocument).to.equal(null);
     hasDuplicate = false;
