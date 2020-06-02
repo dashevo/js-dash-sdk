@@ -4,7 +4,6 @@ const fixtures = require('../fixtures/user-flow-1');
 const Chance = require('chance');
 const chance = new Chance();
 const DataContract = require('@dashevo/dpp/lib/dataContract/DataContract');
-const wait = require('@dashevo/dpp/lib/test/utils/wait');
 
 let clientInstance;
 let hasBalance=false;
