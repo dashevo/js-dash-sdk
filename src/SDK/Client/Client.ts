@@ -1,5 +1,5 @@
 import { Account, Wallet } from "@dashevo/wallet-lib";
-import { DAPIClient as DAPIClientWrapper } from "@dashevo/wallet-lib/src/transporters"
+import { DAPIClientWrapper } from "@dashevo/wallet-lib/src/transporters"
 // FIXME: use dashcorelib types
 import { Platform } from './Platform';
 // @ts-ignore
@@ -62,6 +62,7 @@ export class Client {
     public account: Account | undefined;
     public platform: Platform | undefined;
     public walletAccountIndex: number = 0;
+    // @ts-ignore
     private readonly dapiClientWrapper: DAPIClientWrapper;
     private readonly apps: ClientApps;
     private options: ClientOpts;

@@ -4,6 +4,7 @@ const fixtures = require('../fixtures/user-flow-1');
 const Chance = require('chance');
 const chance = new Chance();
 const DataContract = require('@dashevo/dpp/lib/dataContract/DataContract');
+const wait = require('@dashevo/dpp/lib/test/utils/wait');
 
 let clientInstance;
 let hasBalance=false;
@@ -21,6 +22,10 @@ const clientOpts = {
   network: fixtures.network,
   wallet: {
     mnemonic: fixtures.mnemonic,
+    transporter: {
+      type: 'DAPIClient',
+      seeds: [{service: '54.188.88.39'}]
+    }
   },
   seeds: [{service: '54.188.88.39:3000'}],
   apps: {
@@ -29,6 +34,7 @@ const clientOpts = {
     }
   }
 };
+
 let account;
 describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite() {
   this.timeout(240000);
@@ -69,9 +75,15 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
       throw new Error('Insufficient balance to perform this test')
     }
 
-    createdIdentity = await clientInstance.platform.identities.register();
+    try {
+      createdIdentity = await clientInstance.platform.identities.register();
+    } catch (e) {
+      console.dir(e, {depth: 10})
+    }
 
     createdIdentityId = createdIdentity.getId();
+
+    console.log(createdIdentityId);
 
     expect(createdIdentityId).to.not.equal(null);
     expect(createdIdentityId.length).to.gte(42);
@@ -101,7 +113,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     const createDocument = await clientInstance.platform.names.register(username, createdIdentity);
     expect(createDocument.getType()).to.equal('domain');
     expect(createDocument.getOwnerId()).to.equal(createdIdentityId);
-    expect(createDocument.getDataContractId()).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
+    expect(createDocument.getDataContractId()).to.equal(dpnsContractId);
     expect(createDocument.get('label')).to.equal(username);
     expect(createDocument.get('normalizedParentDomainName')).to.equal('dash');
   });
@@ -120,7 +132,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(doc.getRevision()).to.equal(1);
     expect(doc.getType()).to.equal('domain');
     expect(doc.getOwnerId()).to.equal(createdIdentityId);
-    expect(doc.getDataContractId()).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
+    expect(doc.getDataContractId()).to.equal(dpnsContractId);
     expect(doc.get('label')).to.equal(username);
     expect(doc.get('normalizedParentDomainName')).to.equal('dash');
   });
@@ -158,9 +170,12 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
 
     const identityBeforeTopUp = await clientInstance.platform.identities.get(identityId);
     const balanceBeforeTopUp = identityBeforeTopUp.getBalance();
+    const topUpAmount = 10000;
+    const topUpCredits = topUpAmount * 1000;
+    const topUpFee = 146;
 
     try {
-      await clientInstance.platform.identities.topUp(identityId, 10000);
+      await clientInstance.platform.identities.topUp(identityId, topUpAmount);
     } catch (e) {
       console.dir(e, {depth: 100});
     }
@@ -168,7 +183,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     const identity = await clientInstance.platform.identities.get(identityId);
 
     expect(identity.getId()).to.be.equal(identityId);
-    expect(identity.getBalance()).to.be.equal(balanceBeforeTopUp + 10000);
+    expect(identity.getBalance()).to.be.equal(balanceBeforeTopUp + topUpCredits - topUpFee);
     expect(identity.getBalance()).to.be.greaterThan(10000);
   })
   it('should disconnect', async function () {
