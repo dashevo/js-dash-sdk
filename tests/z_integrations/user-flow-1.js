@@ -46,12 +46,13 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(clientInstance.wallet.network).to.equal('testnet');
     expect(clientInstance.wallet.offlineMode).to.equal(false);
     expect(clientInstance.wallet.mnemonic).to.equal(fixtures.mnemonic);
-    expect(clientInstance.wallet.walletId).to.equal('6afaad2189');
+    expect(clientInstance.wallet.walletId).to.equal('ad7982c7fe');
 
     account = await clientInstance.getWalletAccount();
+
     expect(account.index).to.equal(0);
-    expect(account.walletId).to.equal('6afaad2189');
-    expect(account.getUnusedAddress().address).to.not.equal('yj8sq7ogzz6JtaxpBQm5Hg9YaB5cKExn5T');
+    expect(account.walletId).to.equal('ad7982c7fe');
+    expect(account.getUnusedAddress().address).to.be.not.equal('yZtkbuQhTPGbyD4En81Qyio4Np4BhQVh8M');
     expect(account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
     expect(clientInstance.platform.dpp).to.exist;
     expect(clientInstance.platform.client).to.exist;
