@@ -13,10 +13,10 @@ import getContract from "./methods/contracts/get";
 
 
 import getIdentity from "./methods/identities/get";
-import registerIdentity from "./methods/identities/register";
 
 import getName from "./methods/names/get";
 import registerName from "./methods/names/register";
+import {Identities} from "./Identities";
 
 /**
  * Interface for PlatformOpts
@@ -67,7 +67,7 @@ export class Platform {
      * @param {Function} get - get identities from the platform
      * @param {Function} register - register identities on the platform
      */
-    public identities: Credentials;
+    public identities: Identities;
     /**
      * @param {Function} get - get names from the platform
      * @param {Function} register - register names on the platform
@@ -90,6 +90,8 @@ export class Platform {
      * @param {PlatformOpts} options - options for Platform
      */
     constructor(options: PlatformOpts) {
+        const getIdentityFunction = getIdentity.bind(this);
+
         this.documents = {
             broadcast: broadcastDocument.bind(this),
             create: createDocument.bind(this),
@@ -104,13 +106,9 @@ export class Platform {
             register: registerName.bind(this),
             get: getName.bind(this),
         };
-        this.identities = {
-            register: registerIdentity.bind(this),
-            get: getIdentity.bind(this),
-        };
 
         const stateRepository = {
-            fetchIdentity: getIdentity.bind(this),
+            fetchIdentity: getIdentityFunction,
             fetchDataContract: getContract.bind(this)
         };
 
@@ -122,5 +120,7 @@ export class Platform {
         this.client = options.client;
         this.apps = options.apps;
         this.network = options.network;
+
+        this.identities = new Identities(this);
     }
 }
