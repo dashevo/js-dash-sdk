@@ -98,10 +98,10 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
       .toString();
 
     await fundAddress(
-      clientInstance.clients.dapi,
+      clientInstance.getDAPIClient(),
       faucetAddress,
       faucetPrivateKey,
-      clientInstance.account.getAddress().address,
+      account.getAddress().address,
       20000
     )
   })
