@@ -152,7 +152,7 @@ export class Identities {
 
         const identities = await Promise
             .all(identityIds.map(id => {
-                return this.platform.identities.get(id)
+                return this.get(id)
             }));
 
         identities.forEach((identity: any) => {
