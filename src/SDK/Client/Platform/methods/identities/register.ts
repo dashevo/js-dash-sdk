@@ -53,6 +53,7 @@ export async function register(this: Platform): Promise<any> {
 
     lockTransaction
         .from(selection.utxos)
+        // @ts-ignore
         .addBurnOutput(output.satoshis, identityPublicKey._getID())
         // @ts-ignore
         .change(changeAddress)
