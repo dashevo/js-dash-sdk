@@ -9,6 +9,18 @@ describe('SDK', function suite() {
     expect(Dash).to.have.property('Client');
     expect(Dash.Client.constructor.name).to.be.equal('Function')
   });
+  it('should sign and verify a message', async function () {
+    const client = new Dash.Client({wallet: {offlineMode: true}});
+    const account = await client.getWalletAccount();
+    const idKey = account.getIdentityHDKey();
+    // This transforms from a Wallet-Lib.PrivateKey to a Dashcore-lib.PrivateKey.
+    // It will quickly be annoying to perform this, and we therefore need to find a better solution for that.
+    const privateKey = Dash.Core.PrivateKey(idKey.privateKey);
+    const message = Dash.Core.Message('hello, world');
+    const signed = message.sign(privateKey);
+    const verify = message.verify(idKey.privateKey.toAddress().toString(), signed.toString());
+    expect(verify).to.equal(true);
+  });
   it('should create an instance', async function () {
     instanceWithoutWallet = new Dash.Client();
     expect(instanceWithoutWallet.network).to.equal('testnet');
@@ -28,17 +40,6 @@ describe('SDK', function suite() {
         }
     );
     expect(instanceWithWallet.wallet.mnemonic).to.exist;
-  });
-  it('should sign and verify a message', async function () {
-    const account = await instanceWithWallet.getWalletAccount();
-    const idKey = account.getIdentityHDKey();
-    // This transforms from a Wallet-Lib.PrivateKey to a Dashcore-lib.PrivateKey.
-    // It will quickly be annoying to perform this, and we therefore need to find a better solution for that.
-    const privateKey = Dash.Core.PrivateKey(idKey.privateKey);
-    const message = Dash.Core.Message('hello, world');
-    const signed = message.sign(privateKey);
-    const verify = message.verify(idKey.privateKey.toAddress().toString(), signed.toString());
-    expect(verify).to.equal(true);
   });
   after(async ()=>{
     await instanceWithWallet.disconnect();
