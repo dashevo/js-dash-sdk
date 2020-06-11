@@ -1,5 +1,4 @@
 const baseConfig = require('./webpack.base.config');
-const nodeExternals = require('webpack-node-externals');
 
 const webConfig = Object.assign({}, baseConfig, {
   target: 'web',
@@ -14,8 +13,6 @@ const webConfig = Object.assign({}, baseConfig, {
 });
 const es5Config = Object.assign({}, baseConfig, {
   target: 'node',
-  // in order to ignore all modules in node_modules folder
-  externals: [nodeExternals()],
   optimization: {
     minimize: false
   },
