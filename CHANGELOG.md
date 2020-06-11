@@ -1,3 +1,12 @@
+# [3.13.0](https://github.com/dashevo/DashJS/compare/v3.13.0...v3.0.2) (2020-05-11)
+
+- **feat:**
+  - feat: Identity Topups (#71)
+  - feat: identity sync  (#79)
+  
+- **tests:**
+  - test: switch for one block confirmation in tests (#78)
+
 # [3.0.2](https://github.com/dashevo/DashJS/compare/v3.0.2...v3.0.1) (2020-05-06)
 
 - **fix**:
