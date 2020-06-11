@@ -4,7 +4,6 @@ const dotenvResult = require('dotenv-safe').config();
 
 const webpackBaseConfig = require("./webpack.base.config");
 
-
 if (dotenvResult.error) {
   throw dotenvResult.error;
 }
