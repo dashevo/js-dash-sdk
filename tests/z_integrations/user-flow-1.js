@@ -1,9 +1,60 @@
 const {expect} = require('chai');
-const Dash = require('../../dist/dash.cjs.min.js');
-const fixtures = require('../fixtures/user-flow-1');
+const Dash = require('../../');
 const Chance = require('chance');
 const chance = new Chance();
 const DataContract = require('@dashevo/dpp/lib/dataContract/DataContract');
+
+const dotenvSafe = require('dotenv-safe');
+
+const path = require('path');
+
+dotenvSafe.config({
+  path: path.resolve(__dirname, '..', '..', '.env'),
+});
+
+const {
+  Transaction,
+  PrivateKey
+} = require('@dashevo/dashcore-lib');
+
+function wait(ms) {
+  return new Promise((res) => setTimeout(res, ms));
+}
+
+/**
+ *
+ * @param {DAPIClient} dapiClient
+ * @param {Address} faucetAddress
+ * @param {PrivateKey} faucetPrivateKey
+ * @param {Address} address
+ * @param {number} amount
+ * @return {Promise<string>}
+ */
+async function fundAddress(dapiClient, faucetAddress, faucetPrivateKey, address, amount) {
+  const { items: inputs } = await dapiClient.getUTXO(faucetAddress);
+
+  const transaction = new Transaction();
+
+  transaction.from(inputs.slice(-1)[0])
+    .to(address, amount)
+    .change(faucetAddress)
+    .fee(668)
+    .sign(faucetPrivateKey);
+
+  let { blocks: currentBlockHeight } = await dapiClient.getStatus();
+
+  const transactionId = await dapiClient.sendTransaction(transaction.toBuffer());
+
+  const desiredBlockHeight = currentBlockHeight + 2;
+
+  do {
+    ({ blocks: currentBlockHeight } = await dapiClient.getStatus());
+    await wait(30000);
+  } while (currentBlockHeight < desiredBlockHeight);
+
+  return transactionId;
+}
+
 
 let clientInstance;
 let hasBalance=false;
@@ -15,36 +66,57 @@ const year = chance.birthday({string: true}).slice(-2);
 const firstname = chance.first();
 const username = `test-${firstname}${year}`;
 
+const seeds = process.env.DAPI_SEED
+  .split(',')
+  .map((seed) => ({ service: seed }));
+
 const clientOpts = {
-  network: fixtures.network,
+  seeds,
+  network: process.env.NETWORK,
   wallet: {
-    mnemonic: fixtures.mnemonic,
+    mnemonic: null,
   },
+  apps: {
+    dpns: {
+      contractId: process.env.DPNS_CONTRACT_ID,
+    }
+  }
 };
+
 let account;
+
 describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite() {
-  this.timeout(240000);
+  this.timeout(700000);
 
   it('should init a Client', async () => {
     clientInstance = new Dash.Client(clientOpts);
-    expect(clientInstance.network).to.equal('testnet');
+    expect(clientInstance.network).to.equal(process.env.NETWORK);
     expect(clientInstance.walletAccountIndex).to.equal(0);
-    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: "7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM"}});
-    expect(clientInstance.wallet.network).to.equal('testnet');
+    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: process.env.DPNS_CONTRACT_ID}});
+    expect(clientInstance.wallet.network).to.equal(process.env.NETWORK);
     expect(clientInstance.wallet.offlineMode).to.equal(false);
-    expect(clientInstance.wallet.mnemonic).to.equal(fixtures.mnemonic);
-    expect(clientInstance.wallet.walletId).to.equal('6afaad2189');
+    expect(clientInstance.platform.dpp).to.exist;
+    expect(clientInstance.platform.client).to.exist;
 
     account = await clientInstance.getWalletAccount();
     expect(account.index).to.equal(0);
-    expect(account.walletId).to.equal('6afaad2189');
-    expect(account.getUnusedAddress().address).to.not.equal('yj8sq7ogzz6JtaxpBQm5Hg9YaB5cKExn5T');
-    expect(account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
-    expect(clientInstance.apps['dpns']).to.exist;
-    expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
-    expect(clientInstance.platform.dpp).to.exist;
-    expect(clientInstance.platform.client).to.exist;
   });
+
+  it('populate balance with dash', async () => {
+    const faucetPrivateKey = PrivateKey.fromString(process.env.FAUCET_PRIVATE_KEY);
+    const faucetAddress = faucetPrivateKey
+      .toAddress(process.env.NETWORK)
+      .toString();
+
+    await fundAddress(
+      clientInstance.getDAPIClient(),
+      faucetAddress,
+      faucetPrivateKey,
+      account.getAddress().address,
+      20000
+    )
+  })
+
   it('should have a balance', function (done) {
     const balance = (account.getTotalBalance());
     if(balance<10000){
@@ -53,6 +125,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     hasBalance = true;
     return done();
   });
+
   it('should check if name is available' , async function () {
     const getDocument = await clientInstance.platform.names.get(username);
     expect(getDocument).to.equal(null);
@@ -95,7 +168,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     const createDocument = await clientInstance.platform.names.register(username, createdIdentity);
     expect(createDocument.getType()).to.equal('domain');
     expect(createDocument.getOwnerId()).to.equal(createdIdentityId);
-    expect(createDocument.getDataContractId()).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
+    expect(createDocument.getDataContractId()).to.equal(process.env.DPNS_CONTRACT_ID);
     expect(createDocument.get('label')).to.equal(username);
     expect(createDocument.get('normalizedParentDomainName')).to.equal('dash');
   });
@@ -114,7 +187,7 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(doc.getRevision()).to.equal(1);
     expect(doc.getType()).to.equal('domain');
     expect(doc.getOwnerId()).to.equal(createdIdentityId);
-    expect(doc.getDataContractId()).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
+    expect(doc.getDataContractId()).to.equal(process.env.DPNS_CONTRACT_ID);
     expect(doc.get('label')).to.equal(username);
     expect(doc.get('normalizedParentDomainName')).to.equal('dash');
   });

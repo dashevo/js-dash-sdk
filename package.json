@@ -1,8 +1,8 @@
 {
   "name": "dash",
-  "version": "3.0.2",
+  "version": "3.13.0-dev.6",
   "description": "Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)",
-  "main": "dist/dash.cjs.min.js",
+  "main": "dist/dash.cjs.js",
   "unpkg": "dist/dash.min.js",
   "browser": "dist/dash.min.js",
   "types": "dist/src/index.d.ts",
@@ -16,8 +16,7 @@
     "test": "npm run test:ts && npm run build:prod && npm run test:js && npm run test:browsers",
     "test:browsers": "karma start ./karma.conf.js --single-run",
     "test:ts": "mocha -r ts-node/register \"src/**/*.spec.ts\"",
-    "test:js": "mocha --recursive tests/**/*.js",
-    "prepare": "npm run build:dev"
+    "test:js": "mocha --recursive tests/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -49,6 +48,7 @@
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-webpack": "^4.0.2",
+    "dotenv-safe": "^8.2.0",
     "mocha": "^6.2.2",
     "nodemon": "^2.0.1",
     "rimraf": "^3.0.0",
