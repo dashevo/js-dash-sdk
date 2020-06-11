@@ -1,9 +1,13 @@
+const path = require('path');
+const nodeExternals = require('webpack-node-externals');
+
 const baseConfig = require('./webpack.base.config');
 
 const webConfig = Object.assign({}, baseConfig, {
   target: 'web',
+  mode: "production",
   output: {
-    ...baseConfig.output,
+    path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'umd',
     library: 'Dash',
     filename: 'dash.min.js',
@@ -11,16 +15,17 @@ const webConfig = Object.assign({}, baseConfig, {
     globalObject: "(typeof self !== 'undefined' ? self : this)"
   }
 });
+
 const es5Config = Object.assign({}, baseConfig, {
   target: 'node',
-  optimization: {
-    minimize: false
-  },
+  mode: 'development',
   devtool: 'inline-source-map',
+  externals: [nodeExternals()],
   output: {
-    ...baseConfig.output,
+    path: path.resolve(__dirname, 'dist'),
     filename: 'dash.cjs.js',
     libraryTarget: 'commonjs2'
   },
 });
-module.exports = [webConfig, es5Config]
+
+module.exports = [webConfig, es5Config];

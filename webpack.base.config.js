@@ -1,10 +1,6 @@
 const path = require('path');
 const baseConfig = {
   entry: './src/index.ts',
-  // devtool: 'inline-source-map',
-  devtool: 'cheap-module-source-map',
-  //mode: 'development',
-  mode: "production",
   module: {
     rules: [
       {
@@ -23,6 +19,9 @@ const baseConfig = {
   },
   resolve: {
     extensions: ['.ts', '.js', '.json'],
+    alias: {
+      'bn.js': path.resolve(__dirname, 'node_modules', 'bn.js')
+    }
   }
 }
 module.exports = baseConfig;
