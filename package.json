@@ -59,8 +59,5 @@
     "webpack-bundle-analyzer": "^3.5.2",
     "webpack-cli": "^3.3.9",
     "webpack-node-externals": "^1.7.2"
-  },
-  "peerDependencies": {
-    "@dashevo/dashcore-lib": "^0.18.4"
   }
 }
