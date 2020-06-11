@@ -42,7 +42,6 @@ describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite
     expect(account.state).to.deep.equal({isInitialized: true, isReady: true, isDisconnecting: false});
     expect(clientInstance.apps['dpns']).to.exist;
     expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
-    expect(clientInstance.apps['dpns'].contractId).to.equal('7PBvxeGpj7SsWfvDSa31uqEMt58LAiJww7zNcVRP1uEM');
     expect(clientInstance.platform.dpp).to.exist;
     expect(clientInstance.platform.client).to.exist;
   });
