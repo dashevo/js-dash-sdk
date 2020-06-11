@@ -37,7 +37,7 @@ async function fundAddress(dapiClient, faucetAddress, faucetPrivateKey, address,
 
   const transactionId = await dapiClient.sendTransaction(transaction.toBuffer());
 
-  const desiredBlockHeight = currentBlockHeight + 2;
+  const desiredBlockHeight = currentBlockHeight + 1;
 
   do {
     ({ blocks: currentBlockHeight } = await dapiClient.getStatus());
@@ -77,7 +77,7 @@ const clientOpts = {
 
 let account;
 
-describe('Integration - User flow 1 - Identity, DPNS, Documents', function suite() {
+describe('SDK', function suite() {
   this.timeout(700000);
 
   it('should init a Client', async () => {
