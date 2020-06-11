@@ -29,10 +29,10 @@
   },
   "homepage": "https://github.com/dashevo/DashJS#readme",
   "dependencies": {
-    "@dashevo/dapi-client": "~0.12.0",
-    "@dashevo/dashcore-lib": "^0.18.0",
+    "@dashevo/dapi-client": "^0.14.0-dev.5",
+    "@dashevo/dashcore-lib": "^0.18.4",
     "@dashevo/wallet-lib": "7.1.0",
-    "@dashevo/dpp": "~0.12.1",
+    "@dashevo/dpp": "^0.13.0",
     "bs58": "^4.0.1"
   },
   "devDependencies": {
@@ -40,7 +40,8 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.12",
     "chai": "^4.2.0",
-    "chance": "^1.1.4",
+    "chance": "^1.1.6",
+    "dotenv-safe": "^8.2.0",
     "karma": "^5.0.9",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
@@ -48,15 +49,13 @@
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-webpack": "^4.0.2",
-    "dotenv-safe": "^8.2.0",
-    "mocha": "^6.2.2",
-    "nodemon": "^2.0.1",
-    "rimraf": "^3.0.0",
-    "ts-loader": "^6.2.0",
-    "ts-node": "^8.5.2",
-    "typescript": "^3.7.2",
-    "webpack": "^4.41.0",
-    "webpack-cli": "^3.3.9",
-    "webpack-node-externals": "^1.7.2"
+    "mocha": "^8.0.1",
+    "nodemon": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^7.0.5",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }
