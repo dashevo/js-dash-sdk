@@ -164,6 +164,8 @@ describe('SDK', function suite() {
       throw new Error('Can\'t perform the test. Failed to create identity');
     }
 
+    await wait(200);
+
     const fetchIdentity = await clientInstance.platform.identities.get(createdIdentityId);
 
     expect(fetchIdentity).to.exist;
