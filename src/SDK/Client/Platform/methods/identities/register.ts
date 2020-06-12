@@ -74,7 +74,7 @@ export async function register(this: Platform): Promise<any> {
     // @ts-ignore
     await account.broadcastTransaction(signedLockTransaction);
 
-    await wait(10000);
+    await wait(1000);
 
     // @ts-ignore
     const outPoint = signedLockTransaction.getOutPointBuffer(0);
