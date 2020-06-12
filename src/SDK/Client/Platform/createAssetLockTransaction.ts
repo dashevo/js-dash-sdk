@@ -22,6 +22,12 @@ export default async function createAssetLockTransaction(platform : Platform, fu
         address: identityAddress
     };
 
+    // TODO: Find another way to mark the address as used
+    const outputToMarkItUsed = {
+        satoshis: 10000,
+        address: identityAddress
+    };
+
     const utxos = account.getUTXOS();
     const balance = account.getTotalBalance();
 
@@ -29,7 +35,7 @@ export default async function createAssetLockTransaction(platform : Platform, fu
         throw new Error(`Not enough balance (${balance}) to cover burn amount of ${fundingAmount}`);
     }
 
-    const selection = utils.coinSelection(utxos, [output]);
+    const selection = utils.coinSelection(utxos, [output, outputToMarkItUsed]);
 
     // FIXME : Usage with a single utxo had estimated fee of 205.
     // But network failed us with 66: min relay fee not met.
@@ -41,7 +47,7 @@ export default async function createAssetLockTransaction(platform : Platform, fu
         // @ts-ignore
         .addBurnOutput(output.satoshis, assetLockPublicKey._getID())
         // @ts-ignore
-        .to(identityAddressInfo.address, fundingAmount)
+        .to(identityAddressInfo.address, 10000)
         // @ts-ignore
         .change(changeAddress)
         .fee(selection.estimatedFee);
