@@ -48,6 +48,7 @@ export default async function createAssetLockTransaction(platform : Platform, fu
 
     const utxoAddresses = selection.utxos.map((utxo: any) => utxo.address.toString());
 
+    // @ts-ignore
     const utxoHDPrivateKey = account.getPrivateKeys(utxoAddresses);
 
     // @ts-ignore

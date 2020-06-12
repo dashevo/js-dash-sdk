@@ -8,7 +8,7 @@ import createAssetLockTransaction from "../../createAssetLockTransaction";
  * @param {number} [fundingAmount=10000] - funding amount in duffs
  * @returns {Identity}
  */
-export async function register(this: Platform, fundingAmount : number = 10000): Promise<any> {
+export default async function register(this: Platform, fundingAmount : number = 10000): Promise<any> {
     const { client, dpp } = this;
 
     const account = await client.getWalletAccount();
@@ -29,6 +29,7 @@ export async function register(this: Platform, fundingAmount : number = 10000): 
 
     const identityIndex = await account.getUnusedIdentityIndex();
 
+    // @ts-ignore
     const { privateKey: identityPrivateKey } = account.getIdentityHDKeyByIndex(identityIndex, 0)
     const identityPublicKey = identityPrivateKey.toPublicKey();
 
