@@ -25,7 +25,7 @@ export async function register(this: Platform, fundingAmount : number = 10000): 
     await wait(1000);
 
     // Create Identity
-    const assetLockOutPoint = assetLockTransaction.getOutPointBuffer(0).toString('base64');
+    const assetLockOutPoint = assetLockTransaction.getOutPointBuffer(0);
 
     const identityIndex = await account.getUnusedIdentityIndex();
 
