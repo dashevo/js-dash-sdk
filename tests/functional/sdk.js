@@ -123,7 +123,7 @@ describe('SDK', function suite() {
       faucetAddress,
       faucetPrivateKey,
       account.getAddress().address,
-      50000
+      100000
     )
   })
 
@@ -146,7 +146,11 @@ describe('SDK', function suite() {
       throw new Error('Insufficient balance to perform this test')
     }
 
-    createdIdentity = await clientInstance.platform.identities.register();
+    try {
+      createdIdentity = await clientInstance.platform.identities.register();
+    } catch (e) {
+      console.dir(e, { depth: 100 })
+    }
 
     createdIdentityId = createdIdentity.getId();
 

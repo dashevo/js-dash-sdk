@@ -22,7 +22,8 @@ export async function topUp(this: Platform, identityId: string, amount: number):
     } = await createAssetLockTransaction(this, amount);
 
     // Broadcast Asset Lock transaction
-    await account.broadcastTransaction(assetLockTransaction.serialize(false));
+    // @ts-ignore
+    await account.broadcastTransaction(assetLockTransaction);
 
     // Wait some time for propagation
     await wait(1000);

@@ -39,9 +39,9 @@ export default async function createAssetLockTransaction(platform : Platform, fu
     lockTransaction
         .from(selection.utxos)
         // @ts-ignore
-        .to(identityAddressInfo.address, fundingAmount)
-        // @ts-ignore
         .addBurnOutput(output.satoshis, assetLockPublicKey._getID())
+        // @ts-ignore
+        .to(identityAddressInfo.address, fundingAmount)
         // @ts-ignore
         .change(changeAddress)
         .fee(selection.estimatedFee);
