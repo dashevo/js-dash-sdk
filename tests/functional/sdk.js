@@ -146,11 +146,7 @@ describe('SDK', function suite() {
       throw new Error('Insufficient balance to perform this test')
     }
 
-    try {
-      createdIdentity = await clientInstance.platform.identities.register();
-    } catch (e) {
-      console.dir(e, { depth: 100 })
-    }
+    createdIdentity = await clientInstance.platform.identities.register();
 
     createdIdentityId = createdIdentity.getId();
 
