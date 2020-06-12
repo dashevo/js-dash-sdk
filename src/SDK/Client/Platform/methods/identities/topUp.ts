@@ -76,7 +76,7 @@ export async function topUp(this: Platform, identityId: string, amount: number):
     // @ts-ignore
     await account.broadcastTransaction(signedLockTransaction);
 
-    await wait(10000);
+    await wait(1000);
 
     // @ts-ignore
     const outPointBuffer = signedLockTransaction.getOutPointBuffer(0);
