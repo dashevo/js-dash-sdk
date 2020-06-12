@@ -3,6 +3,7 @@ import { Transaction } from "@dashevo/dashcore-lib";
 import {utils} from "@dashevo/wallet-lib";
 
 import {Platform} from "../../Platform";
+import {wait} from "../../../../../utils/wait";
 
 /**
  * Register identities to the platform
@@ -72,6 +73,8 @@ export async function register(this: Platform): Promise<any> {
 
     // @ts-ignore
     await account.broadcastTransaction(signedLockTransaction);
+
+    await wait(10000);
 
     // @ts-ignore
     const outPoint = signedLockTransaction.getOutPointBuffer(0);

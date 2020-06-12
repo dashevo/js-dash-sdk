@@ -4,6 +4,8 @@ import {utils} from "@dashevo/wallet-lib";
 
 import {Platform} from "../../Platform";
 
+import { wait } from "../../../../../utils/wait";
+
 /**
  * Register identities to the platform
  *
@@ -43,7 +45,7 @@ export async function topUp(this: Platform, identityId: string, amount: number):
     const balance = account.getTotalBalance();
 
     if (balance < output.satoshis) {
-        throw new Error(`Not enought balance (${balance}) to cover burn amount of ${amount}`)
+        throw new Error(`Not enough balance (${balance}) to cover burn amount of ${amount}`)
     }
 
     selection = utils.coinSelection(utxos, [output]);
@@ -73,6 +75,8 @@ export async function topUp(this: Platform, identityId: string, amount: number):
 
     // @ts-ignore
     await account.broadcastTransaction(signedLockTransaction);
+
+    await wait(10000);
 
     // @ts-ignore
     const outPointBuffer = signedLockTransaction.getOutPointBuffer(0);
