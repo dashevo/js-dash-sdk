@@ -26,6 +26,7 @@ export async function topUp(this: Platform, identityId: string, amount: number):
     // @ts-ignore
     const identityPublicKey = identityHDPrivateKey.publicKey;
 
+    // @ts-ignore
     const identityAddress = identityPublicKey.toAddress().toString();
     const changeAddress = account.getUnusedAddress('internal').address;
 
@@ -54,6 +55,7 @@ export async function topUp(this: Platform, identityId: string, amount: number):
 
     lockTransaction
         .from(selection.utxos)
+        // @ts-ignore
         .addBurnOutput(output.satoshis, identityPublicKey._getID())
         // @ts-ignore
         .change(changeAddress)
