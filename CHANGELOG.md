@@ -3,7 +3,11 @@
 - **Features:**
     * Updated wallet-lib to [7.13.3](https://github.com/dashevo/wallet-lib/blob/master/CHANGELOG.md#7133-2020-06-16)
     * Updated js-dpp to [0.13.1](https://github.com/dashevo/js-dpp/blob/master/CHANGELOG.md#0131-2020-06-15)
-    
+
+- **Bug fixes:**
+    * fix: wrong assetlock tx fee estimation (#85)
+    * fix: generate one-time private key for the asset lock transaction (#86)
+        
 ## [3.13.2](https://github.com/dashevo/DashJS/compare/v3.13.1...v3.13.2) (2020-06-12)
 
 - **Bug fixes:**
