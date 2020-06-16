@@ -1,7 +1,8 @@
 ## [3.13.3](https://github.com/dashevo/DashJS/compare/v3.13.2...v3.13.3) (2020-06-15)
 
-- **Bug fixes:**
-    * Wallet-lib - fix(Storage): identityIds being restate to empty array ([#83](https://github.com/dashevo/wallet-lib/pull/143))
+- **Features:**
+    * Updated wallet-lib to [7.13.3](https://github.com/dashevo/wallet-lib/blob/master/CHANGELOG.md#7133-2020-06-16)
+    * Updated js-dpp to [0.13.1](https://github.com/dashevo/js-dpp/blob/master/CHANGELOG.md#0131-2020-06-15)
     
 ## [3.13.2](https://github.com/dashevo/DashJS/compare/v3.13.1...v3.13.2) (2020-06-12)
 
