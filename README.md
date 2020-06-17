@@ -74,6 +74,6 @@ More extensive documentation available at https://dashevo.github.io/DashJS/.
 
 Feel free to dive in! [Open an issue](https://github.com/dashevo/DashJS/issues/new) or submit PRs.
 
-## Licence
+## License
 
-[MIT](/LICENCE) © Dash Core Group, Inc.
+[MIT](/LICENSE) © Dash Core Group, Inc.
