@@ -47,13 +47,13 @@ export async function register(this: Platform,
         Buffer.from(fullDomainName),
     ).toString('hex');
 
-    const slatedDomainHashBuffer = Buffer.concat([
+    const saltedDomainHashBuffer = Buffer.concat([
         bs58.decode(preorderSalt),
         Buffer.from(nameHash, 'hex'),
     ]);
 
     const saltedDomainHash = hash(
-        slatedDomainHashBuffer,
+        saltedDomainHashBuffer,
     ).toString('hex');
 
     if (!this.apps.dpns.contractId) {
