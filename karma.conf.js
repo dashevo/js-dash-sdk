@@ -10,13 +10,15 @@ if (dotenvResult.error) {
 
 module.exports = (config) => {
   config.set({
-    frameworks: ['mocha', 'chai', 'sinon'],
+    frameworks: ['mocha', 'chai'],
     files: [
       'src/**/*.spec.ts',
+      'src/test/karma/bootstrap.js',
       'tests/functional/sdk.js',
     ],
     preprocessors: {
       'src/**/*.spec.ts': ['webpack'],
+      'src/test/karma/bootstrap.js': ['webpack'],
       'tests/functional/sdk.js': ['webpack'],
     },
     webpack: {
@@ -41,7 +43,6 @@ module.exports = (config) => {
       'karma-mocha',
       'karma-mocha-reporter',
       'karma-chai',
-      'karma-sinon',
       'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-webpack',
