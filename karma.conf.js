@@ -10,7 +10,7 @@ if (dotenvResult.error) {
 
 module.exports = (config) => {
   config.set({
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'sinon'],
     files: [
       'src/**/*.spec.ts',
       'tests/functional/sdk.js',
@@ -41,6 +41,7 @@ module.exports = (config) => {
       'karma-mocha',
       'karma-mocha-reporter',
       'karma-chai',
+      'karma-sinon',
       'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-webpack',
