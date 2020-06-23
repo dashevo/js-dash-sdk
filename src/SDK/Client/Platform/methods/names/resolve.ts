@@ -13,7 +13,7 @@ export async function resolve(this: Platform, name: string): Promise<any> {
         ],
     });
 
-    return document;
+    return document === undefined ? null : document;
 }
 
 export default resolve;
