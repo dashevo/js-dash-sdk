@@ -1,9 +1,9 @@
 # Dash SDK
 
-[![NPM Version](https://img.shields.io/npm/v/dash)](https://img.shields.io/npm/v/dash)
-[![Build Status](https://img.shields.io/travis/com/dashevo/dashjs.svg?branch=master&style=flat-square)](https://travis-ci.com/dashevo/dashjs)
+[![NPM Version](https://img.shields.io/npm/v/dash)]((https://www.npmjs.org/package/dash)
+[![Build Status](https://img.shields.io/travis/com/dashevo/dashjs)](https://travis-ci.com/dashevo/dashjs)
 [![Release Date](https://img.shields.io/github/release-date/dashevo/dashjs)](https://img.shields.io/github/release-date/dashevo/dashjs)
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen)](https://github.com/RichardLitt/standard-readme)
 
 Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)
 
