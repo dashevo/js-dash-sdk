@@ -27,10 +27,13 @@ describe('Platform', () => {
                     platformMock, 'recordName', 'recordValue',
                 );
 
-                // @ts-ignore
-                expect(platformMock.documents.get).to.have.been.calledOnceWithExactly('dpns.domain', {
-                    where: [['records.recordName', '==', 'recordValue']],
-                });
+                expect(platformMock.documents.get.callCount).to.equal(1);
+                expect(platformMock.documents.get.getCall(0).args).to.deep.equal([
+                    'dpns.domain',
+                    {
+                        where: [['records.recordName', '==', 'recordValue']],
+                    },
+                ]);
 
                 expect(receivedDocument).to.deep.equal(parentDomainDocument);
             });
@@ -42,12 +45,15 @@ describe('Platform', () => {
                     platformMock, 'recordName', 'recordValue',
                 );
 
-                // @ts-ignore
-                expect(platformMock.documents.get).to.have.been.calledOnceWithExactly('dpns.domain', {
-                    where: [['records.recordName', '==', 'recordValue']],
-                });
+                expect(platformMock.documents.get.callCount).to.equal(1);
+                expect(platformMock.documents.get.getCall(0).args).to.deep.equal([
+                    'dpns.domain',
+                    {
+                        where: [['records.recordName', '==', 'recordValue']],
+                    },
+                ]);
 
-                expect(receivedDocument).to.be.null;
+                expect(receivedDocument).to.be.undefined;
             });
         });
     });

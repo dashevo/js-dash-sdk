@@ -37,8 +37,7 @@ describe('Platform', () => {
 
                 await register.call(platformMock, 'Dash', identityMock);
 
-                // @ts-ignore
-                expect(identityMock.getId).to.have.been.calledOnce();
+                expect(identityMock.getId.callCount).to.equal(1);
                 expect(platformMock.documents.create.getCall(0).args).to.have.deep.members([
                     'dpns.preorder',
                     identityMock,
@@ -68,8 +67,7 @@ describe('Platform', () => {
 
                 await register.call(platformMock, 'User.dash', identityMock);
 
-                // @ts-ignore
-                expect(identityMock.getId).to.have.been.calledOnce();
+                expect(identityMock.getId.callCount).to.equal(1);
                 expect(platformMock.documents.create.getCall(0).args).to.have.deep.members([
                     'dpns.preorder',
                     identityMock,

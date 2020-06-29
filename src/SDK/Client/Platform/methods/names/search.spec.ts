@@ -27,13 +27,16 @@ describe('Platform', () => {
                     platformMock, 'prefix', 'dash',
                 );
 
-                // @ts-ignore
-                expect(platformMock.documents.get).to.have.been.calledOnceWithExactly('dpns.domain', {
-                    where: [
-                        ["normalizedParentDomainName", "==", "dash"],
-                        ["normalizedLabel", "startsWith", "prefix"]
-                    ],
-                });
+                expect(platformMock.documents.get.callCount).to.equal(1);
+                expect(platformMock.documents.get.getCall(0).args).to.deep.equal([
+                    'dpns.domain',
+                    {
+                        where: [
+                            ["normalizedParentDomainName", "==", "dash"],
+                            ["normalizedLabel", "startsWith", "prefix"]
+                        ],
+                    },
+                ]);
 
                 expect(documentsList).to.have.deep.members([parentDomainDocument]);
             });
@@ -45,13 +48,16 @@ describe('Platform', () => {
                     platformMock, 'prefix', 'dash',
                 );
 
-                // @ts-ignore
-                expect(platformMock.documents.get).to.have.been.calledOnceWithExactly('dpns.domain', {
-                    where: [
-                        ["normalizedParentDomainName", "==", "dash"],
-                        ["normalizedLabel", "startsWith", "prefix"]
-                    ],
-                });
+                expect(platformMock.documents.get.callCount).to.equal(1);
+                expect(platformMock.documents.get.getCall(0).args).to.deep.equal([
+                    'dpns.domain',
+                    {
+                        where: [
+                            ["normalizedParentDomainName", "==", "dash"],
+                            ["normalizedLabel", "startsWith", "prefix"]
+                        ],
+                    },
+                ]);
 
                 expect(documentsList).to.deep.equal([]);
             });

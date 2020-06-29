@@ -25,10 +25,15 @@ describe('Platform', () => {
 
                 const receivedDocument = await resolve.call(platformMock, 'parent');
 
-                // @ts-ignore
-                expect(platformMock.documents.get).to.have.been.calledOnceWithExactly('dpns.domain', {
-                    where: [['nameHash', '==', '5620db362ff7ff6021014954f027e989a6ff68d0e7bcf7fed52679847cd9257d45ca']],
-                });
+                expect(platformMock.documents.get.callCount).to.equal(1);
+                expect(platformMock.documents.get.getCall(0).args).to.deep.equal(
+                    [
+                        'dpns.domain',
+                        {
+                            where: [['nameHash', '==', '5620db362ff7ff6021014954f027e989a6ff68d0e7bcf7fed52679847cd9257d45ca']],
+                        },
+                    ],
+                );
 
                 expect(receivedDocument).to.deep.equal(parentDomainDocument);
             });
@@ -38,10 +43,15 @@ describe('Platform', () => {
 
                 const receivedDocument = await resolve.call(platformMock, 'otherName');
 
-                // @ts-ignore
-                expect(platformMock.documents.get).to.have.been.calledOnceWithExactly('dpns.domain', {
-                    where: [['nameHash', '==', '5620f6162fde12d92ef3679f1b61a4d2d78d786d367034b3318a960601af90db95f1']],
-                });
+                expect(platformMock.documents.get.callCount).to.equal(1);
+                expect(platformMock.documents.get.getCall(0).args).to.deep.equal(
+                    [
+                        'dpns.domain',
+                        {
+                            where: [['nameHash', '==', '5620f6162fde12d92ef3679f1b61a4d2d78d786d367034b3318a960601af90db95f1']],
+                        },
+                    ],
+                );
 
                 expect(receivedDocument).to.be.null;
             });
