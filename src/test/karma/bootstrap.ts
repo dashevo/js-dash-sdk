@@ -1,7 +1,8 @@
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const { expect, use } = require('chai');
-const dirtyChai = require('dirty-chai');
+import sinon from 'sinon';
+import { use } from 'chai';
+
+import dirtyChai from 'dirty-chai';
+import sinonChai from 'sinon-chai';
 
 use(dirtyChai);
 use(sinonChai);
