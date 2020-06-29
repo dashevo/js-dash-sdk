@@ -36,8 +36,12 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
+    "@types/dirty-chai": "^2.0.2",
+    "@types/expect": "^24.3.0",
     "@types/mocha": "^7.0.2",
     "@types/node": "^14.0.13",
+    "@types/sinon": "^9.0.4",
+    "@types/sinon-chai": "^3.2.4",
     "chai": "^4.2.0",
     "chance": "^1.1.6",
     "dirty-chai": "^2.0.1",
