@@ -50,10 +50,9 @@ const client = new Dash.Client({
   },
 });
 
-client.wallet.getAccount().then((account) => {
+client.getWalletAccount().then((account) => {
   console.log("Funding address", account.getUnusedAddress().address);
   console.log("Confirmed Balance", account.getConfirmedBalance());
-  client.disconnect();
 });
 ```
 
