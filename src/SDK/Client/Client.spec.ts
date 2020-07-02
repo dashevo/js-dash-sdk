@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import {Client} from "./index";
+import { Client } from "./index";
 import 'mocha';
 
 const mnemonic = 'agree country attract master mimic ball load beauty join gentle turtle hover';
