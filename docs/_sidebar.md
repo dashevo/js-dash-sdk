@@ -43,6 +43,7 @@
             - [`.create()`](platform/contracts/create.md)
             - [`.broadcast()`](platform/contracts/broadcast.md)
         - **Documents**
+            - [About documents](platform/documents/about-documents.md)
             - [`.get()`](platform/documents/get.md)
             - [`.create()`](platform/documents/create.md)
             - [`.broadcast()`](platform/documents/broadcast.md)
