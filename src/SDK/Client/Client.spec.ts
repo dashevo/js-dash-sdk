@@ -29,10 +29,8 @@ describe('Dash - Client', function suite() {
     expect(client.wallet).to.exist;
     expect(client.wallet!.offlineMode).to.be.equal(true);
 
-    // @ts-ignore
-    await client.wallet.storage.stopWorker();
-    // @ts-ignore
-    await client.wallet.disconnect();
+    await client.wallet?.storage.stopWorker();
+    await client.wallet?.disconnect();
 
     const account = await client.getWalletAccount();
     await account.disconnect();

@@ -19,7 +19,6 @@ export default async function register(this: Platform, fundingAmount : number = 
     } = await createAssetLockTransaction(this, fundingAmount);
 
     // Broadcast Asset Lock transaction
-    // @ts-ignore
     await account.broadcastTransaction(assetLockTransaction);
 
     // Wait some time for propagation
@@ -50,14 +49,11 @@ export default async function register(this: Platform, fundingAmount : number = 
     // Broadcast ST
     await client.getDAPIClient().applyStateTransition(identityCreateTransition);
 
-    // @ts-ignore
     account.storage.insertIdentityIdAtIndex(
-        // @ts-ignore
         account.walletId,
         identity.getId(),
         identityIndex,
     );
 
-    // @ts-ignore
     return identity;
 }

@@ -1,8 +1,6 @@
 import { Account, Wallet } from "@dashevo/wallet-lib";
 import { DAPIClientWrapper } from "@dashevo/wallet-lib/src/transporters"
-// FIXME: use dashcorelib types
 import { Platform } from './Platform';
-// @ts-ignore
 import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 
@@ -31,14 +29,14 @@ export interface DAPIClientSeed {
  *
  * @param {[string]?} [seeds] - DAPI seeds
  * @param {Network? | string?} [network] - evonet network
- * @param {Wallet.Options} [wallet] - Wallet options
+ * @param {Wallet.IWalletOptions} [wallet] - Wallet options
  * @param {ClientApps?} [apps] - applications
  * @param {number} [walletAccountIndex=0] - account index number
  */
 export interface ClientOpts {
     seeds?: DAPIClientSeed[];
     network?: Network | string,
-    wallet?: Wallet.Options | null,
+    wallet?: Wallet.IWalletOptions | null,
     apps?: ClientApps,
     walletAccountIndex?: number,
 }
@@ -54,14 +52,15 @@ export interface ClientApps {
 }
 
 /**
- * class for SDK
+ * Client class that wraps all components together to allow integrated payments on both the Dash Network (layer 1)
+ * and the Dash Platform (layer 2).
  */
 export class Client {
     public network: string = 'testnet';
     public wallet: Wallet | undefined;
     public account: Account | undefined;
     public platform: Platform | undefined;
-    public walletAccountIndex: number = 0;
+    public walletAccountIndex: number | undefined = 0;
     private readonly dapiClientWrapper: DAPIClientWrapper;
     private readonly apps: ClientApps;
     private options: ClientOpts;
@@ -77,7 +76,6 @@ export class Client {
             ...options
         }
 
-        // @ts-ignore
         this.walletAccountIndex = this.options.walletAccountIndex;
 
         this.network = this.options.network ? this.options.network.toString() : 'testnet';
@@ -111,10 +109,10 @@ export class Client {
     /**
      * Get Wallet account
      *
-     * @param {Wallet.getAccOptions} [options]
+     * @param {Account.Options} [options]
      * @returns {Promise<Account>}
      */
-    async getWalletAccount(options: Wallet.getAccOptions = {}) : Promise<Account> {
+    async getWalletAccount(options: Account.Options = {}) : Promise<Account> {
         if (!this.wallet) {
             throw new Error('Wallet is not initialized, pass `wallet` option to Client');
         }
@@ -127,9 +125,9 @@ export class Client {
         return this.wallet.getAccount(options);
     }
 
-
     /**
      * disconnect wallet from Dapi
+     * @returns {void}
      */
     async disconnect() {
         if (this.wallet) {
@@ -155,7 +153,7 @@ export class Client {
      * @remarks
      * check if returned value can be null on devnet
      *
-     * @returns applications list
+     * @returns {ClientApps} applications list
      */
     getApps(): ClientApps {
         return this.apps;
