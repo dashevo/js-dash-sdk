@@ -37,6 +37,7 @@
             - [About identities](platform/identities/about-identity.md)
             - [`.get()`](platform/identities/get.md)
             - [`.register()`](platform/identities/register.md)
+            - [`.topUp()`](platform/identities/topUp.md)
         - **Contracts**
             - [About contracts](platform/contracts/about-contracts.md)
             - [`.get()`](platform/contracts/get.md)

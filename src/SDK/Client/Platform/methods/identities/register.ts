@@ -1,12 +1,12 @@
-import {Platform} from "../../Platform";
-import {wait} from "../../../../../utils/wait";
+import { Platform } from "../../Platform";
+import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 
 /**
  * Register identities to the platform
  *
  * @param {number} [fundingAmount=10000] - funding amount in duffs
- * @returns {Identity}
+ * @returns {Identity} identity - a register and funded identity
  */
 export default async function register(this: Platform, fundingAmount : number = 10000): Promise<any> {
     const { client, dpp } = this;
