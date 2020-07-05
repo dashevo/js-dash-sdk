@@ -8,7 +8,8 @@ Parameters:
 | **contractDefinitions**  | JSONDataContract  | yes                | The defined [JSON Application Schema](https://dashplatform.readme.io/docs/explanation-platform-protocol-data-contract) |
 | **identity**             | Identity          | yes                | A valid [registered `application` identity](/platform/identities/register.md) |
 
-**Example**: 
+**Example**:
+
 ```js
   const identityId = '';// Your identity identifier.
   
