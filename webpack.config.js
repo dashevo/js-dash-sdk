@@ -4,15 +4,6 @@ const webConfig =  {
   entry: './build/src/index.js',
   mode: "production",
   target: 'web',
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
-  },
   node: {
     // Prevent embedded winston to throw error with FS not existing.
     fs: 'empty',
