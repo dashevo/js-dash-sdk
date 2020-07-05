@@ -11,9 +11,25 @@ Parameters:
 **Example**: 
 ```js
   const identityId = '';// Your identity identifier.
-  const json = {};// Your valid json contract definitions
+  
+  // Your valid json contract definitions
+  const contractDefinitions = {
+    note: {
+      properties: {
+        message: {
+          type: "string"
+        }
+      },
+      additionalProperties: false
+    }
+  };
   const identity = await client.platform.identities.get(identityId);
-  const contract = client.platform.contracts.create(json, identity);
+  const contract = client.platform.contracts.create(contractDefinitions, identity);
+  
+  // You can use the validate method from DPP to validate the created contract
+  const validationResult = client.platform.dpp.dataContract.validate(contract);
 ```
+
+**Nota Bene**: When your contract is created, it will only exist locally, use the [broadcast](/platform/contracts/broadcast.md) method to register it.  
 
 Returns : Contract.
