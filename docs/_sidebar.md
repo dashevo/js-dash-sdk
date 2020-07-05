@@ -50,8 +50,10 @@
             - [`.broadcast()`](platform/documents/broadcast.md)
         - **Names**
             - [About DPNS](platform/names/about-dpns.md)
-            - [`.get()`](platform/names/get.md)
             - [`.register()`](platform/names/register.md)
+            - [`.resolve()`](platform/names/resolve.md)
+            - [`.resolveByRecord()`](platform/names/resolveByRecord.md)
+            - [`.search()`](platform/names/search.md)
     - [Wallet](wallet/about-wallet-lib.md)
         - [Accounts](wallet/accounts.md)
         - [Signing, Encrypt and Decrypt](wallet/signing-encrypt.md)
