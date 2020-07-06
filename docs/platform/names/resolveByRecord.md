@@ -1,5 +1,5 @@
 **Usage**: `client.platform.names.resolve(name.domain)`    
-**Description**: This method will allow you to resolve a DPNS record from its humanized name. 
+**Description**: This method will allow you to resolve a DPNS record from its identity ID. 
 
 Parameters: 
 
