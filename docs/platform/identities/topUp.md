@@ -1,5 +1,5 @@
 **Usage**: `client.platform.identities.topUp(identity, amount)`    
-**Description**: This method will register a new identity for you. 
+**Description**: This method will topup the provided identity's balance. 
 
 Parameters: 
 
