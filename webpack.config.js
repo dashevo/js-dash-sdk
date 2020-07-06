@@ -17,7 +17,7 @@ const webConfig =  {
     globalObject: "(typeof self !== 'undefined' ? self : this)"
   },
   resolve: {
-    extensions: ['.ts', '.js', '.json'],
+    extensions: ['.js', '.json'],
     alias: {
       'bn.js': path.resolve(__dirname, 'node_modules', 'bn.js')
     }
