@@ -21,6 +21,6 @@ const helloWorldDocument = await platform.documents.create(
      { message: 'Hello World'},
   );
 ```
-**Nota Bene**: When your document is created, it will only exist locally, use the [broadcast](/platform/documents/broadcast.md) method to register it.  
+**Note**: When your document is created, it will only exist locally, use the [broadcast](/platform/documents/broadcast.md) method to register it.  
 
 Returns: Document
