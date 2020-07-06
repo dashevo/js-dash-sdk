@@ -14,7 +14,7 @@ Therefore usage might varies if you need to deal with platform or not.
 
 ### Access to account with platform.
 
-When calling `getWalletAccount`, the client will store locally the index options you have passe to it, which will be used by your platform related call.
+When calling `getWalletAccount`, the client will locally store the index options you have passed to it, which will be used for your platform related calls.
 
 ```js
 async function changeAccount(){
