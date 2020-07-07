@@ -48,7 +48,7 @@ export default async function register(this: Platform, fundingAmount : number = 
     }
 
     // Broadcast ST
-    await client.getDAPIClient().applyStateTransition(identityCreateTransition);
+    await client.getDAPIClient().platform.broadcastStateTransition(identityCreateTransition.serialize());
 
     // @ts-ignore
     account.storage.insertIdentityIdAtIndex(
