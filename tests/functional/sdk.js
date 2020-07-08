@@ -228,8 +228,6 @@ describe('SDK', function suite() {
 
     await clientInstance.platform.contracts.broadcast(contract, createdIdentity);
 
-    await wait(1000);
-
     const fetchedContract = await clientInstance.platform.contracts.get(contract.getId());
 
     expect(fetchedContract).to.exist;

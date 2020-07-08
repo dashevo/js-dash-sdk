@@ -1,4 +1,5 @@
 import {Platform} from "./Platform";
+import {wait} from "../../../utils/wait";
 
 /**
  * @param {Platform} platform
@@ -29,4 +30,7 @@ export default async function broadcastStateTransition(platform: Platform, state
     }
 
     await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.serialize());
+
+    // Wait some time for propagation
+    await wait(1000);
 }

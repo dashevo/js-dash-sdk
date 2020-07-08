@@ -58,6 +58,9 @@ export default async function register(this: Platform, fundingAmount : number = 
         identityIndex,
     );
 
+    // Wait some time for propagation
+    await wait(1000);
+
     // @ts-ignore
     return identity;
 }
