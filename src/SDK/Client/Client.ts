@@ -15,7 +15,7 @@ import DAPIClient from "@dashevo/dapi-client";
  * @param {DAPIAddressProvider} [dapiAddressProvider] - DAPI Address Provider instance
  * @param {Array<RawDAPIAddress|DAPIAddress|string>} [addresses] - DAPI addresses
  * @param {string[]|RawDAPIAddress[]} [seeds] - DAPI seeds
- * @param {string|Network} [network] - Network name
+ * @param {string|Network} [network=evonet] - Network name
  * @param {number} [timeout=2000]
  * @param {number} [retries=3]
  * @param {number} [baseBanTime=60000]
