@@ -3,6 +3,13 @@
 const semver = require('semver');
 const { version } = require('../package.json');
 
-const parsedVersion = semver.coerce(version);
+const prerelease = semver.prerelease(version);
+const minor = semver.minor(version);
 
-console.log(`0.${parsedVersion.minor}`);
+let result = `0.${minor}`;
+
+if (prerelease) {
+    result = `${result}-${prerelease[0]}`;
+}
+
+console.log(result);
