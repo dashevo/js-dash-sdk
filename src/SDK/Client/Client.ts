@@ -95,6 +95,7 @@ export class Client {
 
             this.wallet = new Wallet({
                 transport,
+                network: this.network,
                 ...this.options.wallet,
             });
 
