@@ -42,7 +42,7 @@ install:
   - cd $TRAVIS_BUILD_DIR
   - export CURRENT_VERSION=$(get-release-version $TRAVIS_BUILD_DIR/package.json 0)
   # Install MN Bootstrap
-  - export MN_RELEASE_LINK=$(get-github-release-link $TRAVIS_BUILD_DIR/package.json dashevo/mn-bootstrap)
+  - export MN_RELEASE_LINK=$(get-github-release-link $TRAVIS_BUILD_DIR/package.json dashevo/mn-bootstrap 0)
   - curl -L $MN_RELEASE_LINK > mn-bootstrap.tar.gz
   - mkdir ~/mn-bootstrap && tar -C ~/mn-bootstrap -xvf mn-bootstrap.tar.gz
   - export MN_RELEASE_DIR="$(ls ~/mn-bootstrap)"
