@@ -8,8 +8,7 @@ import 'mocha';
 
 const factory = new DataContractFactory(
     () => {
-        const result = new ValidationResult();
-        return result;
+        return new ValidationResult();
     });
 const dpp = {
     dataContract: factory
@@ -23,11 +22,17 @@ const getDataContract = async (id) => {
             return null;
     }
 };
+
 const client = {
     getDAPIClient: () => {
-        return { getDataContract };
+        return {
+            platform: {
+                getDataContract
+            }
+        };
     }
 };
+
 const apps = {};
 
 describe('Client - Platform - Contracts - .get()', () => {

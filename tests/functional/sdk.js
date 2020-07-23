@@ -6,11 +6,30 @@ const DataContract = require('@dashevo/dpp/lib/dataContract/DataContract');
 
 const {
   Transaction,
-  PrivateKey
+  PrivateKey,
+  Networks,
 } = require('@dashevo/dashcore-lib');
+
+const isRegtest = process.env.NETWORK === 'regtest' || process.env.NETWORK === 'local';
 
 function wait(ms) {
   return new Promise((res) => setTimeout(res, ms));
+}
+
+/**
+ *
+ * @param {Account} walletAccount
+ * @return {Promise<void>}
+ */
+async function waitForBalanceToChange(walletAccount) {
+  const originalBalance = walletAccount.getTotalBalance();
+
+  let currentIteration = 0;
+  while (walletAccount.getTotalBalance() === originalBalance
+  && currentIteration <= 40) {
+    await wait(500);
+    currentIteration++;
+  }
 }
 
 /**
@@ -23,8 +42,13 @@ function wait(ms) {
  * @return {Promise<string>}
  */
 async function fundAddress(dapiClient, faucetAddress, faucetPrivateKey, address, amount) {
-  const { items: inputs } = await dapiClient.getUTXO(faucetAddress);
+  let { items: inputs } = await dapiClient.core.getUTXO(faucetAddress);
 
+  if (isRegtest) {
+    const { blocks } = await dapiClient.core.getStatus();
+
+    inputs = inputs.filter((input) => input.height < blocks - 100);
+  }
   // We take random coz two browsers run in parallel
   // and they can take the same inputs
 
@@ -40,16 +64,25 @@ async function fundAddress(dapiClient, faucetAddress, faucetPrivateKey, address,
     .fee(668)
     .sign(faucetPrivateKey);
 
-  let { blocks: currentBlockHeight } = await dapiClient.getStatus();
+  let { blocks: currentBlockHeight } = await dapiClient.core.getStatus();
 
-  const transactionId = await dapiClient.sendTransaction(transaction.toBuffer());
+  const transactionId = await dapiClient.core.broadcastTransaction(transaction.toBuffer());
 
   const desiredBlockHeight = currentBlockHeight + 1;
 
-  do {
-    ({ blocks: currentBlockHeight } = await dapiClient.getStatus());
-    await wait(30000);
-  } while (currentBlockHeight < desiredBlockHeight);
+  if (isRegtest) {
+    const privateKey = new PrivateKey();
+
+    await dapiClient.core.generateToAddress(
+        1,
+        privateKey.toAddress(process.env.NETWORK).toString(),
+    );
+  } else {
+    do {
+      ({ blocks: currentBlockHeight } = await dapiClient.core.getStatus());
+      await wait(30000);
+    } while (currentBlockHeight < desiredBlockHeight);
+  }
 
   return transactionId;
 }
@@ -66,8 +99,7 @@ const firstname = chance.first();
 const username = `test-${firstname}${year}`;
 
 const seeds = process.env.DAPI_SEED
-  .split(',')
-  .map((seed) => ({ service: seed }));
+  .split(',');
 
 const clientOpts = {
   seeds,
@@ -92,7 +124,7 @@ describe('SDK', function suite() {
     expect(clientInstance.network).to.equal(process.env.NETWORK);
     expect(clientInstance.walletAccountIndex).to.equal(0);
     expect(clientInstance.apps).to.deep.equal({dpns: {contractId: process.env.DPNS_CONTRACT_ID}});
-    expect(clientInstance.wallet.network).to.equal(process.env.NETWORK);
+    expect(clientInstance.wallet.network).to.equal(Networks.get(process.env.NETWORK).name);
     expect(clientInstance.wallet.offlineMode).to.equal(false);
     expect(clientInstance.platform.dpp).to.exist;
     expect(clientInstance.platform.client).to.exist;
@@ -112,7 +144,7 @@ describe('SDK', function suite() {
     expect(verify).to.equal(true);
   });
 
-  it('populate balance with dash', async () => {
+  it('should populate balance with dash', async () => {
     const faucetPrivateKey = PrivateKey.fromString(process.env.FAUCET_PRIVATE_KEY);
     const faucetAddress = faucetPrivateKey
       .toAddress(process.env.NETWORK)
@@ -124,7 +156,11 @@ describe('SDK', function suite() {
       faucetPrivateKey,
       account.getAddress().address,
       100000
-    )
+    );
+
+    if (isRegtest) {
+      await waitForBalanceToChange(account);
+    }
   })
 
   it('should have a balance', function (done) {
@@ -228,8 +264,6 @@ describe('SDK', function suite() {
     expect(contract).to.be.instanceOf(DataContract);
 
     await clientInstance.platform.contracts.broadcast(contract, createdIdentity);
-
-    await wait(1000);
 
     const fetchedContract = await clientInstance.platform.contracts.get(contract.getId());
 

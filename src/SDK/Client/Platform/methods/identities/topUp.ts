@@ -41,7 +41,12 @@ export async function topUp(this: Platform, identityId: string, amount: number):
         throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     }
 
-    await client.getDAPIClient().applyStateTransition(identityTopUpTransition);
+    // Broadcast ST
+
+    await client.getDAPIClient().platform.broadcastStateTransition(identityTopUpTransition.serialize());
+
+    // Wait some time for propagation
+    await wait(1000);
 
     return true;
 }

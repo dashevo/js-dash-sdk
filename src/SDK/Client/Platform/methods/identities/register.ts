@@ -47,13 +47,16 @@ export default async function register(this: Platform, fundingAmount : number = 
     }
 
     // Broadcast ST
-    await client.getDAPIClient().applyStateTransition(identityCreateTransition);
+    await client.getDAPIClient().platform.broadcastStateTransition(identityCreateTransition.serialize());
 
     account.storage.insertIdentityIdAtIndex(
         account.walletId,
         identity.getId(),
         identityIndex,
     );
+
+    // Wait some time for propagation
+    await wait(1000);
 
     return identity;
 }
