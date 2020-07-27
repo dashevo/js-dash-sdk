@@ -1,8 +1,5 @@
 const {expect} = require('chai');
 const Dash = require(typeof process === 'undefined' ? '../../src/index.ts' : '../../');
-const Chance = require('chance');
-const chance = new Chance();
-const DataContract = require('@dashevo/dpp/lib/dataContract/DataContract');
 
 const {
   Transaction,
@@ -90,13 +87,6 @@ async function fundAddress(dapiClient, faucetAddress, faucetPrivateKey, address,
 
 let clientInstance;
 let hasBalance=false;
-let hasDuplicate=true;
-let createdIdentityId;
-let createdIdentity;
-
-const year = chance.birthday({string: true}).slice(-2);
-const firstname = chance.first();
-const username = `test-${firstname}${year}`;
 
 const seeds = process.env.DAPI_SEED
   .split(',');
@@ -171,127 +161,6 @@ describe('SDK', function suite() {
     hasBalance = true;
     return done();
   });
-
-  it('should check if name is available' , async function () {
-    const getDocument = await clientInstance.platform.names.resolve(`${username}.dash`);
-    expect(getDocument).to.equal(null);
-    hasDuplicate = false;
-  });
-
-  it('should register an identity', async function () {
-    if(!hasBalance){
-      throw new Error('Insufficient balance to perform this test')
-    }
-
-    createdIdentity = await clientInstance.platform.identities.register();
-
-    createdIdentityId = createdIdentity.getId();
-
-    expect(createdIdentityId).to.not.equal(null);
-    expect(createdIdentityId.length).to.gte(42);
-    expect(createdIdentityId.length).to.lte(44);
-  });
-
-  it('should fetch the identity back', async function () {
-    if(!createdIdentityId){
-      throw new Error('Can\'t perform the test. Failed to create identity');
-    }
-
-    await wait(200);
-
-    const fetchIdentity = await clientInstance.platform.identities.get(createdIdentityId);
-
-    expect(fetchIdentity).to.exist;
-    expect(fetchIdentity.getId()).to.equal(createdIdentityId);
-
-    createdIdentity = fetchIdentity;
-  });
-
-  it('should register a name', async function () {
-    if(!createdIdentity){
-      throw new Error('Can\'t perform the test. Failed to fetch identity');
-    }
-    if(hasDuplicate){
-      throw new Error(`Duplicate username ${username} registered. Skipping.`)
-    }
-
-    const createDocument = await clientInstance.platform.names.register(`${username}.dash`, createdIdentity);
-    expect(createDocument.getType()).to.equal('domain');
-    expect(createDocument.getOwnerId()).to.equal(createdIdentityId);
-    expect(createDocument.getDataContractId()).to.equal(process.env.DPNS_CONTRACT_ID);
-    expect(createDocument.get('label')).to.equal(username);
-    expect(createDocument.get('normalizedParentDomainName')).to.equal('dash');
-  });
-
-  it('should retrieve itself by document', async function () {
-    if(!createdIdentity){
-      throw new Error('Can\'t perform the test. Failed to fetch identity & did not reg name');
-    }
-
-    const [doc] = await clientInstance.platform.documents.get('dpns.domain', {where:[
-        ["normalizedParentDomainName","==","dash"],
-        ["normalizedLabel","==",username.toLowerCase()],
-      ]});
-
-    expect(doc).to.exist;
-    expect(doc.getRevision()).to.equal(1);
-    expect(doc.getType()).to.equal('domain');
-    expect(doc.getOwnerId()).to.equal(createdIdentityId);
-    expect(doc.getDataContractId()).to.equal(process.env.DPNS_CONTRACT_ID);
-    expect(doc.get('label')).to.equal(username);
-    expect(doc.get('normalizedParentDomainName')).to.equal('dash');
-  });
-
-  it('should create and broadcast contract', async () => {
-    if(!createdIdentity){
-      throw new Error('Can\'t perform the test. Failed to fetch identity & did not reg name');
-    }
-
-    const documentsDefinition = {
-      test: {
-        properties: {
-          testProperty: {
-            type: "string"
-          }
-        },
-        additionalProperties: false,
-      }
-    }
-
-    const contract = await clientInstance.platform.contracts.create(documentsDefinition, createdIdentity);
-
-    expect(contract).to.exist;
-    expect(contract).to.be.instanceOf(DataContract);
-
-    await clientInstance.platform.contracts.broadcast(contract, createdIdentity);
-
-    const fetchedContract = await clientInstance.platform.contracts.get(contract.getId());
-
-    expect(fetchedContract).to.exist;
-    expect(fetchedContract).to.be.instanceOf(DataContract);
-    expect(fetchedContract.toJSON()).to.be.deep.equal(contract.toJSON());
-  });
-
-  it('should top up identity', async function () {
-    const identityId = createdIdentity.getId();
-
-    const identityBeforeTopUp = await clientInstance.platform.identities.get(identityId);
-    const balanceBeforeTopUp = identityBeforeTopUp.getBalance();
-    const topUpAmount = 10000;
-    const topUpCredits = topUpAmount * 1000;
-
-    await clientInstance.platform.identities.topUp(identityId, topUpAmount);
-
-    const identity = await clientInstance.platform.identities.get(identityId);
-
-    expect(identity.getId()).to.be.equal(identityId);
-
-    // Fee is based on ST's size atm, so we too lazy
-    // to take it somehow from clientInstance.platform.identities.topUp
-
-    expect(identity.getBalance()).to.be.greaterThan(balanceBeforeTopUp);
-    expect(identity.getBalance()).to.be.lessThan(balanceBeforeTopUp + topUpCredits);
-  })
 
   it('should disconnect', async function () {
     await clientInstance.disconnect();
