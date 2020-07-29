@@ -2,6 +2,22 @@ import {Platform} from "../../Platform";
 
 import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
+import {PrivateKey} from "@dashevo/dashcore-lib";
+
+
+function calculateTopUpTransitionFee(dpp, identityId, privateKey) {
+    const staticOutPontBuffer = Buffer.alloc(36);
+
+    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(
+        identityId,
+        staticOutPontBuffer,
+    );
+
+    identityTopUpTransition.signByPrivateKey(privateKey);
+
+    return identityTopUpTransition.calculateFee();
+}
+
 
 /**
  * Register identities to the platform
@@ -14,12 +30,18 @@ import createAssetLockTransaction from "../../createAssetLockTransaction";
 export async function topUp(this: Platform, identityId: string, amount: number): Promise<any> {
     const { client, dpp } = this;
 
+
+    const assetLockOneTimePrivateKey = new PrivateKey();
+
+    const topUpTransitionFee = calculateTopUpTransitionFee(dpp, identityId, assetLockOneTimePrivateKey);
+
+
     const account = await client.getWalletAccount();
 
     const {
         transaction: assetLockTransaction,
         privateKey: assetLockPrivateKey
-    } = await createAssetLockTransaction(this, amount);
+    } = await createAssetLockTransaction(this, assetLockOneTimePrivateKey, amount + topUpTransitionFee);
 
     // Broadcast Asset Lock transaction
     await account.broadcastTransaction(assetLockTransaction);
