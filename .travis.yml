@@ -39,7 +39,7 @@ install:
   - cd ~/travis-ci-tools/$CI_TOOLS_DIR
   - npm ci && npm link
   - print-bells
-  - source $(./bin/start-local-node.sh $TRAVIS_BUILD_DIR/package.json --override-major-version=0 --dapi-branch=$DAPI_BRANCH --drive-branch=$DRIVE_BRANCH)
+  - source ./bin/start-local-node.sh $TRAVIS_BUILD_DIR/package.json --override-major-version=0 --dapi-branch=$DAPI_BRANCH --drive-branch=$DRIVE_BRANCH
   - cd $TRAVIS_BUILD_DIR
   - echo $TRAVIS_BUILD_DIR/dist:/node_modules/dash/dist -v $TRAVIS_BUILD_DIR/build:/node_modules/dash/build dashpay/platform-test-suite:$CURRENT_VERSION 127.0.0.1:3000 -k=$FAUCET_PRIVATE_KEY -n=regtest --dpns-tld-identity-private-key=$DPNS_TOP_LEVEL_IDENTITY_PRIVATE_KEY --dpns-tld-identity-id=$DPNS_TOP_LEVEL_IDENTITY_ID --dpns-contract-id=$DPNS_CONTRACT_ID --scope=platform
 
