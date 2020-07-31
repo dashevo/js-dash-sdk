@@ -4,6 +4,7 @@
     "module": "commonjs",
     "lib": ["es6"],
     "outDir": "./build",
+    "skipLibCheck": true,
     "strict": true,
     "allowUmdGlobalAccess": true,
     "noImplicitAny": false,
@@ -14,6 +15,6 @@
     "declaration": true,
     "declarationDir": "./dist"
   },
-  "exclude": ["node_modules", "examples"],
-  "typeRoots": ["node_modules/@types", "./typings"]
+  "exclude": ["node_modules", "examples", "build", "dist"],
+  "typeRoots": ["node_modules/@types"]
 }

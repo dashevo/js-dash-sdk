@@ -6,7 +6,7 @@ declare type ContractIdentifier = string;
  * Get contracts from the platform
  *
  * @param {Platform} this - bound instance class
- * @param {ContractIdentifier} identifier - identifier
+ * @param {ContractIdentifier} identifier - identifier of the contract to fetch
  * @returns contracts
  */
 export async function get(this: Platform, identifier: ContractIdentifier): Promise<any> {
@@ -23,7 +23,7 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
     if (localContract && localContract.contract) {
         return localContract.contract;
     } else {
-        const rawContract = await this.client.getDAPIClient().getDataContract(identifier);
+        const rawContract = await this.client.getDAPIClient().platform.getDataContract(identifier);
         if(!rawContract){
             return null;
         }
