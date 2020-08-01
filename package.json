@@ -1,6 +1,6 @@
 {
   "name": "dash",
-  "version": "3.14.1",
+  "version": "3.15.0-dev.1",
   "description": "Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)",
   "main": "build/src/index.js",
   "unpkg": "dist/dash.min.js",
@@ -17,7 +17,8 @@
     "test:browsers": "karma start ./karma.conf.js --single-run",
     "test:unit": "mocha -r ts-node/register \"src/**/*.spec.ts\"",
     "test:functional": "npm run build && mocha --recursive tests/functional/**/*.js",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -30,10 +31,10 @@
   },
   "homepage": "https://github.com/dashevo/DashJS#readme",
   "dependencies": {
-    "@dashevo/dapi-client": "~0.14.0",
+    "@dashevo/dapi-client": "~0.15.0-dev.1",
     "@dashevo/dashcore-lib": "~0.18.11",
     "@dashevo/dpp": "~0.14.0",
-    "@dashevo/wallet-lib": "~7.14.0",
+    "@dashevo/wallet-lib": "~7.15.0-dev.1",
     "bs58": "^4.0.1"
   },
   "devDependencies": {
