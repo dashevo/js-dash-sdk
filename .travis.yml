@@ -38,6 +38,8 @@ install:
   - export CI_TOOLS_DIR="$(ls ~/travis-ci-tools)"
   - cd ~/travis-ci-tools/$CI_TOOLS_DIR
   - npm ci && npm link
+
+before_script:
   - print-bells
   - source ./bin/start-local-node.sh $TRAVIS_BUILD_DIR/package.json --override-major-version=0 --dapi-branch=$DAPI_BRANCH --drive-branch=$DRIVE_BRANCH
   - cd $TRAVIS_BUILD_DIR
