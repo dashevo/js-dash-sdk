@@ -6,6 +6,7 @@ import Client, { ClientApps } from "../Client";
 import broadcastDocument from "./methods/documents/broadcast";
 import createDocument from "./methods/documents/create";
 import getDocument from "./methods/documents/get";
+import getDocumentById from "./methods/documents/getById";
 
 import broadcastContract from "./methods/contracts/broadcast";
 import createContract from "./methods/contracts/create";
@@ -35,11 +36,13 @@ export interface PlatformOpts {
  * @param {Function} broadcast - broadcast records onto the platform
  * @param {Function} create - create records which can be broadcasted
  * @param {Function} get - get records from the platform
+ * @param {Function} getById - get records by id from the platform
  */
 interface Records {
     broadcast: Function,
     create: Function,
     get: Function,
+    getById?: Function,
 }
 
 /**
@@ -75,6 +78,7 @@ export class Platform {
     public documents: Records;
     /**
      * @param {Function} get - get identities from the platform
+     * @param {Function} getById - get document by id from the platform
      * @param {Function} register - register identities on the platform
      */
     public identities: Identities;
@@ -103,6 +107,7 @@ export class Platform {
             broadcast: broadcastDocument.bind(this),
             create: createDocument.bind(this),
             get: getDocument.bind(this),
+            getById: getDocumentById.bind(this),
         };
         this.contracts = {
             broadcast: broadcastContract.bind(this),
