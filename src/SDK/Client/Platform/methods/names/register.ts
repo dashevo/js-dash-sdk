@@ -12,6 +12,9 @@ const bs58 = require('bs58');
  * @param identity - identity
  * @param {any} [identity.id] - identity ID
  * @param {function(number):any} - get public key by ID
+ * @param {Object} records - records object having only one of the following items
+ * @param {string} [records.dashUniqueIdentityId]
+ * @param {string} [records.dashAliasIdentityId]
  * @returns registered names
  */
 export async function register(this: Platform,
@@ -19,12 +22,12 @@ export async function register(this: Platform,
                                identity: {
                                    getId(): string;
                                    getPublicKeyById(number: number):any;
-                               }
+                               },
+                               records: {
+                                   dashUniqueIdentityId?: string,
+                                   dashAliasIdentityId?: string,
+                               },
 ): Promise<any> {
-    const records = {
-        dashUniqueIdentityId: identity.getId(),
-    };
-
     const nameLabels = name.split('.');
 
     const normalizedParentDomainName = nameLabels

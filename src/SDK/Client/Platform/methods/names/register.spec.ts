@@ -33,12 +33,13 @@ describe('Platform', () => {
             });
 
             it('register top level domain', async () => {
-                identityMock.getId.returns('someIdentityId');
+                const identityId = 'someIdentityId';
+                identityMock.getId.returns(identityId);
 
-                await register.call(platformMock, 'Dash', identityMock);
+                await register.call(platformMock, 'Dash', identityMock, {
+                    dashUniqueIdentityId: identityId,
+                });
 
-                expect(identityMock.getId.callCount).to.equal(1);
-              
                 expect(platformMock.documents.create.getCall(0).args[0]).to.deep.equal('dpns.preorder');
                 expect(platformMock.documents.create.getCall(0).args[1]).to.deep.equal(identityMock);
                 expect(platformMock.documents.create.getCall(0).args[2].saltedDomainHash.toString('hex')).to.deep.equal(
@@ -64,11 +65,12 @@ describe('Platform', () => {
             });
 
             it('should register second level domain', async () => {
-                identityMock.getId.returns('someIdentityId');
+                const identityId = 'someIdentityId';
+                identityMock.getId.returns(identityId);
 
-                await register.call(platformMock, 'User.dash', identityMock);
-
-                expect(identityMock.getId.callCount).to.equal(1);
+                await register.call(platformMock, 'User.dash', identityMock, {
+                    dashAliasIdentityId: identityId,
+                });
 
                 expect(platformMock.documents.create.getCall(0).args[0]).to.deep.equal('dpns.preorder');
                 expect(platformMock.documents.create.getCall(0).args[1]).to.deep.equal(identityMock);
@@ -85,7 +87,7 @@ describe('Platform', () => {
                         'normalizedParentDomainName': 'dash',
                         'preorderSalt': Buffer.from('736f6d65456e74726f7079', 'hex'),
                         'records': {
-                            'dashUniqueIdentityId': 'someIdentityId',
+                            'dashAliasIdentityId': 'someIdentityId',
                         },
                         'subdomainRules': {
                             'allowSubdomains': false,
@@ -98,7 +100,9 @@ describe('Platform', () => {
                 delete platformMock.apps.dpns.contractId;
 
                 try {
-                    await register.call(platformMock, 'user.dash', identityMock);
+                    await register.call(platformMock, 'user.dash', identityMock, {
+                        dashUniqueIdentityId: 'someIdentityId',
+                    });
                 } catch (e) {
                     expect(e.message).to.equal('DPNS is required to register a new name.');
                 }
