@@ -22,7 +22,7 @@ export async function register(this: Platform,
                                }
 ): Promise<any> {
     const records = {
-        dashIdentity: identity.getId(),
+        dashUniqueIdentityId: identity.getId(),
     };
 
     const nameLabels = name.split('.');
@@ -35,7 +35,7 @@ export async function register(this: Platform,
     const [label] = nameLabels;
     const normalizedLabel = label.toLowerCase();
 
-    const preorderSalt = entropy.generate();
+    const preorderSalt = bs58.decode(entropy.generate());
 
     const fullDomainName = normalizedParentDomainName.length > 0
         ? `${normalizedLabel}.${normalizedParentDomainName}`
@@ -43,16 +43,12 @@ export async function register(this: Platform,
 
     const nameHash = hash(
         Buffer.from(fullDomainName),
-    ).toString('hex');
+    );
 
-    const saltedDomainHashBuffer = Buffer.concat([
-        bs58.decode(preorderSalt),
-        Buffer.from(nameHash, 'hex'),
+    const saltedDomainHash = Buffer.concat([
+        preorderSalt,
+        nameHash,
     ]);
-
-    const saltedDomainHash = hash(
-        saltedDomainHashBuffer,
-    ).toString('hex');
 
     if (!this.apps.dpns.contractId) {
         throw new Error('DPNS is required to register a new name.');
@@ -79,12 +75,14 @@ export async function register(this: Platform,
         'dpns.domain',
         identity,
         {
-            nameHash,
             label,
             normalizedLabel,
             normalizedParentDomainName,
             preorderSalt,
             records,
+            subdomainRules: {
+                allowSubdomains: false,
+            },
         },
     );
 

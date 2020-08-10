@@ -8,13 +8,17 @@ import { Platform } from "../../Platform";
  * @returns {Document} document
  */
 export async function resolve(this: Platform, name: string): Promise<any> {
-    const normalizedAndHashedName = hash(
-        Buffer.from(name.toLowerCase()),
-    ).toString('hex');
+    const normalizedName = (name.indexOf('.') !== -1 ? name : `${name}.`).toLowerCase();
+
+    const [
+        normalizedLabel,
+        normalizedParentDomainName,
+    ] = normalizedName.split('.');
 
     const [document] = await this.documents.get('dpns.domain', {
         where: [
-            ['nameHash', '==', normalizedAndHashedName],
+            ['normalizedParentDomainName', '==', normalizedParentDomainName],
+            ['normalizedLabel', '==', normalizedLabel],
         ],
     });
 
