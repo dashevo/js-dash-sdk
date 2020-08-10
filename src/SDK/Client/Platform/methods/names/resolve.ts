@@ -8,12 +8,18 @@ import { Platform } from "../../Platform";
  * @returns {Document} document
  */
 export async function resolve(this: Platform, name: string): Promise<any> {
-    const normalizedName = (name.indexOf('.') !== -1 ? name : `${name}.`).toLowerCase();
+    // setting up variables in case of TLD registration
+    let normalizedLabel = name.toLowerCase();
+    let normalizedParentDomainName = '';
 
-    const [
-        normalizedLabel,
-        normalizedParentDomainName,
-    ] = normalizedName.split('.');
+    // in case of subdomain registration
+    // we should split label and parent domain name
+    if (name.includes('.')) {
+        const segments = name.toLowerCase().split('.');
+
+        normalizedLabel = segments[0];
+        normalizedParentDomainName = segments.slice(1).join('.');
+    }
 
     const [document] = await this.documents.get('dpns.domain', {
         where: [
