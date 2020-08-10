@@ -1,5 +1,3 @@
-import { hash } from '@dashevo/dpp/lib/util/multihashDoubleSHA256';
-
 import { Platform } from "../../Platform";
 
 /**
