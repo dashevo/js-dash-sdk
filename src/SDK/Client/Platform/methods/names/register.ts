@@ -44,14 +44,12 @@ export async function register(this: Platform,
         ? `${normalizedLabel}.${normalizedParentDomainName}`
         : normalizedLabel;
 
-    const nameHash = hash(
-        Buffer.from(fullDomainName),
+    const saltedDomainHash = hash(
+        Buffer.concat([
+            preorderSalt,
+            Buffer.from(fullDomainName),
+        ]),
     );
-
-    const saltedDomainHash = Buffer.concat([
-        preorderSalt,
-        nameHash,
-    ]);
 
     if (!this.apps.dpns.contractId) {
         throw new Error('DPNS is required to register a new name.');
