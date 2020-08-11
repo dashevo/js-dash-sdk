@@ -2,7 +2,7 @@ import {Platform} from "../../Platform";
 
 const entropy = require('@dashevo/dpp/lib/util/entropy');
 const hash = require('@dashevo/dpp/lib/util/hash');
-const bs58 = require('bs58');
+const crypto = require('crypto');
 
 /**
  * Register names to the platform
@@ -38,7 +38,7 @@ export async function register(this: Platform,
     const [label] = nameLabels;
     const normalizedLabel = label.toLowerCase();
 
-    const preorderSalt = bs58.decode(entropy.generate());
+    const preorderSalt = crypto.randomBytes(32);
 
     const fullDomainName = normalizedParentDomainName.length > 0
         ? `${normalizedLabel}.${normalizedParentDomainName}`

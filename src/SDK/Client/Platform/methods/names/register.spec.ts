@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { ImportMock } from 'ts-mock-imports';
 
-import entropyModule from '@dashevo/dpp/lib/util/entropy';
+import cryptoModule from 'crypto';
 
-ImportMock.mockFunction(entropyModule, 'generate', 'VdFfaQCbqbrE7da');
+ImportMock.mockFunction(cryptoModule, 'randomBytes', Buffer.alloc(32));
 
 import register from './register';
 
@@ -43,7 +43,7 @@ describe('Platform', () => {
                 expect(platformMock.documents.create.getCall(0).args[0]).to.deep.equal('dpns.preorder');
                 expect(platformMock.documents.create.getCall(0).args[1]).to.deep.equal(identityMock);
                 expect(platformMock.documents.create.getCall(0).args[2].saltedDomainHash.toString('hex')).to.deep.equal(
-                    '736f6d65456e74726f707960f0833932a21446ada9b0bb71ac8e8b40e2618f99f44204d66815f6bdf258cc',
+                    '000000000000000000000000000000000000000000000000000000000000000060f0833932a21446ada9b0bb71ac8e8b40e2618f99f44204d66815f6bdf258cc',
                 );
 
                 expect(platformMock.documents.create.getCall(1).args).to.have.deep.members([
@@ -53,7 +53,7 @@ describe('Platform', () => {
                         'label': 'Dash',
                         'normalizedLabel': 'dash',
                         'normalizedParentDomainName': '',
-                        'preorderSalt': Buffer.from('736f6d65456e74726f7079', 'hex'),
+                        'preorderSalt': Buffer.alloc(32),
                         'records': {
                             'dashUniqueIdentityId': 'someIdentityId',
                         },
@@ -75,7 +75,7 @@ describe('Platform', () => {
                 expect(platformMock.documents.create.getCall(0).args[0]).to.deep.equal('dpns.preorder');
                 expect(platformMock.documents.create.getCall(0).args[1]).to.deep.equal(identityMock);
                 expect(platformMock.documents.create.getCall(0).args[2].saltedDomainHash.toString('hex')).to.deep.equal(
-                    '736f6d65456e74726f7079b5f42fb635a08cc0f441bbc6ef5f3bdeed2877692feffd9945bde3abf8b4141f',
+                    '0000000000000000000000000000000000000000000000000000000000000000b5f42fb635a08cc0f441bbc6ef5f3bdeed2877692feffd9945bde3abf8b4141f',
                 );
 
                 expect(platformMock.documents.create.getCall(1).args).to.have.deep.members([
@@ -85,7 +85,7 @@ describe('Platform', () => {
                         'label': 'User',
                         'normalizedLabel': 'user',
                         'normalizedParentDomainName': 'dash',
-                        'preorderSalt': Buffer.from('736f6d65456e74726f7079', 'hex'),
+                        'preorderSalt': Buffer.alloc(32),
                         'records': {
                             'dashAliasIdentityId': 'someIdentityId',
                         },
