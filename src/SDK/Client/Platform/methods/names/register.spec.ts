@@ -43,7 +43,7 @@ describe('Platform', () => {
                 expect(platformMock.documents.create.getCall(0).args[0]).to.deep.equal('dpns.preorder');
                 expect(platformMock.documents.create.getCall(0).args[1]).to.deep.equal(identityMock);
                 expect(platformMock.documents.create.getCall(0).args[2].saltedDomainHash.toString('hex')).to.deep.equal(
-                    '736f6d65456e74726f7079562060f0833932a21446ada9b0bb71ac8e8b40e2618f99f44204d66815f6bdf258cc',
+                    '736f6d65456e74726f707960f0833932a21446ada9b0bb71ac8e8b40e2618f99f44204d66815f6bdf258cc',
                 );
 
                 expect(platformMock.documents.create.getCall(1).args).to.have.deep.members([
@@ -75,7 +75,7 @@ describe('Platform', () => {
                 expect(platformMock.documents.create.getCall(0).args[0]).to.deep.equal('dpns.preorder');
                 expect(platformMock.documents.create.getCall(0).args[1]).to.deep.equal(identityMock);
                 expect(platformMock.documents.create.getCall(0).args[2].saltedDomainHash.toString('hex')).to.deep.equal(
-                    '736f6d65456e74726f70795620b5f42fb635a08cc0f441bbc6ef5f3bdeed2877692feffd9945bde3abf8b4141f',
+                    '736f6d65456e74726f7079b5f42fb635a08cc0f441bbc6ef5f3bdeed2877692feffd9945bde3abf8b4141f',
                 );
 
                 expect(platformMock.documents.create.getCall(1).args).to.have.deep.members([

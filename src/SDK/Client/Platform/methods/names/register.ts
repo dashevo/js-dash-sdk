@@ -1,7 +1,7 @@
 import {Platform} from "../../Platform";
 
 const entropy = require('@dashevo/dpp/lib/util/entropy');
-const { hash } = require('@dashevo/dpp/lib/util/multihashDoubleSHA256');
+const hash = require('@dashevo/dpp/lib/util/hash');
 const bs58 = require('bs58');
 
 /**
