@@ -36,9 +36,9 @@ describe('Platform', () => {
                 const identityId = 'someIdentityId';
                 identityMock.getId.returns(identityId);
 
-                await register.call(platformMock, 'Dash', identityMock, {
+                await register.call(platformMock, 'Dash', {
                     dashUniqueIdentityId: identityId,
-                });
+                }, identityMock);
 
                 expect(platformMock.documents.create.getCall(0).args[0]).to.deep.equal('dpns.preorder');
                 expect(platformMock.documents.create.getCall(0).args[1]).to.deep.equal(identityMock);
@@ -68,9 +68,9 @@ describe('Platform', () => {
                 const identityId = 'someIdentityId';
                 identityMock.getId.returns(identityId);
 
-                await register.call(platformMock, 'User.dash', identityMock, {
+                await register.call(platformMock, 'User.dash', {
                     dashAliasIdentityId: identityId,
-                });
+                }, identityMock);
 
                 expect(platformMock.documents.create.getCall(0).args[0]).to.deep.equal('dpns.preorder');
                 expect(platformMock.documents.create.getCall(0).args[1]).to.deep.equal(identityMock);
@@ -100,9 +100,9 @@ describe('Platform', () => {
                 delete platformMock.apps.dpns.contractId;
 
                 try {
-                    await register.call(platformMock, 'user.dash', identityMock, {
+                    await register.call(platformMock, 'user.dash', {
                         dashUniqueIdentityId: 'someIdentityId',
-                    });
+                    }, identityMock);
                 } catch (e) {
                     expect(e.message).to.equal('DPNS is required to register a new name.');
                 }

@@ -8,23 +8,22 @@ const crypto = require('crypto');
  *
  * @param {Platform} this - bound instance class
  * @param {string} name - name
- * @param identity - identity
- * @param {any} [identity.id] - identity ID
- * @param {function(number):any} - get public key by ID
  * @param {Object} records - records object having only one of the following items
  * @param {string} [records.dashUniqueIdentityId]
  * @param {string} [records.dashAliasIdentityId]
- * @returns registered names
+ * @param identity - identity
+ *
+ * @returns registered domain document
  */
 export async function register(this: Platform,
                                name: string,
-                               identity: {
-                                   getId(): string;
-                                   getPublicKeyById(number: number):any;
-                               },
                                records: {
                                    dashUniqueIdentityId?: string,
                                    dashAliasIdentityId?: string,
+                               },
+                               identity: {
+                                   getId(): string;
+                                   getPublicKeyById(number: number):any;
                                },
 ): Promise<any> {
     const nameLabels = name.split('.');
