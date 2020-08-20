@@ -3,7 +3,7 @@ In order to use Dash SDK with TypeScript, you will need some dependencies to be 
 `npm install -g typescript` - Required for compilation (`tsc`).    
 `npm install -g ts-node` - Required for REPL / Execution.     
 
-Create a new file, let's assume you will name it `myScript.ts`.    
+Create a new file, and assuming you name it `myScript.ts`.    
 
 ```js
 import Dash from 'dash';
@@ -30,6 +30,6 @@ Have a following `tsconfig.json` file
 }
 ```
 
-**Run without compiling**: `ts-node myCode.ts`  
+**Run without compiling**: `ts-node myScript.ts`  
 **Compile:** `tsc -p tsconfig.json`  
-**Run:** `node myCode.js`  
+**Run:** `node myScript.js`  
