@@ -38,7 +38,9 @@ export async function register(this: Platform,
 
     const preorderSalt = crypto.randomBytes(32);
 
-    const fullDomainName = normalizedParentDomainName.length > 0
+    const isSecondLevelDomain = normalizedParentDomainName.length > 0;
+
+    const fullDomainName = isSecondLevelDomain
         ? `${normalizedLabel}.${normalizedParentDomainName}`
         : normalizedLabel;
 
@@ -80,7 +82,7 @@ export async function register(this: Platform,
             preorderSalt,
             records,
             subdomainRules: {
-                allowSubdomains: false,
+                allowSubdomains: !isSecondLevelDomain,
             },
         },
     );
