@@ -54,7 +54,7 @@ describe('Platform', () => {
                 ]);
 
                 expect(receivedDocuments).to.be.an('array');
-                expect(receivedDocuments).to.be.empty();
+                expect(receivedDocuments.length).to.equal(0);
             });
         });
     });
