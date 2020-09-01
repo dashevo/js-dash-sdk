@@ -58,7 +58,7 @@ describe('Platform', () => {
                             'dashUniqueIdentityId': 'someIdentityId',
                         },
                         'subdomainRules': {
-                            'allowSubdomains': false,
+                            'allowSubdomains': true,
                         },
                     }
                 ]);
