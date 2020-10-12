@@ -47,7 +47,7 @@ export default async function register(this: Platform, fundingAmount : number = 
     }
 
     // Broadcast ST
-    await client.getDAPIClient().platform.broadcastStateTransition(identityCreateTransition.serialize());
+    await client.getDAPIClient().platform.broadcastStateTransition(identityCreateTransition.toBuffer());
 
     account.storage.insertIdentityIdAtIndex(
         account.walletId,

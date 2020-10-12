@@ -29,7 +29,7 @@ export default async function broadcastStateTransition(platform: Platform, state
         throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     }
 
-    await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.serialize());
+    await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
 
     // Wait some time for propagation
     await wait(1000);
