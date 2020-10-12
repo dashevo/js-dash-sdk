@@ -62,7 +62,7 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
     const documents: any[] = [];
 
     for (const rawData of rawDataList) {
-        const doc = await this.dpp.document.createFromBuffer(rawData, {skipValidation: true});
+        const doc = await this.dpp.document.createFromBuffer(rawData);
         documents.push(doc);
     }
     return documents
