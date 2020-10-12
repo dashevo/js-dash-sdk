@@ -17,7 +17,7 @@ const getDataContract = async (id) => {
     switch (id) {
         case contractsFixtures.ratePlatform.$id:
             const contract = await dpp.dataContract.createFromObject(contractsFixtures.ratePlatform);
-            return contract.serialize()
+            return contract.toBuffer()
         default:
             return null;
     }

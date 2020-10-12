@@ -15,7 +15,7 @@ export async function get(this: Platform, id: string): Promise<any> {
         return null;
     }
 
-    return this.dpp.identity.createFromSerialized(identityBuffer);
+    return this.dpp.identity.createFromBuffer(identityBuffer);
 }
 
 export default get;

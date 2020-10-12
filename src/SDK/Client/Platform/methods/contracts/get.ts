@@ -28,7 +28,7 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
             return null;
         }
 
-        const contract = await this.dpp.dataContract.createFromSerialized(rawContract);
+        const contract = await this.dpp.dataContract.createFromBuffer(rawContract);
         const app = {contractId: identifier, contract};
 
         // If we do not have even the identifier in this.apps, we add it with timestamp as key
