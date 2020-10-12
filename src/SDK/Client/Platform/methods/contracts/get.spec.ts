@@ -39,7 +39,7 @@ describe('Client - Platform - Contracts - .get()', () => {
     it('should get a contract', async function () {
         // @ts-ignore
         const contract = await get.call({apps, dpp, client}, contractsFixtures.ratePlatform.$id);
-        expect(contract.toObject()).to.deep.equal(contractsFixtures.ratePlatform);
+        expect(contract.toJSON()).to.deep.equal(contractsFixtures.ratePlatform);
     });
     it('should deal when no contract', async function () {
         // @ts-ignore
