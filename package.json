@@ -31,10 +31,10 @@
   },
   "homepage": "https://github.com/dashevo/DashJS#readme",
   "dependencies": {
-    "@dashevo/dapi-client": "~0.16.0-dev.1",
+    "@dashevo/dapi-client": "~0.16.0-dev.4",
     "@dashevo/dashcore-lib": "~0.18.12",
-    "@dashevo/dpp": "~0.16.0-dev.4",
-    "@dashevo/wallet-lib": "~7.16.0-dev.1",
+    "@dashevo/dpp": "~0.16.0-dev.6",
+    "@dashevo/wallet-lib": "git+ssh://git@github.com/dashevo/wallet-lib.git#v0.16-dev",
     "bs58": "^4.0.1"
   },
   "devDependencies": {
