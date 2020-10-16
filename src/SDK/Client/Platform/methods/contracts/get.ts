@@ -1,5 +1,8 @@
 import {Platform} from "../../Platform";
 
+// @ts-ignore
+import Identifier from "@dashevo/dpp/lib/Identifier";
+
 declare type ContractIdentifier = string;
 
 /**
@@ -23,13 +26,14 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
     if (localContract && localContract.contract) {
         return localContract.contract;
     } else {
-        const rawContract = await this.client.getDAPIClient().platform.getDataContract(identifier);
+        // @ts-ignore
+        const rawContract = await this.client.getDAPIClient().platform.getDataContract(Identifier.from(identifier));
         if(!rawContract){
             return null;
         }
 
         const contract = await this.dpp.dataContract.createFromBuffer(rawContract);
-        const app = {contractId: identifier, contract};
+        const app = {contractId: identifier.toString(), contract};
 
         // If we do not have even the identifier in this.apps, we add it with timestamp as key
         if (localContract === undefined || !localContract.contract) {
