@@ -11,7 +11,7 @@ import Identifier from "@dashevo/dpp/lib/Identifier";
  */
 export async function get(this: Platform, id: string): Promise<any> {
     // @ts-ignore
-    const identityBuffer = await this.client.getDAPIClient().platform.getIdentity(Identifier.from(id));
+    const identityBuffer = await this.client.getDAPIClient().platform.getIdentity(Identifier.from(id).toBuffer());
 
     if (identityBuffer === null) {
         return null;

@@ -34,7 +34,7 @@ export async function topUp(this: Platform, identityId: string, amount: number):
     const outPointBuffer = assetLockTransaction.getOutPointBuffer(0);
 
     // @ts-ignore
-    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(Identifier.from(identityId), outPointBuffer);
+    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(Identifier.from(identityId).toBuffer(), outPointBuffer);
 
     identityTopUpTransition.signByPrivateKey(assetLockPrivateKey);
 
