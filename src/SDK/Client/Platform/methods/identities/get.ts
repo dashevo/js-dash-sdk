@@ -1,4 +1,6 @@
 import {Platform} from "../../Platform";
+// @ts-ignore
+import Identifier from "@dashevo/dpp/lib/Identifier";
 
 /**
  * Get an identity from the platform
@@ -9,7 +11,7 @@ import {Platform} from "../../Platform";
  */
 export async function get(this: Platform, id: string): Promise<any> {
     // @ts-ignore
-    const identityBuffer = await this.client.getDAPIClient().platform.getIdentity(id);
+    const identityBuffer = await this.client.getDAPIClient().platform.getIdentity(Identifier.from(id));
 
     if (identityBuffer === null) {
         return null;

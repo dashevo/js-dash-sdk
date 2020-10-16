@@ -1,3 +1,5 @@
+// @ts-ignore
+import Identifier from "@dashevo/dpp/lib/Identifier";
 import {Platform} from "../../Platform";
 
 import { wait } from "../../../../../utils/wait";
@@ -31,7 +33,8 @@ export async function topUp(this: Platform, identityId: string, amount: number):
 
     const outPointBuffer = assetLockTransaction.getOutPointBuffer(0);
 
-    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(identityId, outPointBuffer);
+    // @ts-ignore
+    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(Identifier.from(identityId), outPointBuffer);
 
     identityTopUpTransition.signByPrivateKey(assetLockPrivateKey);
 
