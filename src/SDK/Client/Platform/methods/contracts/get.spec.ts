@@ -6,6 +6,7 @@ import DataContractFactory from "@dashevo/dpp/lib/dataContract/DataContractFacto
 import ValidationResult from "@dashevo/dpp/lib/validation/ValidationResult";
 import Identifier from "@dashevo/dpp/lib/Identifier";
 import 'mocha';
+import {ClientApps} from "../../../ClientApps";
 
 const factory = new DataContractFactory(
     () => {
@@ -32,6 +33,9 @@ const client = {
                 getDataContract
             }
         };
+    },
+    getApps(): ClientApps {
+        return new ClientApps();
     }
 };
 

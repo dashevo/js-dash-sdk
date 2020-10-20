@@ -7,6 +7,7 @@ import cryptoModule from 'crypto';
 ImportMock.mockFunction(cryptoModule, 'randomBytes', Buffer.alloc(32));
 
 import register from './register';
+import {ClientApps} from "../../../ClientApps";
 
 describe('Platform', () => {
     describe('Names', () => {
@@ -16,10 +17,14 @@ describe('Platform', () => {
 
             beforeEach(async function beforeEach() {
                 platformMock = {
-                    apps: {
-                      dpns: {
-                          contractId: 'someDPNSContractId',
-                      },
+                    client: {
+                        getApps() {
+                            return new ClientApps({
+                                dpns: {
+                                    contractId: generateRandomIdentifier(),
+                                }
+                            });
+                        }
                     },
                     documents: {
                         create: this.sinon.stub(),
@@ -98,7 +103,7 @@ describe('Platform', () => {
             });
 
             it('should fail if DPNS app have no contract set up', async () => {
-                delete platformMock.apps.dpns.contractId;
+                delete platformMock.client.getApps().get('dpns').contractId;
 
                 try {
                     await register.call(platformMock, 'user.dash', {

@@ -60,7 +60,7 @@ export async function register(this: Platform,
         ]),
     );
 
-    if (!this.apps.dpns.contractId) {
+    if (!this.client.getApps().has('dpns')) {
         throw new Error('DPNS is required to register a new name.');
     }
 
