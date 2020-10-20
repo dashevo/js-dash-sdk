@@ -51,7 +51,7 @@ export default async function register(this: Platform, fundingAmount : number = 
 
     account.storage.insertIdentityIdAtIndex(
         account.walletId,
-        identity.getId(),
+        identity.getId().toString(),
         identityIndex,
     );
 

@@ -4,6 +4,7 @@ import identitiesFixtures from "../../../../../../tests/fixtures/identities.json
 import contractsFixtures from "../../../../../../tests/fixtures/contracts.json";
 import DataContractFactory from "@dashevo/dpp/lib/dataContract/DataContractFactory";
 import ValidationResult from "@dashevo/dpp/lib/validation/ValidationResult";
+import Identifier from "@dashevo/dpp/lib/Identifier";
 import 'mocha';
 
 const factory = new DataContractFactory(
@@ -14,13 +15,14 @@ const dpp = {
     dataContract: factory
 }
 const getDataContract = async (id) => {
-    switch (id) {
-        case contractsFixtures.ratePlatform.$id:
-            const contract = await dpp.dataContract.createFromObject(contractsFixtures.ratePlatform);
-            return contract.toBuffer()
-        default:
-            return null;
+    const fixtureIdentifier = Identifier.from(contractsFixtures.ratePlatform.$id);
+
+    if (id.equals(fixtureIdentifier)) {
+        const contract = await dpp.dataContract.createFromObject(contractsFixtures.ratePlatform);
+        return contract.toBuffer()
     }
+
+    return null;
 };
 
 const client = {
@@ -36,11 +38,18 @@ const client = {
 const apps = {};
 
 describe('Client - Platform - Contracts - .get()', () => {
-    it('should get a contract', async function () {
+    it('should get a contract by string', async function () {
         // @ts-ignore
         const contract = await get.call({apps, dpp, client}, contractsFixtures.ratePlatform.$id);
         expect(contract.toJSON()).to.deep.equal(contractsFixtures.ratePlatform);
     });
+
+    it('should get a contract by identifier', async function () {
+        // @ts-ignore
+        const contract = await get.call({apps, dpp, client}, Identifier.from(contractsFixtures.ratePlatform.$id));
+        expect(contract.toJSON()).to.deep.equal(contractsFixtures.ratePlatform);
+    });
+
     it('should deal when no contract', async function () {
         // @ts-ignore
         const contract = await get.call({apps, dpp, client}, identitiesFixtures.bob.id);

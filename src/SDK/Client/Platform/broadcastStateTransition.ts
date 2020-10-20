@@ -14,7 +14,7 @@ export default async function broadcastStateTransition(platform: Platform, state
 
     // @ts-ignore
     const { privateKey } = account.getIdentityHDKeyById(
-        identity.getId(),
+        identity.getId().toString(),
         keyIndex,
     );
 
