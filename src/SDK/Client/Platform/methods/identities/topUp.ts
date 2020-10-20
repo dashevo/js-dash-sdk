@@ -9,12 +9,14 @@ import createAssetLockTransaction from "../../createAssetLockTransaction";
  * Register identities to the platform
  *
  * @param {Platform} this - bound instance class
- * @param {string} identityId - id of the identity to top up
+ * @param {Identifier|string} identityId - id of the identity to top up
  * @param {number} amount - amount to top up in duffs
  * @returns {boolean}
  */
-export async function topUp(this: Platform, identityId: string, amount: number): Promise<any> {
+export async function topUp(this: Platform, identityId: Identifier | string, amount: number): Promise<any> {
     const { client, dpp } = this;
+
+    identityId = Identifier.from(identityId);
 
     const account = await client.getWalletAccount();
 
@@ -34,7 +36,7 @@ export async function topUp(this: Platform, identityId: string, amount: number):
     const outPointBuffer = assetLockTransaction.getOutPointBuffer(0);
 
     // @ts-ignore
-    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(Identifier.from(identityId).toBuffer(), outPointBuffer);
+    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(identityId, outPointBuffer);
 
     identityTopUpTransition.signByPrivateKey(assetLockPrivateKey);
 
