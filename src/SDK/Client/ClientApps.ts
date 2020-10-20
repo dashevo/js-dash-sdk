@@ -30,9 +30,9 @@ export class ClientApps {
      * Set app
      *
      * @param {string} name
-     * @param {ClientAppDefinition} definition
+     * @param {ClientAppDefinitionOptions} definition
      */
-    set(name: string, definition: ClientAppDefinition) {
+    set(name: string, definition: ClientAppDefinitionOptions) {
         definition.contractId = Identifier.from(definition.contractId);
 
         this.apps[name] = definition;
