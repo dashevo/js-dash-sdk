@@ -1,24 +1,25 @@
-const {expect} = require('chai');
-const Dash = require(typeof process === 'undefined' ? '../../src/index.ts' : '../../');
+const { expect } = require('chai');
+
 const Identifier = require('@dashevo/dpp/lib/Identifier');
 
 const {
   Networks,
 } = require('@dashevo/dashcore-lib');
 
+const Dash = require(typeof process === 'undefined' ? '../../src/index.ts' : '../../');
+
 describe('SDK', function suite() {
   this.timeout(700000);
 
   let account;
   let dpnsContractId;
-  let clientOpts;
   let clientInstance;
-  let seeds;
 
   beforeEach(async () => {
     dpnsContractId = Identifier.from(process.env.DPNS_CONTRACT_ID);
-    clientOpts = {
-      seeds,
+
+    const clientOpts = {
+      seeds: process.env.DAPI_SEED.split(','),
       network: process.env.NETWORK,
       wallet: {
         mnemonic: null,
@@ -29,22 +30,35 @@ describe('SDK', function suite() {
         }
       }
     };
-    seeds = process.env.DAPI_SEED.split(',');
+
     clientInstance = new Dash.Client(clientOpts);
-    account = await clientInstance.getWalletAccount();
   });
 
   it('should init a Client', async () => {
     expect(clientInstance.network).to.equal(process.env.NETWORK);
+
     expect(clientInstance.walletAccountIndex).to.equal(0);
-    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: dpnsContractId.toBuffer()}});
-    expect(clientInstance.wallet.network).to.equal(Networks.get(process.env.NETWORK).name);
+
+    expect(clientInstance.getApps().has('dpns')).to.be.true;
+    expect(clientInstance.getApps().get('dpns')).to.deep.equal({
+      contractId: dpnsContractId,
+    });
+
+    const network = Networks.get(process.env.NETWORK).name;
+    expect(clientInstance.wallet.network).to.equal(network);
+
     expect(clientInstance.wallet.offlineMode).to.equal(false);
+
     expect(clientInstance.platform.dpp).to.exist;
+
     expect(clientInstance.platform.client).to.exist;
+  });
+
+  it('should initiate Wallet account', async () => {
+    account = await clientInstance.getWalletAccount();
 
     expect(account.index).to.equal(0);
-  });
+  })
 
   it('should sign and verify a message', async function () {
     const idKey = account.getIdentityHDKeyByIndex(0, 0);
