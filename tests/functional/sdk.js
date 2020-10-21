@@ -1,5 +1,6 @@
 const {expect} = require('chai');
 const Dash = require(typeof process === 'undefined' ? '../../src/index.ts' : '../../');
+const Identifier = require('@dashevo/dpp/lib/Identifier');
 
 const {
   Networks,
@@ -28,11 +29,17 @@ let account;
 describe('SDK', function suite() {
   this.timeout(700000);
 
+  let dpnsContractId;
+
+  beforeEach(() => {
+    dpnsContractId = Identifier.from(process.env.DPNS_CONTRACT_ID);
+  });
+
   it('should init a Client', async () => {
     clientInstance = new Dash.Client(clientOpts);
     expect(clientInstance.network).to.equal(process.env.NETWORK);
     expect(clientInstance.walletAccountIndex).to.equal(0);
-    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: process.env.DPNS_CONTRACT_ID}});
+    expect(clientInstance.apps).to.deep.equal({dpns: {contractId: dpnsContractId.toBuffer()}});
     expect(clientInstance.wallet.network).to.equal(Networks.get(process.env.NETWORK).name);
     expect(clientInstance.wallet.offlineMode).to.equal(false);
     expect(clientInstance.platform.dpp).to.exist;
