@@ -32,9 +32,9 @@
   "homepage": "https://github.com/dashevo/DashJS#readme",
   "dependencies": {
     "@dashevo/dapi-client": "~0.16.0-dev.8",
-    "@dashevo/dashcore-lib": "~0.18.12",
+    "@dashevo/dashcore-lib": "~0.18.13",
     "@dashevo/dpp": "~0.16.0-dev.9",
-    "@dashevo/wallet-lib": "github:dashevo/wallet-lib#bump-version",
+    "@dashevo/wallet-lib": "~7.16.0-dev.2",
     "bs58": "^4.0.1"
   },
   "devDependencies": {
