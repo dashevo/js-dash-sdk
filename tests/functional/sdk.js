@@ -6,37 +6,35 @@ const {
   Networks,
 } = require('@dashevo/dashcore-lib');
 
-let clientInstance;
-
-const seeds = process.env.DAPI_SEED
-  .split(',');
-
-const clientOpts = {
-  seeds,
-  network: process.env.NETWORK,
-  wallet: {
-    mnemonic: null,
-  },
-  apps: {
-    dpns: {
-      contractId: process.env.DPNS_CONTRACT_ID,
-    }
-  }
-};
-
-let account;
-
 describe('SDK', function suite() {
   this.timeout(700000);
 
+  let account;
   let dpnsContractId;
+  let clientOpts;
+  let clientInstance;
+  let seeds;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dpnsContractId = Identifier.from(process.env.DPNS_CONTRACT_ID);
+    clientOpts = {
+      seeds,
+      network: process.env.NETWORK,
+      wallet: {
+        mnemonic: null,
+      },
+      apps: {
+        dpns: {
+          contractId: dpnsContractId,
+        }
+      }
+    };
+    seeds = process.env.DAPI_SEED.split(',');
+    clientInstance = new Dash.Client(clientOpts);
+    account = await clientInstance.getWalletAccount();
   });
 
   it('should init a Client', async () => {
-    clientInstance = new Dash.Client(clientOpts);
     expect(clientInstance.network).to.equal(process.env.NETWORK);
     expect(clientInstance.walletAccountIndex).to.equal(0);
     expect(clientInstance.apps).to.deep.equal({dpns: {contractId: dpnsContractId.toBuffer()}});
@@ -45,7 +43,6 @@ describe('SDK', function suite() {
     expect(clientInstance.platform.dpp).to.exist;
     expect(clientInstance.platform.client).to.exist;
 
-    account = await clientInstance.getWalletAccount();
     expect(account.index).to.equal(0);
   });
 
