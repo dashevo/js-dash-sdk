@@ -59,6 +59,33 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
     // If not present, will fetch contract based on appName and contractId store in this.apps.
     await ensureAppContractFetched.call(this, appName);
 
+    if (opts.where) {
+        const binaryProperties = appDefinition.contract.getBinaryProperties(fieldType);
+
+        opts.where.forEach(([propertyName, operator, propertyValue], index) => {
+            if (operator === 'elementMatch') {
+
+            }
+
+            const property = binaryProperties[propertyName];
+
+            if (property && property.contentMediaType === Identifier.MEDIA_TYPE) {
+                if (typeof value === 'string') {
+                    try {
+                        opts.where[index][2] = Identifier.from(propertyValue);
+                    } catch (e) {
+                        if (!(e instanceof IdentifierError)) {
+                            throw e;
+                        }
+                    }
+                }
+            }
+
+            return []
+        });
+    }
+
+
     // @ts-ignore
     const rawDocuments = await this.client.getDAPIClient().platform.getDocuments(
         appDefinition.contractId,
