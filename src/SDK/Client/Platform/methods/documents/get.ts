@@ -3,24 +3,29 @@ import Identifier from '@dashevo/dpp/lib/Identifier';
 import {Platform} from "../../Platform";
 
 /**
- * @param {any} [where] - where
- * @param {any} [orderBy] - order by
+ * @param {WhereCondition[]} [where] - where
+ * @param {OrderByCondition[]} [orderBy] - order by
  * @param {number} [limit] - limit
  * @param {number} [startAt] - start value (included)
  * @param {number} [startAfter] - start value (not included)
  */
 declare interface fetchOpts {
-    where: any;
-    orderBy?: any;
+    where?: WhereCondition[];
+    orderBy?: OrderByCondition[];
     limit?: number;
     startAt?: number;
     startAfter?: number;
 }
 
+type OrderByCondition = [
+    string,
+    'asc' | 'desc',
+];
+
 type WhereCondition = [
     string,
-    string,
-    WhereCondition,
+    '<' | '<=' | '==' | '>' | '>=' | 'in' | 'startsWith' | 'elementMatch' | 'length' | 'contains',
+    WhereCondition|any,
 ]
 
 /**
@@ -39,8 +44,6 @@ const ensureAppContractFetched = async function (this: Platform, appName) {
     }
 }
 
-
-
 /**
  * Convert where condition identifier properties
  *
@@ -48,10 +51,12 @@ const ensureAppContractFetched = async function (this: Platform, appName) {
  * @param {Object} binaryProperties
  * @param {null|string} [parentProperty=null]
  *
- * @return {Array}
+ * @return {WhereCondition}
  */
 function convertIdentifierProperties(whereCondition: WhereCondition, binaryProperties: Record<string, any>, parentProperty: null|string = null) {
     const [propertyName, operator, propertyValue] = whereCondition;
+
+    const fullPropertyName = parentProperty ? `${parentProperty}.${propertyName}`: propertyName;
 
     if (operator === 'elementMatch') {
         return [
@@ -60,14 +65,12 @@ function convertIdentifierProperties(whereCondition: WhereCondition, binaryPrope
             convertIdentifierProperties(
                 propertyValue,
                 binaryProperties,
-                parentProperty ? `${parentProperty}.${propertyName}`: propertyName,
+                fullPropertyName,
             ),
         ];
     }
 
-    const property = binaryProperties[
-        parentProperty ? `${parentProperty}.${propertyName}`: propertyName
-    ];
+    const property = binaryProperties[fullPropertyName];
 
     if (property && property.contentMediaType === Identifier.MEDIA_TYPE) {
         if (typeof propertyValue === 'string') {
@@ -109,8 +112,7 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
     if (opts.where) {
         const binaryProperties = appDefinition.contract.getBinaryProperties(fieldType);
 
-        opts.where = opts.where.map((whereCondition) => convertIdentifierProperties(whereCondition, binaryProperties)
-        );
+        opts.where = opts.where.map((whereCondition) => convertIdentifierProperties(whereCondition, binaryProperties));
     }
 
     // @ts-ignore
