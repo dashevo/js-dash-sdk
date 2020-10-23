@@ -47,7 +47,7 @@ describe('Client - Platform - Documents - .get()', () => {
       ],
     });
 
-    expect(getDocumentsMock).to.have.been.calledOnceWithExactly(
+    expect(getDocumentsMock.getCall(0).args).to.have.deep.members([
       appDefinition.contractId,
       'withByteArrays',
       {
@@ -55,7 +55,7 @@ describe('Client - Platform - Documents - .get()', () => {
           ['identifierField', '==', id],
         ],
       },
-    );
+    ]);
   });
 
   it('should convert nested identifier properties inside where condition if `elementMatch` is used', async () => {
@@ -102,15 +102,15 @@ describe('Client - Platform - Documents - .get()', () => {
       ],
     });
 
-    expect(getDocumentsMock).to.have.been.calledOnceWithExactly(
-        appDefinition.contractId,
-        'withByteArrays',
-        {
-          where: [
-            ['nestedObject', 'elementMatch', ['idField', '==', id]],
-            ['nestedObject', 'elementMatch', ['anotherNested', 'elementMatch', ['anotherIdField', '==', id]]]
-          ],
-        },
-    );
+    expect(getDocumentsMock.getCall(0).args).to.have.deep.members([
+      appDefinition.contractId,
+      'withByteArrays',
+      {
+        where: [
+          ['nestedObject', 'elementMatch', ['idField', '==', id]],
+          ['nestedObject', 'elementMatch', ['anotherNested', 'elementMatch', ['anotherIdField', '==', id]]]
+        ],
+      },
+    ]);
   });
 });
