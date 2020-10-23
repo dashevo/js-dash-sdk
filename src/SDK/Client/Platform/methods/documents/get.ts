@@ -1,3 +1,5 @@
+import Identifier from '@dashevo/dpp/lib/Identifier';
+
 import {Platform} from "../../Platform";
 
 /**
@@ -9,11 +11,17 @@ import {Platform} from "../../Platform";
  */
 declare interface fetchOpts {
     where: any;
-    orderBy: any;
-    limit: number;
-    startAt: number;
-    startAfter: number;
+    orderBy?: any;
+    limit?: number;
+    startAt?: number;
+    startAfter?: number;
 }
+
+type WhereCondition = [
+    string,
+    string,
+    WhereCondition,
+]
 
 /**
  * Prefetch contract
@@ -29,6 +37,45 @@ const ensureAppContractFetched = async function (this: Platform, appName) {
             await this.contracts.get(appDefinition.contractId);
         }
     }
+}
+
+
+
+/**
+ * Convert where condition identifier properties
+ *
+ * @param {WhereCondition} whereCondition
+ * @param {Object} binaryProperties
+ * @param {null|string} [parentProperty=null]
+ *
+ * @return {Array}
+ */
+function convertIdentifierProperties(whereCondition: WhereCondition, binaryProperties: Record<string, any>, parentProperty: null|string = null) {
+    const [propertyName, operator, propertyValue] = whereCondition;
+
+    if (operator === 'elementMatch') {
+        return [
+            propertyName,
+            operator,
+            convertIdentifierProperties(
+                propertyValue,
+                binaryProperties,
+                parentProperty ? `${parentProperty}.${propertyName}`: propertyName,
+            ),
+        ];
+    }
+
+    const property = binaryProperties[
+        parentProperty ? `${parentProperty}.${propertyName}`: propertyName
+    ];
+
+    if (property && property.contentMediaType === Identifier.MEDIA_TYPE) {
+        if (typeof propertyValue === 'string') {
+            return [propertyName, operator, Identifier.from(propertyValue)];
+        }
+    }
+
+    return [propertyName, operator, propertyValue];
 }
 
 /**
@@ -62,29 +109,9 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
     if (opts.where) {
         const binaryProperties = appDefinition.contract.getBinaryProperties(fieldType);
 
-        opts.where.forEach(([propertyName, operator, propertyValue], index) => {
-            if (operator === 'elementMatch') {
-
-            }
-
-            const property = binaryProperties[propertyName];
-
-            if (property && property.contentMediaType === Identifier.MEDIA_TYPE) {
-                if (typeof value === 'string') {
-                    try {
-                        opts.where[index][2] = Identifier.from(propertyValue);
-                    } catch (e) {
-                        if (!(e instanceof IdentifierError)) {
-                            throw e;
-                        }
-                    }
-                }
-            }
-
-            return []
-        });
+        opts.where = opts.where.map((whereCondition) => convertIdentifierProperties(whereCondition, binaryProperties)
+        );
     }
-
 
     // @ts-ignore
     const rawDocuments = await this.client.getDAPIClient().platform.getDocuments(
