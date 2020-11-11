@@ -120,7 +120,7 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
 
     // @ts-ignore
     const rawDocuments = await this.client.getDAPIClient().platform.getDocuments(
-        appDefinition.contractId,
+        Identifier.from(appDefinition.contractId),
         fieldType,
         opts
     );

@@ -24,11 +24,10 @@ describe('SDK', function suite() {
       wallet: {
         mnemonic: null,
       },
-      apps: {
-        dpns: {
+      apps: [{
           contractId: dpnsContractId,
-        }
-      }
+          alias: 'dpns'
+        }]
     };
 
     clientInstance = new Dash.Client(clientOpts);

@@ -1,41 +1,57 @@
 import Identifier from "@dashevo/dpp/lib/Identifier";
+import {strict} from "assert";
 
 /**
  * Interface for ClientApps
  */
 export interface ClientAppsOptions {
-    [name: string]: ClientAppDefinitionOptions,
+    [identifier: string]: ClientAppDefinitionOptions,
 }
 
-interface ClientAppDefinitionOptions {
-    contractId: Identifier|string,
+
+export interface ClientAppDefinitionOptions {
+    contractId: Identifier | string,
     contract?: any
-}
+    aliases?: [string],
+    alias?: string
+};
 
-interface ClientAppDefinition {
+export interface ClientAppDefinition {
     contractId: Identifier,
-    contract?: any
+    contract: any,
+    aliases: [string]
 }
 
-type ClientAppsList = Record<string, ClientAppDefinition>;
+type ClientAppsList = Record<Identifier, ClientAppDefinition>;
 
 export class ClientApps {
     private apps: ClientAppsList = {};
 
-    constructor(apps: ClientAppsOptions = {}) {
-        Object.entries(apps).forEach(([name, definition]) => this.set(name, definition));
+    constructor(apps: Array<ClientAppDefinitionOptions> = []) {
+        apps && apps.forEach((appDefinition)=> this.set(appDefinition.contractId, appDefinition));
     }
 
+    getApps(){
+        return this.apps;
+    }
     /**
      * Set app
      *
-     * @param {string} name
+     * @param {string|Identifier} name or identifier
      * @param {ClientAppDefinitionOptions} definition
      */
-    set(name: string, definition: ClientAppDefinitionOptions) {
-        definition.contractId = Identifier.from(definition.contractId);
+    set(contractId: string | Identifier, appProperties) {
+        console.log({contractId});
+        const identifier = Identifier.from(contractId);
+        const definition = this.apps[identifier] || {
+            contractId: identifier.toString(),
+            contract: null,
+            aliases: []};
 
-        this.apps[name] = definition;
+        if (appProperties.contract) definition.contract = appProperties.contract;
+        if (appProperties.alias) definition.aliases.push(appProperties.alias);
+        if (appProperties.aliases) definition.aliases.push(...appProperties.aliases);
+        this.apps[Identifier.from(identifier)] = definition;
     }
 
     /**
@@ -44,22 +60,39 @@ export class ClientApps {
      * @param {string} name
      * @return {ClientAppDefinition}
      */
-    get(name: string): ClientAppDefinition {
-        if (!this.has(name)) {
-            throw new Error(`Application with name ${name} is not defined`);
+    get(query: string | Identifier) {
+        let identifier;
+        try {
+            identifier = Identifier.from(query);
+        } catch (e) {
+            const appSearch = Object.entries(this.apps).find((el) => {
+                if (el[1].aliases.includes(query)) {
+                    return el;
+                }
+            });
+            if (appSearch && appSearch.length) {
+                identifier = Identifier.from(appSearch[0]);
+            }
         }
 
-        return this.apps[name];
+        return this.apps[identifier];
     }
 
+
     /**
-     * Check if app is defined
+     * Check if app is defined by name or identifier
      *
-     * @param {string} name
+     * @param {string|Identifier} name
      * @return {boolean}
      */
-    has(name: string): boolean {
-        return Boolean(this.apps[name]);
+    has(query: string | Identifier) {
+        let identifier;
+        try {
+            identifier = Identifier.from(query);
+            return Boolean(this.apps[identifier])
+        } catch (e) {
+            return this.getAliases().includes(query);
+        }
     }
 
     /**
@@ -67,7 +100,22 @@ export class ClientApps {
      *
      * @return {ClientAppsList}
      */
-    getNames(): Array<string> {
-        return Object.keys(this.apps);
+    getAliases(): Array<any> {
+        return Object
+            .entries(this.apps)
+            .map(function (elem) {
+                const [, definition] = elem;
+                return definition.aliases;
+            })
+            .reduce((acc, val: any) => acc.concat(val), []);
     }
-}
+
+    /**
+     * Get all apps
+     *
+     * @return {ClientAppsList}
+     */
+    getIdentifiers(): Array<Identifier> {
+        return Object.keys(this.apps).map((el) => Identifier.from(el));
+    }
+};
