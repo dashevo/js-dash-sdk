@@ -16,7 +16,7 @@ describe('SDK', function suite() {
   let clientInstance;
 
   beforeEach(async () => {
-    dpnsContractId = Identifier.from(process.env.DPNS_CONTRACT_ID);
+    dpnsContractId = process.env.DPNS_CONTRACT_ID;
 
     const clientOpts = {
       seeds: process.env.DAPI_SEED.split(','),
@@ -40,6 +40,8 @@ describe('SDK', function suite() {
 
     expect(clientInstance.getApps().has('dpns')).to.be.true;
     expect(clientInstance.getApps().get('dpns')).to.deep.equal({
+      aliases: ['dpns'],
+      contract: null,
       contractId: dpnsContractId,
     });
 

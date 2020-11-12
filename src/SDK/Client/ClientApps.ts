@@ -41,15 +41,17 @@ export class ClientApps {
      * @param {ClientAppDefinitionOptions} definition
      */
     set(contractId: string | Identifier, appProperties) {
-        console.log({contractId});
         const identifier = Identifier.from(contractId);
+
         const definition = this.apps[identifier] || {
             contractId: identifier.toString(),
             contract: null,
             aliases: []};
 
         if (appProperties.contract) definition.contract = appProperties.contract;
-        if (appProperties.alias) definition.aliases.push(appProperties.alias);
+        if (appProperties.alias) {
+            definition.aliases.push(appProperties.alias);
+        }
         if (appProperties.aliases) definition.aliases.push(...appProperties.aliases);
         this.apps[Identifier.from(identifier)] = definition;
     }
