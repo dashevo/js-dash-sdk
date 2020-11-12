@@ -1,13 +1,8 @@
 import Identifier from "@dashevo/dpp/lib/Identifier";
-import {strict} from "assert";
 
 /**
  * Interface for ClientApps
  */
-export interface ClientAppsOptions {
-    [identifier: string]: ClientAppDefinitionOptions,
-}
-
 
 export interface ClientAppDefinitionOptions {
     contractId: Identifier | string,
@@ -37,8 +32,8 @@ export class ClientApps {
     /**
      * Set app
      *
-     * @param {string|Identifier} name or identifier
-     * @param {ClientAppDefinitionOptions} definition
+     * @param {string|Identifier} contractId
+     * @param {ClientAppDefinitionOptions} appProperties
      */
     set(contractId: string | Identifier, appProperties) {
         const identifier = Identifier.from(contractId);
@@ -57,9 +52,9 @@ export class ClientApps {
     }
 
     /**
-     * Get app definition by name
+     * Get app definition by name or identifier
      *
-     * @param {string} name
+     * @param {string|Identifier} query
      * @return {ClientAppDefinition}
      */
     get(query: string | Identifier) {
@@ -84,7 +79,7 @@ export class ClientApps {
     /**
      * Check if app is defined by name or identifier
      *
-     * @param {string|Identifier} name
+     * @param {string|Identifier} query
      * @return {boolean}
      */
     has(query: string | Identifier) {
