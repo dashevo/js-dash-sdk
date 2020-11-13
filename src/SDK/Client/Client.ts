@@ -97,17 +97,13 @@ export class Client {
             this.walletAccountIndex = this.options.walletAccountIndex;
         }
 
-        const appsOpts: Array<ClientAppDefinitionOptions> = [];
+        const appsOpts: Array<ClientAppDefinitionOptions> = [{
+                contractId: '3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8',
+                alias: 'dpns',
+            }];
 
         if(this.options.apps){
             appsOpts.push(...this.options.apps);
-        }
-
-        if(!appsOpts.find((el)=> el.alias === 'dpns')){
-            appsOpts.push({
-                contractId: '3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8',
-                alias: 'dpns',
-            });
         }
 
         this.apps = new ClientApps(appsOpts)

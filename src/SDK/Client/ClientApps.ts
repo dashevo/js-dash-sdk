@@ -24,7 +24,7 @@ function getIdentifierFromQuery(query: string|Identifier, apps: ClientAppsList):
     try {
         identifier = Identifier.from(query);
     } catch (e) {
-        if(e.message !== 'Non-base58 character') throw e;
+        if(!['Non-base58 character', 'Identifier must be 32 long'].includes(e.message)) throw e;
         const appSearch = Object.entries(apps).find((el) => {
             if (el[1].aliases.includes(query)) {
                 return el;
@@ -62,10 +62,18 @@ export class ClientApps {
             aliases: []};
 
         if (appProperties.contract) definition.contract = appProperties.contract;
-        if (appProperties.alias) {
-            definition.aliases.push(appProperties.alias);
-        }
-        if (appProperties.aliases) definition.aliases.push(...appProperties.aliases);
+
+        const aliases = (appProperties.alias) ? [appProperties.alias] : appProperties.aliases;
+
+        aliases.forEach((alias)=>{
+            const matchingAppAlias = this.get(alias);
+            if(matchingAppAlias){
+                // @ts-ignore we remove the previously assigned alias
+                matchingAppAlias.aliases = matchingAppAlias.aliases.filter(alias => alias !== appProperties.alias);
+            }
+            definition.aliases.push(alias);
+        });
+
         this.apps[Identifier.from(identifier)] = definition;
     }
 

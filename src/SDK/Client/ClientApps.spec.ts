@@ -49,6 +49,19 @@ describe('ClientApps', () => {
             "contract": {something: true},
             "aliases": ["dpns", "tutorialContract", "contract"],
         });
+        apps.set('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u9', {
+            alias: 'dpns',
+            contract: {somethingElse: true}
+        });
+        expect(apps.getApps()).to.deep.equal({"3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8": {
+            "contractId": "3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8",
+            "contract": {something: true},
+            "aliases": ["tutorialContract", "contract"],
+        }, "3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u9":{
+            "contractId": "3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u9",
+            "contract": {somethingElse: true},
+            "aliases": ["dpns"],
+        }});
 
     });
     it('should get', function () {
@@ -56,29 +69,34 @@ describe('ClientApps', () => {
         expect(getByIdentifier).to.deep.equal({
             "contractId": "3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8",
             "contract": {something: true},
-            "aliases": ["dpns", "tutorialContract", "contract"],
+            "aliases": ["tutorialContract", "contract"],
         })
         const getByAlias = apps.get('tutorialContract');
         expect(getByAlias).to.deep.equal({
             "contractId": "3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8",
             "contract": {something: true},
-            "aliases": ["dpns", "tutorialContract", "contract"],
+            "aliases": ["tutorialContract", "contract"],
         })
     });
     it('should .getIdentifiers()', function () {
         const identifiers = apps.getIdentifiers();
-        expect(identifiers).to.deep.equal([Identifier.from('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8')]);
+        expect(identifiers).to.deep.equal([
+            Identifier.from('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8'),
+            Identifier.from('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u9')
+        ]);
     });
     it('should .getAliases()', function () {
         const aliases = apps.getAliases();
-        expect(aliases).to.deep.equal(['dpns', 'tutorialContract', 'contract']);
+        expect(aliases).to.deep.equal(['tutorialContract', 'contract', 'dpns']);
     });
     it('should .has', function () {
         expect(apps.has('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8')).to.equal(true);
         expect(apps.has(Identifier.from('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8'))).to.equal(true);
         expect(apps.has('tutorialContract')).to.equal(true);
+        expect(apps.has('dpns')).to.equal(true);
+        expect(apps.has('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u9')).to.equal(true);
 
-        expect(apps.has('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u9')).to.equal(false);
+        expect(apps.has('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u1')).to.equal(false);
         expect(apps.has('tutorialContractt')).to.equal(false);
     });
 });
