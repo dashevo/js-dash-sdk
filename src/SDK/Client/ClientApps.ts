@@ -19,6 +19,24 @@ export interface ClientAppDefinition {
 
 type ClientAppsList = Record<Identifier, ClientAppDefinition>;
 
+function getIdentifierFromQuery(query: string|Identifier, apps: ClientAppsList): Identifier{
+    let identifier;
+    try {
+        identifier = Identifier.from(query);
+    } catch (e) {
+        if(e.message !== 'Non-base58 character') throw e;
+        const appSearch = Object.entries(apps).find((el) => {
+            if (el[1].aliases.includes(query)) {
+                return el;
+            }
+        });
+        if (appSearch && appSearch.length) {
+            identifier = Identifier.from(appSearch[0]);
+        }
+    }
+    return identifier;
+};
+
 export class ClientApps {
     private apps: ClientAppsList = {};
 
@@ -58,20 +76,7 @@ export class ClientApps {
      * @return {ClientAppDefinition}
      */
     get(query: string | Identifier) {
-        let identifier;
-        try {
-            identifier = Identifier.from(query);
-        } catch (e) {
-            const appSearch = Object.entries(this.apps).find((el) => {
-                if (el[1].aliases.includes(query)) {
-                    return el;
-                }
-            });
-            if (appSearch && appSearch.length) {
-                identifier = Identifier.from(appSearch[0]);
-            }
-        }
-
+        const identifier = getIdentifierFromQuery(query, this.getApps());
         return this.apps[identifier];
     }
 
