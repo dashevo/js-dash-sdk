@@ -110,6 +110,13 @@ export class Client {
             });
         }
 
+        if(!appsOpts.find((el)=> el.alias === 'dashpay')){
+            appsOpts.push({
+                contractId: 'FrXpVEsxFZ9hgCpiXwWbsQe4xHB9wZHGj4Lg5UjgxtHb',
+                alias: 'dashpay',
+            });
+        }
+
         this.apps = new ClientApps(appsOpts)
 
         this.platform = new Platform({
