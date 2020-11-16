@@ -63,16 +63,17 @@ export class ClientApps {
 
         if (appProperties.contract) definition.contract = appProperties.contract;
 
-        const aliases = (appProperties.alias) ? [appProperties.alias] : appProperties.aliases;
-
-        aliases.forEach((alias)=>{
-            const matchingAppAlias = this.get(alias);
-            if(matchingAppAlias){
-                // @ts-ignore we remove the previously assigned alias
-                matchingAppAlias.aliases = matchingAppAlias.aliases.filter(alias => alias !== appProperties.alias);
-            }
-            definition.aliases.push(alias);
-        });
+        if(appProperties.alias || appProperties.aliases){
+            const aliases = (appProperties.alias) ? [appProperties.alias] : appProperties.aliases;
+            aliases.forEach((alias)=>{
+                const matchingAppAlias = this.get(alias);
+                if(matchingAppAlias){
+                    // @ts-ignore we remove the previously assigned alias
+                    matchingAppAlias.aliases = matchingAppAlias.aliases.filter(alias => alias !== appProperties.alias);
+                }
+                definition.aliases.push(alias);
+            });
+        }
 
         this.apps[Identifier.from(identifier)] = definition;
     }
