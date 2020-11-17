@@ -1,3 +1,12 @@
+## [3.16.2](https://github.com/dashevo/DashJS/compare/v3.16.1...v3.16.2) (2020-11-17)
+
+
+### Bug Fixes
+
+* cannot read property 'getBinaryProperties' of undefined ([#158](https://github.com/dashevo/DashJS/issues/158))
+
+
+
 ## [3.16.1](https://github.com/dashevo/DashJS/compare/v3.16.0...v3.16.1) (2020-10-30)
 
 
