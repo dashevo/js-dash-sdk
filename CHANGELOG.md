@@ -1,3 +1,12 @@
+## [3.16.3](https://github.com/dashevo/DashJS/compare/v3.16.2...v3.16.3) (2020-12-01)
+
+
+### Bug Fix
+
+* chore: update dashcore-lib dependency ([#162](https://github.com/dashevo/dashcore-lib/pull/197))
+
+
+
 ## [3.16.2](https://github.com/dashevo/DashJS/compare/v3.16.1...v3.16.2) (2020-11-17)
 
 
