@@ -37,6 +37,8 @@ function getDataContractName(platform: Platform, document: Document): string {
  * @param {Document[]} [documents.delete]
  */
 async function waitForPropagation(platform: Platform, documents: { create: Document[], replace: Document[], delete: Document[]}): Promise<void> {
+    await wait(6000);
+
     let fetchedDocuments;
 
     if (documents.create.length > 0) {

@@ -59,6 +59,8 @@ export default async function register(
     );
 
     // Wait some time for propagation
+    await wait(6000);
+
     let fetchedIdentity;
     do {
         await wait(1000);
