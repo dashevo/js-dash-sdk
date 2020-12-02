@@ -16,7 +16,7 @@ function getDataContractName(platform: Platform, document: Document): string {
     const dataContractName = appNames.find((name) => {
         const clientAppDefinition = platform.client.getApps().get(name);
 
-        return clientAppDefinition.contractId === contractId;
+        return clientAppDefinition.contractId.equals(contractId);
     });
 
     if (dataContractName === undefined) {
