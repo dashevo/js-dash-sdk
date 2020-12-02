@@ -47,7 +47,7 @@ async function waitForPropagation(platform: Platform, documents: { create: Docum
             await wait(1000);
 
             // @ts-ignore
-            fetchedDocuments = await this.client.platform.documents.get(
+            fetchedDocuments = await platform.client.platform.documents.get(
               `${dataContractName}.${document.getType()}`,
               { where: [['$id', '==', document.getId()]] },
             );
@@ -60,7 +60,7 @@ async function waitForPropagation(platform: Platform, documents: { create: Docum
             await wait(1000);
 
             // @ts-ignore
-            fetchedDocuments = await this.client.platform.documents.get(
+            fetchedDocuments = await platform.client.platform.documents.get(
               `${dataContractName}.${document.getType()}`,
               { where: [['$id', '==', document.getId()]] },
             );
@@ -73,7 +73,7 @@ async function waitForPropagation(platform: Platform, documents: { create: Docum
             await wait(1000);
 
             // @ts-ignore
-            fetchedDocuments = await this.client.platform.documents.get(
+            fetchedDocuments = await platform.client.platform.documents.get(
               `${dataContractName}.${document.getType()}`,
               { where: [['$id', '==', document.getId()]] },
             );
