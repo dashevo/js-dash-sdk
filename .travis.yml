@@ -38,8 +38,6 @@ install:
   - export CI_TOOLS_DIR="$(ls ~/travis-ci-tools)"
   - cd ~/travis-ci-tools/$CI_TOOLS_DIR
   - npm ci && npm link
-  # Add current DashJs code to mn-bootstrap
-  - npm i github:dashevo/DashJS#${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
 
 before_script:
   - print-bells
