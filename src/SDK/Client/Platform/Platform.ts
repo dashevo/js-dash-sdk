@@ -125,8 +125,11 @@ export class Platform {
         };
 
         this.dpp = new DashPlatformProtocol({
-            ...options,
+            identites: {
+                skipAssetLockConfirmationValidation: true,
+            },
             stateRepository,
+            ...options,
         });
 
         this.client = options.client;
