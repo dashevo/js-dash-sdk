@@ -2,6 +2,9 @@ import { Platform } from "../../Platform";
 import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 
+// We're creating a new transaction every time and the index is always 0
+const ASSET_LOCK_OUTPUT_INDEX = 0;
+
 /**
  * Register identities to the platform
  *
@@ -36,7 +39,12 @@ export default async function register(
     const { privateKey: identityPrivateKey } = account.getIdentityHDKeyByIndex(identityIndex, 0);
     const identityPublicKey = identityPrivateKey.toPublicKey();
 
-    const identity = dpp.identity.create(assetLockOutPoint, [identityPublicKey]);
+    const instantLock = await account.waitForInstantLock(assetLockTransaction.hash);
+
+    // @ts-ignore
+    const assetLockProof = await dpp.identity.createInstantAssetLockProof(instantLock);
+    // @ts-ignore
+    const identity = dpp.identity.create(assetLockTransaction, 0, assetLockProof, [identityPublicKey]);
 
     // Create ST
     const identityCreateTransition = dpp.identity.createIdentityCreateTransition(identity);

@@ -32,11 +32,12 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
     await wait(1000);
 
     // Create ST
-
-    const outPointBuffer = assetLockTransaction.getOutPointBuffer(0);
-
+    // Get IS lock to proof that transaction won't be double spent
+    const instantLock = await account.waitForInstantLock(assetLockTransaction.hash);
     // @ts-ignore
-    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(identityId, outPointBuffer);
+    const assetLockProof = await dpp.identity.createInstantAssetLockProof(instantLock);
+    // @ts-ignore
+    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(identityId, assetLockTransaction, 0, assetLockProof);
 
     identityTopUpTransition.signByPrivateKey(assetLockPrivateKey);
 
