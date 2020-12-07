@@ -128,7 +128,7 @@ export class Platform {
 
         this.dpp = new DashPlatformProtocol({
             identities: {
-                skipAssetLockConfirmationValidation: true,
+                skipAssetLockProofSignatureVerification: true,
             },
             stateRepository,
             ...options,
