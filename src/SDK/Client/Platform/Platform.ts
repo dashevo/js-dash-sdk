@@ -28,6 +28,7 @@ import searchName from "./methods/names/search";
  */
 export interface PlatformOpts {
     client: Client,
+    passFakeAssetLockProofForTests?: boolean,
 }
 
 /**
@@ -70,6 +71,7 @@ interface Identities {
  */
 export class Platform {
     dpp: DashPlatformProtocol;
+    passFakeAssetLockProofForTests: boolean;
 
     public documents: Records;
     /**
@@ -132,6 +134,7 @@ export class Platform {
             ...options,
         });
 
+        this.passFakeAssetLockProofForTests = Boolean(options.passFakeAssetLockProofForTests);
         this.client = options.client;
     }
 }

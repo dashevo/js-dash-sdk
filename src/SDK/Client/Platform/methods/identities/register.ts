@@ -1,5 +1,6 @@
 import { Platform } from "../../Platform";
 import { wait } from "../../../../../utils/wait";
+import { createFakeInstantLock } from "../../../../../utils/createFakeIntantLock";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 
 // We're creating a new transaction every time and the index is always 0
@@ -15,7 +16,7 @@ export default async function register(
   this: Platform,
   fundingAmount : number = 10000
 ): Promise<any> {
-    const { client, dpp } = this;
+    const { client, dpp, passFakeAssetLockProofForTests } = this;
 
     const account = await client.getWalletAccount();
 
@@ -36,8 +37,13 @@ export default async function register(
     const { privateKey: identityPrivateKey } = account.getIdentityHDKeyByIndex(identityIndex, 0);
     const identityPublicKey = identityPrivateKey.toPublicKey();
 
+    let instantLock;
     // Create poof that the transaction won't be double spend
-    const instantLock = await account.waitForInstantLock(assetLockTransaction.hash);
+    if (passFakeAssetLockProofForTests) {
+        instantLock = createFakeInstantLock(assetLockTransaction.hash);
+    } else {
+        instantLock = await account.waitForInstantLock(assetLockTransaction.hash);
+    }
     // @ts-ignore
     const assetLockProof = await dpp.identity.createInstantAssetLockProof(instantLock);
 

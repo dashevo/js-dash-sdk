@@ -3,6 +3,7 @@ import Identifier from "@dashevo/dpp/lib/Identifier";
 import {Platform} from "../../Platform";
 
 import { wait } from "../../../../../utils/wait";
+import { createFakeInstantLock } from "../../../../../utils/createFakeIntantLock";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 
 // We're creating a new transaction every time and the index is always 0
@@ -17,7 +18,7 @@ const ASSET_LOCK_OUTPUT_INDEX = 0;
  * @returns {boolean}
  */
 export async function topUp(this: Platform, identityId: Identifier | string, amount: number): Promise<any> {
-    const { client, dpp } = this;
+    const { client, dpp, passFakeAssetLockProofForTests } = this;
 
     identityId = Identifier.from(identityId);
 
@@ -36,7 +37,13 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
 
     // Create ST
     // Get IS lock to proof that transaction won't be double spent
-    const instantLock = await account.waitForInstantLock(assetLockTransaction.hash);
+    let instantLock;
+    // Create poof that the transaction won't be double spend
+    if (passFakeAssetLockProofForTests) {
+        instantLock = createFakeInstantLock(assetLockTransaction.hash);
+    } else {
+        instantLock = await account.waitForInstantLock(assetLockTransaction.hash);
+    }
     // @ts-ignore
     const assetLockProof = await dpp.identity.createInstantAssetLockProof(instantLock);
     // @ts-ignore
