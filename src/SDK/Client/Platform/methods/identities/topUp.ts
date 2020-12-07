@@ -5,6 +5,9 @@ import {Platform} from "../../Platform";
 import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 
+// We're creating a new transaction every time and the index is always 0
+const ASSET_LOCK_OUTPUT_INDEX = 0;
+
 /**
  * Register identities to the platform
  *
@@ -37,7 +40,9 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
     // @ts-ignore
     const assetLockProof = await dpp.identity.createInstantAssetLockProof(instantLock);
     // @ts-ignore
-    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(identityId, assetLockTransaction, 0, assetLockProof);
+    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(
+        identityId, assetLockTransaction, ASSET_LOCK_OUTPUT_INDEX, assetLockProof
+    );
 
     identityTopUpTransition.signByPrivateKey(assetLockPrivateKey);
 

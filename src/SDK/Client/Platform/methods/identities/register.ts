@@ -30,21 +30,22 @@ export default async function register(
     // Wait some time for propagation
     await wait(1000);
 
-    // Create Identity
-    const assetLockOutPoint = assetLockTransaction.getOutPointBuffer(0);
-
     const identityIndex = await account.getUnusedIdentityIndex();
 
     // @ts-ignore
     const { privateKey: identityPrivateKey } = account.getIdentityHDKeyByIndex(identityIndex, 0);
     const identityPublicKey = identityPrivateKey.toPublicKey();
 
+    // Create poof that the transaction won't be double spend
     const instantLock = await account.waitForInstantLock(assetLockTransaction.hash);
-
     // @ts-ignore
     const assetLockProof = await dpp.identity.createInstantAssetLockProof(instantLock);
+
+    // Create Identity
     // @ts-ignore
-    const identity = dpp.identity.create(assetLockTransaction, 0, assetLockProof, [identityPublicKey]);
+    const identity = dpp.identity.create(
+        assetLockTransaction, ASSET_LOCK_OUTPUT_INDEX, assetLockProof, [identityPublicKey]
+    );
 
     // Create ST
     const identityCreateTransition = dpp.identity.createIdentityCreateTransition(identity);
