@@ -138,6 +138,9 @@ describe('Dash - Client', function suite() {
       ]);
 
       expect(identity).to.be.not.null;
+
+      // TODO: stub broadcastTransition method and check that asset lock proof
+      // includes the same instant lock as was emitted in sendTransaction stub
     });
   });
 });
