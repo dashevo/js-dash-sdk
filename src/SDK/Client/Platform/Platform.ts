@@ -123,7 +123,11 @@ export class Platform {
 
         const stateRepository = {
             fetchIdentity: getIdentity.bind(this),
-            fetchDataContract: getContract.bind(this)
+            fetchDataContract: getContract.bind(this),
+            // This check still exists on the client side, however there's no need to
+            // perform the check as in this client we always use a new transaction
+            // register/top up identity
+            checkAssetLockTransactionOutPointExists() { return false; },
         };
 
         this.dpp = new DashPlatformProtocol({
