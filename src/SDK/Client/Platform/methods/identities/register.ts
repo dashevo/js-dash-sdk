@@ -3,9 +3,6 @@ import { wait } from "../../../../../utils/wait";
 import { createFakeInstantLock } from "../../../../../utils/createFakeIntantLock";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 
-// We're creating a new transaction every time and the index is always 0
-const ASSET_LOCK_OUTPUT_INDEX = 0;
-
 /**
  * Register identities to the platform
  *
@@ -22,7 +19,8 @@ export default async function register(
 
     const {
         transaction: assetLockTransaction,
-        privateKey: assetLockPrivateKey
+        privateKey: assetLockPrivateKey,
+        outputIndex: assetLockOutputIndex
     } = await createAssetLockTransaction(this, fundingAmount);
 
     // Broadcast Asset Lock transaction
@@ -50,7 +48,7 @@ export default async function register(
     // Create Identity
     // @ts-ignore
     const identity = dpp.identity.create(
-        assetLockTransaction, ASSET_LOCK_OUTPUT_INDEX, assetLockProof, [identityPublicKey]
+        assetLockTransaction, assetLockOutputIndex, assetLockProof, [identityPublicKey]
     );
 
     // Create ST

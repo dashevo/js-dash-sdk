@@ -6,9 +6,6 @@ import { wait } from "../../../../../utils/wait";
 import { createFakeInstantLock } from "../../../../../utils/createFakeIntantLock";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 
-// We're creating a new transaction every time and the index is always 0
-const ASSET_LOCK_OUTPUT_INDEX = 0;
-
 /**
  * Register identities to the platform
  *
@@ -26,7 +23,8 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
 
     const {
         transaction: assetLockTransaction,
-        privateKey: assetLockPrivateKey
+        privateKey: assetLockPrivateKey,
+        outputIndex: assetLockOutputIndex
     } = await createAssetLockTransaction(this, amount);
 
     // Broadcast Asset Lock transaction
@@ -48,7 +46,7 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
     const assetLockProof = await dpp.identity.createInstantAssetLockProof(instantLock);
     // @ts-ignore
     const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(
-        identityId, assetLockTransaction, ASSET_LOCK_OUTPUT_INDEX, assetLockProof
+        identityId, assetLockTransaction, assetLockOutputIndex, assetLockProof
     );
 
     identityTopUpTransition.signByPrivateKey(assetLockPrivateKey);
