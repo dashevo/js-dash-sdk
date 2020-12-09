@@ -58,6 +58,8 @@ async function waitForPropagation(platform: Platform, documents: { create?: Docu
         const [document] = documents.replace;
         const dataContractName = getDataContractName(platform, document);
 
+        let revision;
+
         do {
             await wait(1000);
 
@@ -66,7 +68,9 @@ async function waitForPropagation(platform: Platform, documents: { create?: Docu
               `${dataContractName}.${document.getType()}`,
               { where: [['$id', '==', document.getId()]] },
             );
-        } while(fetchedDocuments[0]?.revision > document.revision);
+
+            revision = fetchedDocuments[0]?.revision || document.revision;
+        } while(revision === document.revision);
     } else if (documents.delete && documents.delete.length > 0) {
         const [document] = documents.delete;
         const dataContractName = getDataContractName(platform, document);
