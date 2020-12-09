@@ -36,12 +36,12 @@ function getDataContractName(platform: Platform, document: Document): string {
  * @param {Document[]} [documents.replace]
  * @param {Document[]} [documents.delete]
  */
-async function waitForPropagation(platform: Platform, documents: { create: Document[], replace: Document[], delete: Document[]}): Promise<void> {
+async function waitForPropagation(platform: Platform, documents: { create?: Document[], replace?: Document[], delete?: Document[]}): Promise<void> {
     await wait(6000);
 
     let fetchedDocuments;
 
-    if (documents.create.length > 0) {
+    if (documents.create && documents.create.length > 0) {
         const [document] = documents.create;
         const dataContractName = getDataContractName(platform, document);
 
@@ -54,7 +54,7 @@ async function waitForPropagation(platform: Platform, documents: { create: Docum
               { where: [['$id', '==', document.getId()]] },
             );
         } while(fetchedDocuments.length === 0);
-    } else if (documents.replace.length > 0) {
+    } else if (documents.replace && documents.replace.length > 0) {
         const [document] = documents.replace;
         const dataContractName = getDataContractName(platform, document);
 
@@ -67,7 +67,7 @@ async function waitForPropagation(platform: Platform, documents: { create: Docum
               { where: [['$id', '==', document.getId()]] },
             );
         } while(fetchedDocuments[0]?.revision > document.revision);
-    } else {
+    } else if (documents.delete && documents.delete.length > 0) {
         const [document] = documents.delete;
         const dataContractName = getDataContractName(platform, document);
 
@@ -93,7 +93,7 @@ async function waitForPropagation(platform: Platform, documents: { create: Docum
  * @param {Document[]} [documents.delete]
  * @param identity - identity
  */
-export default async function broadcast(this: Platform, documents: { create: Document[], replace: Document[], delete: Document[]}, identity: any): Promise<any> {
+export default async function broadcast(this: Platform, documents: { create?: Document[], replace?: Document[], delete?: Document[]}, identity: any): Promise<any> {
     const { dpp } = this;
 
     const documentsBatchTransition = dpp.document.createStateTransition(documents);
