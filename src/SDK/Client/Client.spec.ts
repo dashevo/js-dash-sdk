@@ -168,4 +168,55 @@ describe('Dash - Client', function suite() {
       expect(importedIdentityIds[0]).to.be.equal(interceptedIdentityStateTransition.getIdentityId().toString());
     });
   });
+
+  describe('#platform.identities.topUp', async () => {
+    it('should top up an identity', async () => {
+      expect.fail("please implement me");
+      // Set up transport to emit instant lock when it receives transaction
+      let isLock;
+      let transaction;
+      transportMock.sendTransaction.callsFake((txString) => {
+        transaction = new Transaction(txString);
+
+        isLock = createFakeInstantLock(transaction.hash);
+        txStreamMock.emit(
+            TxStreamMock.EVENTS.data,
+            new TxStreamDataResponseMock(
+                { instantSendLockMessages: [isLock.toBuffer()] }
+            )
+        );
+      });
+
+      // Set up DAPI mock to return identity
+      let interceptedIdentityStateTransition;
+      let identityFromDAPI;
+      dapiClientMock.platform.broadcastStateTransition.callsFake(async (stBuffer) => {
+        interceptedIdentityStateTransition = await clientWithMockTransport.platform.dpp.stateTransition.createFromBuffer(stBuffer);
+        identityFromDAPI = new Identity({
+          protocolVersion: interceptedIdentityStateTransition.getProtocolVersion(),
+          id: interceptedIdentityStateTransition.getIdentityId().toBuffer(),
+          publicKeys: interceptedIdentityStateTransition.getPublicKeys().map((key) => key.toObject()),
+          balance: 100,
+          revision: 0,
+        });
+        dapiClientMock.platform.getIdentity.resolves(identityFromDAPI);
+      });
+
+      const [identity] = await Promise.all([
+        clientWithMockTransport.platform.identities.register(),
+      ]);
+
+      expect(identity).to.be.not.null;
+
+      const interceptedAssetLock = interceptedIdentityStateTransition.getAssetLock();
+
+      // Check intercepted st
+      expect(interceptedAssetLock.getProof().getInstantLock()).to.be.deep.equal(isLock);
+      expect(interceptedAssetLock.getTransaction().hash).to.be.equal(transaction.hash);
+
+      const importedIdentityIds = account.getIdentityIds();
+      expect(importedIdentityIds.length).to.be.equal(1);
+      expect(importedIdentityIds[0]).to.be.equal(interceptedIdentityStateTransition.getIdentityId().toString());
+    });
+  });
 });

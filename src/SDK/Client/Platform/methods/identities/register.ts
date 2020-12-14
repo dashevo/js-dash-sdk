@@ -1,8 +1,8 @@
 import { Platform } from "../../Platform";
 import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
-import createIdentityTransition from "./internal/createIdentityTransition";
-import broadcastIdentityCreateStateTransition from "./internal/broadcastIdentityCreateTransition";
+import createIdentityCreateTransition from "./internal/createIdentityCreateTransition";
+import createAssetLockProof from "./internal/createAssetLockProof";
 
 /**
  * Register identities to the platform
@@ -26,15 +26,20 @@ export default async function register(
 
     // Broadcast Asset Lock transaction
     await account.broadcastTransaction(assetLockTransaction);
+    const assetLockProof = await createAssetLockProof(this, assetLockTransaction);
 
-    // Wait some time for propagation
-    await wait(1000);
-
-    const { identity, identityCreateTransition, identityIndex } = await createIdentityTransition(
-        this, assetLockTransaction, assetLockOutputIndex, assetLockPrivateKey
+    const { identity, identityCreateTransition, identityIndex } = await createIdentityCreateTransition(
+        this, assetLockTransaction, assetLockOutputIndex, assetLockProof, assetLockPrivateKey
     );
 
-    await broadcastIdentityCreateStateTransition(this, identityCreateTransition, identity, identityIndex);
+    await client.getDAPIClient().platform.broadcastStateTransition(identityCreateTransition.toBuffer());
+
+    // If state transition was broadcast without any errors, import identity to the account
+    account.storage.insertIdentityIdAtIndex(
+        account.walletId,
+        identity.getId().toString(),
+        identityIndex,
+    );
 
     let fetchedIdentity;
     do {
