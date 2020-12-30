@@ -19,6 +19,7 @@
 * requires a version of DAPI with instant locks implemented, i.e. 0.17 or higher
 
 
+
 ## [3.16.1](https://github.com/dashevo/DashJS/compare/v3.16.0...v3.16.1) (2020-10-30)
 
 
