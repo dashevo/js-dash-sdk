@@ -9,7 +9,7 @@
 import { wait } from '../../../../../utils/wait';
 import { Platform } from "../../Platform";
 import broadcastStateTransition from "../../broadcastStateTransition";
-import {signStateTransition} from "../../signStateTransition";
+import { signStateTransition } from "../../signStateTransition";
 
 export default async function broadcast(this: Platform, dataContract: any, identity: any): Promise<any> {
     const { dpp } = this;

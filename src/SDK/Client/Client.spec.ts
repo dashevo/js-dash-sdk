@@ -234,9 +234,7 @@ describe('Dash - Client', function suite() {
 
       let error;
       try {
-        await client.platform.documents.broadcast({
-          create: documentsFixture,
-        }, identityFixture);
+        await client.platform.contracts.broadcast(dataContractFixture, identityFixture);
       } catch (e) {
         error = e;
       }
@@ -246,22 +244,17 @@ describe('Dash - Client', function suite() {
       expect(error.message).to.be.equal("Error happened");
     });
 
-    it('should broadcast documents', async () => {
+    it('should broadcast data contract', async () => {
       dapiClientMock.platform.waitForStateTransitionResult.resolves({ hash: '', proof: { code: 2, log: "Error happened" } });
 
-      await client.platform.documents.broadcast({
-        create: documentsFixture,
-      }, identityFixture);
+      await client.platform.contracts.broadcast(dataContractFixture, identityFixture);
 
       const serializedSt = dapiClientMock.platform.broadcastStateTransition.getCall(0).args[0];
       const interceptedSt = await client.platform.dpp.stateTransition.createFromBuffer(serializedSt);
 
       expect(interceptedSt.verifySignature(identityFixture.getPublicKeyById(0))).to.be.true();
-
-      const documentTransitions = interceptedSt.getTransitions();
-
-      expect(documentTransitions.length).to.be.greaterThan(0);
-      expect(documentTransitions.length).to.be.equal(documentsFixture.length);
+      expect(interceptedSt.getEntropy()).to.be.deep.equal(dataContractFixture.entropy);
+      expect(interceptedSt.getDataContract().toObject()).to.be.deep.equal(dataContractFixture.toObject());
     });
   });
 });
