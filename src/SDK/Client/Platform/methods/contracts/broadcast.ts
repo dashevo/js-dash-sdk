@@ -9,13 +9,15 @@
 import { wait } from '../../../../../utils/wait';
 import { Platform } from "../../Platform";
 import broadcastStateTransition from "../../broadcastStateTransition";
+import {signStateTransition} from "../../signStateTransition";
 
 export default async function broadcast(this: Platform, dataContract: any, identity: any): Promise<any> {
     const { dpp } = this;
 
     const dataContractCreateTransition = dpp.dataContract.createStateTransition(dataContract);
 
-    await broadcastStateTransition(this, dataContractCreateTransition, identity);
+    await signStateTransition(this, dataContractCreateTransition, identity);
+    await broadcastStateTransition(this, dataContractCreateTransition);
 
     // Wait some time for propagation
     await wait(6000);

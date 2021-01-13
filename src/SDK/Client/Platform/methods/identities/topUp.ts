@@ -6,6 +6,7 @@ import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 import createAssetLockProof from "./internal/createAssetLockProof";
 import createIdentityTopUpTransition from "./internal/createIdnetityTopUpTransition";
+import broadcastStateTransition from "../../broadcastStateTransition";
 
 /**
  * Register identities to the platform
@@ -37,7 +38,7 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
     const identityTopUpTransition = await createIdentityTopUpTransition(this, assetLockTransaction, assetLockOutputIndex, assetLockProof, assetLockPrivateKey, identityId);
 
     // Broadcast ST
-    await client.getDAPIClient().platform.broadcastStateTransition(identityTopUpTransition.toBuffer());
+    await broadcastStateTransition(this, identityTopUpTransition);
 
     // Wait some time for propagation
     await wait(1000);

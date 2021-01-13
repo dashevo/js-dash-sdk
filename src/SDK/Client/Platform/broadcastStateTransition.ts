@@ -1,5 +1,5 @@
 import { Platform } from "./Platform";
-import { wait } from "../../../utils/wait";
+import { TransitionBroadcastError } from "../../../errors/TransitionBroadcastError";
 
 /**
  * @param {Platform} platform
@@ -7,21 +7,8 @@ import { wait } from "../../../utils/wait";
  * @param identity
  * @param {number} [keyIndex=0]
  */
-export default async function broadcastStateTransition(platform: Platform, stateTransition: any, identity: any, keyIndex : number = 0) {
+export default async function broadcastStateTransition(platform: Platform, stateTransition: any) {
     const { client, dpp } = platform;
-
-    const account = await client.getWalletAccount();
-
-    // @ts-ignore
-    const { privateKey } = account.getIdentityHDKeyById(
-        identity.getId().toString(),
-        keyIndex,
-    );
-
-    stateTransition.sign(
-        identity.getPublicKeyById(keyIndex),
-        privateKey,
-    );
 
     const result = await dpp.stateTransition.validateStructure(stateTransition);
 
@@ -29,8 +16,20 @@ export default async function broadcastStateTransition(platform: Platform, state
         throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     }
 
-    await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
+    const [ stateTransitionResult, ] = await Promise.all([
+        client.getDAPIClient().platform.waitForStateTransitionResult(stateTransition.hash()),
+        new Promise(resolve => {
+            setTimeout(async () => {
+                const res = await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
+                resolve(res);
+            }, 1)
+        }),
+    ]);
 
-    // Wait some time for propagation
-    await wait(1000);
+    // @ts-ignore
+    let { error: stateTransitionError } = stateTransitionResult;
+
+    if (stateTransitionError) {
+        throw new TransitionBroadcastError(stateTransitionError.code, stateTransitionError.log);
+    }
 }
