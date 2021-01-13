@@ -51,7 +51,7 @@ function makeGetIdentityRespondWithIdentity(client, dapiClientMock) {
     });
 }
 
-export async function createAndattachTransportMocksToClient(client, sinon) {
+export async function createAndAttachTransportMocksToClient(client, sinon) {
     const txStreamMock = new TxStreamMock();
     const transportMock = new TransportMock(sinon, txStreamMock);
     const dapiClientMock = createDapiClientMock(sinon);

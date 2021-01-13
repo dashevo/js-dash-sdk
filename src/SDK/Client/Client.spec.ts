@@ -13,7 +13,7 @@ const getDataContractFixture = require('@dashevo/dpp/lib/test/fixtures/getDataCo
 
 import { createIdentityFixtureInAccount } from '../../test/fixtures/createIdentityFixtureInAccount';
 import { createTransactionInAccount } from '../../test/fixtures/createTransactionFixtureInAccount';
-import { createAndattachTransportMocksToClient } from '../../test/mocks/createAndattachTransportMocksToClient';
+import { createAndAttachTransportMocksToClient } from '../../test/mocks/createAndAttachTransportMocksToClient';
 
 describe('Dash - Client', function suite() {
   this.timeout(30000);
@@ -40,7 +40,7 @@ describe('Dash - Client', function suite() {
       }
     });
 
-    ({ txStreamMock, transportMock, dapiClientMock } = await createAndattachTransportMocksToClient(client, this.sinon));
+    ({ txStreamMock, transportMock, dapiClientMock } = await createAndAttachTransportMocksToClient(client, this.sinon));
 
     account = await client.getWalletAccount();
 
