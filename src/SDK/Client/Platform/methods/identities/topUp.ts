@@ -2,7 +2,6 @@
 import Identifier from "@dashevo/dpp/lib/Identifier";
 import {Platform} from "../../Platform";
 
-import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 import createAssetLockProof from "./internal/createAssetLockProof";
 import createIdentityTopUpTransition from "./internal/createIdnetityTopUpTransition";
@@ -39,9 +38,6 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
 
     // Broadcast ST
     await broadcastStateTransition(this, identityTopUpTransition);
-
-    // Wait some time for propagation
-    await wait(1000);
 
     return true;
 }
