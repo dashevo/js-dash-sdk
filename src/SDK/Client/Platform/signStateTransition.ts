@@ -1,6 +1,14 @@
 import {Platform} from "./Platform";
 
-export async function signStateTransition(platform: Platform, stateTransition: any, identity: any, keyIndex: number = 0) {
+/**
+ *
+ * @param {Platform} platform
+ * @param {AbstractStateTransition} stateTransition
+ * @param {Identity} identity
+ * @param {number} [keyIndex]
+ * @return {AbstractStateTransition}
+ */
+export async function signStateTransition(platform: Platform, stateTransition: any, identity: any, keyIndex: number = 0): Promise<any> {
     const { client } = platform;
 
     const account = await client.getWalletAccount();
@@ -15,4 +23,6 @@ export async function signStateTransition(platform: Platform, stateTransition: a
         identity.getPublicKeyById(keyIndex),
         privateKey,
     );
+
+    return stateTransition;
 }

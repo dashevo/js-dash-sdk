@@ -5,6 +5,8 @@ import Identity from "@dashevo/dpp/lib/identity/Identity";
 import { createFakeInstantLock } from "../../utils/createFakeIntantLock";
 import { createDapiClientMock } from "./createDapiClientMock";
 
+import { wait } from "../../utils/wait";
+
 // @ts-ignore
 const TxStreamMock = require('@dashevo/wallet-lib/src/test/mocks/TxStreamMock');
 // @ts-ignore
@@ -17,6 +19,7 @@ function makeTxStreamEmitISLocksForTransactions(transportMock, txStreamMock) {
         const transaction = new Transaction(txString);
         const isLock = createFakeInstantLock(transaction.hash);
 
+        // Emit IS lock for the transaction
         txStreamMock.emit(
             TxStreamMock.EVENTS.data,
             new TxStreamDataResponseMock(
@@ -34,6 +37,11 @@ function makeTxStreamEmitISLocksForTransactions(transportMock, txStreamMock) {
     });
 }
 
+/**
+ * Makes stub remember the identity from the ST and respond with it
+ * @param {Client} client
+ * @param dapiClientMock
+ */
 function makeGetIdentityRespondWithIdentity(client, dapiClientMock) {
     dapiClientMock.platform.broadcastStateTransition.callsFake(async (stBuffer) => {
         let interceptedIdentityStateTransition = await client.platform.dpp.stateTransition.createFromBuffer(stBuffer);
@@ -61,16 +69,14 @@ export async function createAndAttachTransportMocksToClient(client, sinon) {
     // Mock dapi client for platform endpoints
     client.dapiClient = dapiClientMock;
 
-    // Emitting txStream.end, so client will resolve sync process
-    await Promise.all([
-        client.wallet.getAccount(),
-        new Promise(resolve => {
-            setTimeout(() => {
-                txStreamMock.emit(TxStreamMock.EVENTS.end);
-                resolve();
-            }, 10)
-        })
-    ]);
+    // Starting account sync
+    const accountPromise = client.wallet.getAccount();
+    // Breaking the event loop to emit an event
+    await wait(0);
+    // Emitting stream end event to mark finish of the account sync
+    txStreamMock.emit(TxStreamMock.EVENTS.end);
+    // Wait for account to resolve
+    await accountPromise;
 
     // Putting data in transport stubs
     transportMock.getIdentityIdsByPublicKeyHash.resolves([null]);

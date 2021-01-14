@@ -1,11 +1,9 @@
 import { Platform } from "./Platform";
-import { TransitionBroadcastError } from "../../../errors/TransitionBroadcastError";
+import { StateTransitionBroadcastError } from "../../../errors/StateTransitionBroadcastError";
 
 /**
  * @param {Platform} platform
  * @param stateTransition
- * @param identity
- * @param {number} [keyIndex=0]
  */
 export default async function broadcastStateTransition(platform: Platform, stateTransition: any) {
     const { client, dpp } = platform;
@@ -16,20 +14,17 @@ export default async function broadcastStateTransition(platform: Platform, state
         throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     }
 
-    const [ stateTransitionResult, ] = await Promise.all([
-        client.getDAPIClient().platform.waitForStateTransitionResult(stateTransition.hash()),
-        new Promise(resolve => {
-            setTimeout(async () => {
-                const res = await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
-                resolve(res);
-            }, 1)
-        }),
-    ]);
+    // Subscribing to future result
+    const stateTransitionResultPromise = client.getDAPIClient().platform.waitForStateTransitionResult(stateTransition.hash());
+    // Broadcasting state transition
+    await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
+    // Waiting for result to return
+    const stateTransitionResult = await stateTransitionResultPromise;
 
     // @ts-ignore
     let { error: stateTransitionError } = stateTransitionResult;
 
     if (stateTransitionError) {
-        throw new TransitionBroadcastError(stateTransitionError.code, stateTransitionError.log);
+        throw new StateTransitionBroadcastError(stateTransitionError.code, stateTransitionError.log);
     }
 }

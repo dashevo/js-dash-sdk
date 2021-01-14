@@ -4,7 +4,7 @@ import 'mocha';
 import { Transaction } from "@dashevo/dashcore-lib";
 import { createFakeInstantLock } from "../../utils/createFakeIntantLock";
 import stateTransitionTypes from '@dashevo/dpp/lib/stateTransition/stateTransitionTypes';
-import { TransitionBroadcastError } from '../../errors/TransitionBroadcastError';
+import { StateTransitionBroadcastError } from '../../errors/StateTransitionBroadcastError';
 
 // @ts-ignore
 const getDocumentsFixture = require('@dashevo/dpp/lib/test/fixtures/getDocumentsFixture');
@@ -139,7 +139,7 @@ describe('Dash - Client', function suite() {
         error = e;
       }
 
-      expect(error).to.be.an.instanceOf(TransitionBroadcastError);
+      expect(error).to.be.an.instanceOf(StateTransitionBroadcastError);
       expect(error.getCode()).to.be.equal(2);
       expect(error.message).to.be.equal("Error happened");
 
@@ -185,7 +185,7 @@ describe('Dash - Client', function suite() {
         error = e;
       }
 
-      expect(error).to.be.an.instanceOf(TransitionBroadcastError);
+      expect(error).to.be.an.instanceOf(StateTransitionBroadcastError);
       expect(error.getCode()).to.be.equal(2);
       expect(error.message).to.be.equal("Error happened");
     });
@@ -204,7 +204,7 @@ describe('Dash - Client', function suite() {
         error = e;
       }
 
-      expect(error).to.be.an.instanceOf(TransitionBroadcastError);
+      expect(error).to.be.an.instanceOf(StateTransitionBroadcastError);
       expect(error.getCode()).to.be.equal(2);
       expect(error.message).to.be.equal("Error happened");
     });
@@ -239,7 +239,7 @@ describe('Dash - Client', function suite() {
         error = e;
       }
 
-      expect(error).to.be.an.instanceOf(TransitionBroadcastError);
+      expect(error).to.be.an.instanceOf(StateTransitionBroadcastError);
       expect(error.getCode()).to.be.equal(2);
       expect(error.message).to.be.equal("Error happened");
     });
