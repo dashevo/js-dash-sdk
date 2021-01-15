@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { Platform } from "./Platform";
 import { StateTransitionBroadcastError } from "../../../errors/StateTransitionBroadcastError";
 
@@ -15,7 +16,10 @@ export default async function broadcastStateTransition(platform: Platform, state
     }
 
     // Subscribing to future result
-    const stateTransitionResultPromise = client.getDAPIClient().platform.waitForStateTransitionResult(stateTransition.hash());
+    const hash = crypto.createHash('sha256')
+      .update(stateTransition.toBuffer())
+      .digest();
+    const stateTransitionResultPromise = client.getDAPIClient().platform.waitForStateTransitionResult(hash);
     // Broadcasting state transition
     await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
     // Waiting for result to return
