@@ -59,16 +59,19 @@ describe('Dash - Client', function suite() {
     expect(Client.name).to.be.equal('Client');
     expect(Client.constructor.name).to.be.equal('Function');
   });
+
   it('should be instantiable', function () {
     const client = new Client();
     expect(client).to.exist;
     expect(client.network).to.be.equal('testnet');
     expect(client.getDAPIClient().constructor.name).to.be.equal('DAPIClient');
   });
+
   it('should not initiate wallet lib without mnemonic', function () {
     const client = new Client();
     expect(client.wallet).to.be.equal(undefined);
   });
+
   it('should initiate wallet-lib with a mnemonic', async ()=>{
     const client = new Client({
       wallet: {
@@ -85,6 +88,7 @@ describe('Dash - Client', function suite() {
     const account = await client.getWalletAccount();
     await account.disconnect();
   });
+
   it('should throw an error if client and wallet have different networks', async () => {
     try {
       new Client({
@@ -130,7 +134,15 @@ describe('Dash - Client', function suite() {
     it('should throw TransitionBroadcastError when transport resolves error', async () => {
       const accountIdentitiesCountBeforeTest = account.getIdentityIds().length;
 
-      dapiClientMock.platform.waitForStateTransitionResult.resolves({ error: { code: 2, log: "Error happened" } });
+      const errorResponse = {
+        error: {
+          code: 2,
+          message: "Error happened",
+          data: {},
+        }
+      };
+
+      dapiClientMock.platform.waitForStateTransitionResult.resolves(errorResponse);
 
       let error;
       try {
@@ -140,8 +152,9 @@ describe('Dash - Client', function suite() {
       }
 
       expect(error).to.be.an.instanceOf(StateTransitionBroadcastError);
-      expect(error.getCode()).to.be.equal(2);
-      expect(error.message).to.be.equal("Error happened");
+      expect(error.getCode()).to.be.equal(errorResponse.error.code);
+      expect(error.getMessage()).to.be.equal(errorResponse.error.message);
+      expect(error.getData()).to.be.equal(errorResponse.error.data);
 
       const importedIdentityIds = account.getIdentityIds();
       // Check that no identities were imported
@@ -175,7 +188,15 @@ describe('Dash - Client', function suite() {
       // Registering an identity we're going to top up
       const identity = await client.platform.identities.register();
 
-      dapiClientMock.platform.waitForStateTransitionResult.resolves({ error: { code: 2, log: "Error happened" } });
+      const errorResponse = {
+        error: {
+          code: 2,
+          message: "Error happened",
+          data: {},
+        }
+      };
+
+      dapiClientMock.platform.waitForStateTransitionResult.resolves(errorResponse);
 
       let error;
       try {
@@ -186,14 +207,23 @@ describe('Dash - Client', function suite() {
       }
 
       expect(error).to.be.an.instanceOf(StateTransitionBroadcastError);
-      expect(error.getCode()).to.be.equal(2);
-      expect(error.message).to.be.equal("Error happened");
+      expect(error.getCode()).to.be.equal(errorResponse.error.code);
+      expect(error.getMessage()).to.be.equal(errorResponse.error.message);
+      expect(error.getData()).to.be.equal(errorResponse.error.data);
     });
   });
 
   describe('#platform.documents.broadcast', () => {
     it('should throw TransitionBroadcastError when transport resolves error', async () => {
-      dapiClientMock.platform.waitForStateTransitionResult.resolves({ error: { code: 2, log: "Error happened" } });
+      const errorResponse = {
+        error: {
+          code: 2,
+          message: "Error happened",
+          data: {},
+        }
+      };
+
+      dapiClientMock.platform.waitForStateTransitionResult.resolves(errorResponse);
 
       let error;
       try {
@@ -205,12 +235,17 @@ describe('Dash - Client', function suite() {
       }
 
       expect(error).to.be.an.instanceOf(StateTransitionBroadcastError);
-      expect(error.getCode()).to.be.equal(2);
-      expect(error.message).to.be.equal("Error happened");
+      expect(error.getCode()).to.be.equal(errorResponse.error.code);
+      expect(error.getMessage()).to.be.equal(errorResponse.error.message);
+      expect(error.getData()).to.be.equal(errorResponse.error.data);
     });
 
     it('should broadcast documents', async () => {
-      dapiClientMock.platform.waitForStateTransitionResult.resolves({ hash: '', proof: { code: 2, log: "Error happened" } });
+      const proofResponse = {
+        proof: { }
+      }
+
+      dapiClientMock.platform.waitForStateTransitionResult.resolves(proofResponse);
 
       await client.platform.documents.broadcast({
         create: documentsFixture,
@@ -230,7 +265,15 @@ describe('Dash - Client', function suite() {
 
   describe('#platform.contracts.broadcast', () => {
     it('should throw TransitionBroadcastError when transport resolves error', async () => {
-      dapiClientMock.platform.waitForStateTransitionResult.resolves({ error: { code: 2, log: "Error happened" } });
+      const errorResponse = {
+        error: {
+          code: 2,
+          message: "Error happened",
+          data: {},
+        }
+      };
+
+      dapiClientMock.platform.waitForStateTransitionResult.resolves(errorResponse);
 
       let error;
       try {
@@ -240,12 +283,15 @@ describe('Dash - Client', function suite() {
       }
 
       expect(error).to.be.an.instanceOf(StateTransitionBroadcastError);
-      expect(error.getCode()).to.be.equal(2);
-      expect(error.message).to.be.equal("Error happened");
+      expect(error.getCode()).to.be.equal(errorResponse.error.code);
+      expect(error.getMessage()).to.be.equal(errorResponse.error.message);
+      expect(error.getData()).to.be.equal(errorResponse.error.data);
     });
 
     it('should broadcast data contract', async () => {
-      dapiClientMock.platform.waitForStateTransitionResult.resolves({ hash: '', proof: { code: 2, log: "Error happened" } });
+      dapiClientMock.platform.waitForStateTransitionResult.resolves({
+        proof: {  }
+      });
 
       await client.platform.contracts.broadcast(dataContractFixture, identityFixture);
 

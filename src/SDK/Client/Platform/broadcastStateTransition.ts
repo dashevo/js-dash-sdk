@@ -19,16 +19,19 @@ export default async function broadcastStateTransition(platform: Platform, state
     const hash = crypto.createHash('sha256')
       .update(stateTransition.toBuffer())
       .digest();
+
     const stateTransitionResultPromise = client.getDAPIClient().platform.waitForStateTransitionResult(hash);
+
     // Broadcasting state transition
     await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
+
     // Waiting for result to return
     const stateTransitionResult = await stateTransitionResultPromise;
 
     // @ts-ignore
-    let { error: stateTransitionError } = stateTransitionResult;
+    let { error } = stateTransitionResult;
 
-    if (stateTransitionError) {
-        throw new StateTransitionBroadcastError(stateTransitionError.code, stateTransitionError.log);
+    if (error) {
+        throw new StateTransitionBroadcastError(error.code, error.message, error.data);
     }
 }
