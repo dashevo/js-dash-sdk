@@ -20,7 +20,7 @@ export default async function broadcastStateTransition(platform: Platform, state
       .update(stateTransition.toBuffer())
       .digest();
 
-    const stateTransitionResultPromise = client.getDAPIClient().platform.waitForStateTransitionResult(hash);
+    const stateTransitionResultPromise = client.getDAPIClient().platform.waitForStateTransitionResult(hash, { prove: true });
 
     // Broadcasting state transition
     await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
