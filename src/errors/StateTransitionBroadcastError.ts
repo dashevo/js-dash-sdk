@@ -10,10 +10,12 @@ export class StateTransitionBroadcastError extends Error {
      * @param {*} data
      */
     constructor(code: number, message: string, data: any) {
-        super(message);
+        const firstError = data.errors;
+        const detailedMessage = `${message}: ${firstError.name} ${firstError.message}`;
+        super(detailedMessage);
 
         this.code = code;
-        this.message = message;
+        this.message = detailedMessage;
         this.data = data;
 
         if (Error.captureStackTrace) {
