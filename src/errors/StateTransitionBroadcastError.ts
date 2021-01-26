@@ -12,9 +12,14 @@ export class StateTransitionBroadcastError extends Error {
     constructor(code: number, message: string, data: any) {
         let detailedMessage = message;
 
-        if (data && data.errors && data.errors[0]) {
-            const firstError = data.errors[0];
-            detailedMessage = `${message}: ${firstError.name}: ${firstError.message}`;
+        if (data && data.errors && data.errors.length > 0) {
+            const [firstError] = data.errors;
+            
+            detailedMessage += `: ${firstError.name}: ${firstError.message}`;
+            
+            if (data.errors.length > 1) {
+              detailedMessage += ` and ${data.errors.length} more`;
+            }
         }
 
         super(detailedMessage);
