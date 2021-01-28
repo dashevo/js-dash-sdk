@@ -32,7 +32,9 @@ export default async function broadcastStateTransition(platform: Platform, state
         if (e.data) {
             data = e.data;
         } else if (e.metadata) {
-            data = {errors: JSON.parse(e.metadata.get('errors'))};
+            const errors = e.metadata.get('errors');
+            data = {};
+            data.errors = errors && errors.length > 0 ? JSON.parse(errors) : errors;
         }
 
         if (e.details) {
