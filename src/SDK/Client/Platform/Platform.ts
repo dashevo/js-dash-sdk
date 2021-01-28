@@ -108,8 +108,6 @@ export class Platform {
      * @param {PlatformOpts} options - options for Platform
      */
     constructor(options: PlatformOpts) {
-        this.broadcastStateTransition = broadcastStateTransition.bind(this);
-
         this.documents = {
             broadcast: broadcastDocument.bind(this),
             create: createDocument.bind(this),
@@ -151,5 +149,7 @@ export class Platform {
 
         this.passFakeAssetLockProofForTests = Boolean(options.passFakeAssetLockProofForTests);
         this.client = options.client;
+
+        this.broadcastStateTransition = broadcastStateTransition.bind(this);
     }
 }
