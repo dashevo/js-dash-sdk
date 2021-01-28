@@ -1,12 +1,14 @@
 import crypto from "crypto";
 import { Platform } from "./Platform";
 import { StateTransitionBroadcastError } from "../../../errors/StateTransitionBroadcastError";
+import { IStateTransitionResult } from "./IStateTransitionResult";
+import { IPlatformStateProof } from "./IPlatformStateProof";
 
 /**
  * @param {Platform} platform
  * @param stateTransition
  */
-export default async function broadcastStateTransition(platform: Platform, stateTransition: any) {
+export default async function broadcastStateTransition(platform: Platform, stateTransition: any): Promise<IPlatformStateProof|void> {
     const { client, dpp } = platform;
 
     const result = await dpp.stateTransition.validateStructure(stateTransition);
@@ -20,7 +22,7 @@ export default async function broadcastStateTransition(platform: Platform, state
       .update(stateTransition.toBuffer())
       .digest();
 
-    const stateTransitionResultPromise = client.getDAPIClient().platform.waitForStateTransitionResult(hash, { prove: true });
+    const stateTransitionResultPromise: IStateTransitionResult = client.getDAPIClient().platform.waitForStateTransitionResult(hash, { prove: true });
 
     // Broadcasting state transition
     try {
@@ -49,10 +51,11 @@ export default async function broadcastStateTransition(platform: Platform, state
     // Waiting for result to return
     const stateTransitionResult = await stateTransitionResultPromise;
 
-    // @ts-ignore
     let { error } = stateTransitionResult;
 
     if (error) {
         throw new StateTransitionBroadcastError(error.code, error.message, error.data);
     }
+
+    return stateTransitionResult.proof;
 }
