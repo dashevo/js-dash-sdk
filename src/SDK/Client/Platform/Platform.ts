@@ -62,8 +62,6 @@ interface Identities {
     topUp: Function,
 }
 
-type TBroadcastStateTransition = (platform: Platform, stateTransition: any) => Promise<void>;
-
 /**
  * Class for Dash Platform
  *
@@ -98,7 +96,9 @@ export class Platform {
      * Broadcasts state transition
      * @param {Object} stateTransition
      */
-    public broadcastStateTransition: TBroadcastStateTransition;
+    public broadcastStateTransition(stateTransition: any): Promise<void> {
+        return broadcastStateTransition(this, stateTransition);
+    };
 
     client: Client;
 
@@ -149,7 +149,5 @@ export class Platform {
 
         this.passFakeAssetLockProofForTests = Boolean(options.passFakeAssetLockProofForTests);
         this.client = options.client;
-
-        this.broadcastStateTransition = broadcastStateTransition.bind(this);
     }
 }
