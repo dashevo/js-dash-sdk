@@ -101,6 +101,9 @@ export class Client {
         this.apps = new ClientApps(Object.assign({
             dpns: {
                 contractId: '36ez8VqoDbR8NkdXwFaf9Tp8ukBdQxN8eYs8JNMnUyKz'
+            },
+            dashpay: {
+                contractId: 'matk8g1YRpzZskecRfpG5GCAgRmWCGJfjUemrsLkFDg'
             }
         }, this.options.apps));
 
