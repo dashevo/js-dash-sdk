@@ -19,6 +19,7 @@ import registerName from "./methods/names/register";
 import resolveName from "./methods/names/resolve";
 import resolveNameByRecord from "./methods/names/resolveByRecord";
 import searchName from "./methods/names/search";
+import broadcastStateTransition from "./broadcastStateTransition";
 
 /**
  * Interface for PlatformOpts
@@ -61,6 +62,8 @@ interface Identities {
     topUp: Function,
 }
 
+type TBroadcastStateTransition = (platform: Platform, stateTransition: any) => Promise<void>;
+
 /**
  * Class for Dash Platform
  *
@@ -91,6 +94,12 @@ export class Platform {
      */
     public contracts: Records;
 
+    /**
+     * Broadcasts state transition
+     * @param {Object} stateTransition
+     */
+    public broadcastStateTransition: TBroadcastStateTransition;
+
     client: Client;
 
     /**
@@ -99,6 +108,8 @@ export class Platform {
      * @param {PlatformOpts} options - options for Platform
      */
     constructor(options: PlatformOpts) {
+        this.broadcastStateTransition = broadcastStateTransition.bind(this);
+
         this.documents = {
             broadcast: broadcastDocument.bind(this),
             create: createDocument.bind(this),

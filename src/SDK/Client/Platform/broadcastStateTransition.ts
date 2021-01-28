@@ -26,7 +26,22 @@ export default async function broadcastStateTransition(platform: Platform, state
     try {
         await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
     } catch (e) {
-        throw new StateTransitionBroadcastError(e.code, e.message, e.data);
+        let data;
+        let message;
+
+        if (e.data) {
+            data = e.data;
+        } else if (e.metadata) {
+            data = {errors: JSON.parse(e.metadata.get('errors'))};
+        }
+
+        if (e.details) {
+            message = e.details;
+        } else {
+            message = e.message;
+        }
+
+        throw new StateTransitionBroadcastError(e.code, message, data);
     }
 
     // Waiting for result to return
