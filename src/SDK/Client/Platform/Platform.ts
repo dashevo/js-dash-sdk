@@ -20,8 +20,7 @@ import resolveName from "./methods/names/resolve";
 import resolveNameByRecord from "./methods/names/resolveByRecord";
 import searchName from "./methods/names/search";
 import broadcastStateTransition from "./broadcastStateTransition";
-import {IStateTransitionResult} from "./IStateTransitionResult";
-import {IPlatformStateProof} from "./IPlatformStateProof";
+import { IPlatformStateProof } from "./IPlatformStateProof";
 
 /**
  * Interface for PlatformOpts
