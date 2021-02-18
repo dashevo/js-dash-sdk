@@ -94,6 +94,7 @@ export class Client {
                 ...this.options.wallet,
             });
 
+
             // @ts-ignore
             this.walletAccountIndex = this.options.walletAccountIndex;
         }
