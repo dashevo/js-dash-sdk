@@ -2,8 +2,8 @@
 
 ### Features
 
-* feat!: make identity derivation DIP-11 compatible ([#188](https://github.com/dashevo/DashJS/issues/188)
 * update dependencies ([#186](https://github.com/dashevo/DashJS/issues/186), [#191](https://github.com/dashevo/js-dash-sdk/issues/191))
+* feat!: make identity derivation DIP-11 compatible ([#188](https://github.com/dashevo/DashJS/issues/188)
 * feat: wait for state transition result ([#180](https://github.com/dashevo/DashJS/issues/180))
 
 
