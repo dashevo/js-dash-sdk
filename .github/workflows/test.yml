@@ -127,19 +127,16 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: NPM meta
-        run: 
-
-      - name: Set -dev suffix
-        id: suffix
+        id: tag
         run: |
-          if [[ ${{ contains(github.event.release.tag_name, '-dev') }} = true ]]
+          if [[ ${{ contains(github.event.release.tag_name, 'dev') }} = true ]]
           then
-            echo '::set-output name=result::-dev'
+            echo '::set-output name=result::dev'
           else
-            echo '::set-output name=result::'
+            echo '::set-output name=result::latest'
           fi
 
-      - run: npm publish --tag ${{ steps.}}
+      - run: npm publish --tag ${{ steps.tag.outputs.result }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
