@@ -34,9 +34,6 @@ jobs:
       - name: Install NPM dependencies
         run: npm ci
 
-      - name: Run ESLinter
-        run: npm run lint
-
       - name: Create dotenv file
         run: cp .env.example .env
 
