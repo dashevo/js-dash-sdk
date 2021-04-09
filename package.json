@@ -1,5 +1,5 @@
 {
-  "name": "dash",
+  "name": "dash-strophy-test",
   "version": "3.19.0-dev.1",
   "description": "Dash library for JavaScript/TypeScript ecosystem (Wallet, DAPI, Primitives, BLS, ...)",
   "main": "build/src/index.js",
