@@ -66,17 +66,10 @@ jobs:
 
       - name: Run tests
         run: |
-          cat .env
           echo "DAPI_SEED=127.0.0.1" > .env
           echo "FAUCET_PRIVATE_KEY=${{ env.faucet-private-key }}" >> .env
           echo "NETWORK=regtest" >> .env
           echo "DPNS_CONTRACT_ID=${{ env.dpns-contract-id }}" >> .env
-          cat .env
-          
-          # echo "Faucet private key:" $FAUCET_PRIVATE_KEY
-          # echo "DPNS contract ID:" $DPNS_CONTRACT_ID
-          # echo "Network:" $NETWORK
-          # echo "DAPI seed:" $DAPI_SEED
           npm run check-package
           npm run test
 
