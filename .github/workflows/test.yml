@@ -64,14 +64,14 @@ jobs:
           dashmate-branch: ${{ steps.platform-branches.outputs.dashmate-branch }}
           install-sdk-version: ${{ steps.runtime-vars.outputs.install-sdk-version }}
 
-      - name: Run tests
-        run: |
-          echo "DAPI_SEED=127.0.0.1" > .env
-          echo "FAUCET_PRIVATE_KEY=${{ env.faucet-private-key }}" >> .env
-          echo "NETWORK=regtest" >> .env
-          echo "DPNS_CONTRACT_ID=${{ env.dpns-contract-id }}" >> .env
-          npm run check-package
-          npm run test
+      # - name: Run tests
+      #   run: |
+      #     echo "DAPI_SEED=127.0.0.1" > .env
+      #     echo "FAUCET_PRIVATE_KEY=${{ env.faucet-private-key }}" >> .env
+      #     echo "NETWORK=regtest" >> .env
+      #     echo "DPNS_CONTRACT_ID=${{ env.dpns-contract-id }}" >> .env
+      #     npm run check-package
+      #     npm run test
 
       - uses: dashevo/gh-action-run-platform-test-suite@master
         with:
