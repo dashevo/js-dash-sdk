@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    name: Run tests
+    name: Run SDK tests
     runs-on: ubuntu-20.04
     timeout-minutes: 60
     steps:
@@ -55,16 +55,16 @@ jobs:
           override-dashmate-branch: v0.19-dev
           override-testsuite-branch: v0.19-dev
 
-      - uses: dashevo/gh-action-start-local-network@master
-        with:
-          actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
-          actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
-          drive-branch: ${{ steps.platform-branches.outputs.current-branch }}
-          dapi-branch: ${{ steps.runtime-vars.outputs.dapi-branch }}
-          dashmate-branch: ${{ steps.platform-branches.outputs.dashmate-branch }}
-          install-sdk-version: ${{ steps.runtime-vars.outputs.install-sdk-version }}
+      # - uses: dashevo/gh-action-start-local-network@master
+      #   with:
+      #     actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
+      #     actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
+      #     drive-branch: ${{ steps.platform-branches.outputs.current-branch }}
+      #     dapi-branch: ${{ steps.runtime-vars.outputs.dapi-branch }}
+      #     dashmate-branch: ${{ steps.platform-branches.outputs.dashmate-branch }}
+      #     install-sdk-version: ${{ steps.runtime-vars.outputs.install-sdk-version }}
 
-      # - name: Run tests
+      # - name: Run SDK tests
       #   run: |
       #     echo "DAPI_SEED=127.0.0.1" > .env
       #     echo "FAUCET_PRIVATE_KEY=${{ env.faucet-private-key }}" >> .env
@@ -73,21 +73,21 @@ jobs:
       #     npm run check-package
       #     npm run test
 
-      - uses: dashevo/gh-action-run-platform-test-suite@master
-        with:
-          sdk-install: ${{ steps.runtime-vars.outputs.install-sdk-version }}
-          faucet-private-key: ${{ env.faucet-private-key }}
-          dpns-contract-id: ${{ env.dpns-contract-id }}
-          dpns-top-level-identity-id: ${{ env.dpns-top-level-identity-id }}
-          dpns-top-level-identity-private-key: ${{ env.dpns-top-level-identity-private-key }}
-          platform-test-suite-branch: ${{ steps.platform-branches.outputs.testsuite-branch }}
+      # - uses: dashevo/gh-action-run-platform-test-suite@master
+      #   with:
+      #     sdk-install: ${{ steps.runtime-vars.outputs.install-sdk-version }}
+      #     faucet-private-key: ${{ env.faucet-private-key }}
+      #     dpns-contract-id: ${{ env.dpns-contract-id }}
+      #     dpns-top-level-identity-id: ${{ env.dpns-top-level-identity-id }}
+      #     dpns-top-level-identity-private-key: ${{ env.dpns-top-level-identity-private-key }}
+      #     platform-test-suite-branch: ${{ steps.platform-branches.outputs.testsuite-branch }}
 
       - name: Show Docker logs
         if: ${{ failure() }}
         uses: jwalton/gh-docker-logs@v1
 
   release:
-    name: Release to Docker Hub
+    name: Release to NPM
     runs-on: ubuntu-20.04
     needs: test
     if: ${{ github.event_name == 'release' }}
@@ -110,7 +110,7 @@ jobs:
       - name: Install NPM dependencies
         run: npm ci
 
-      - name: NPM meta
+      - name: Set release tag
         uses: actions/github-script@v3
         id: tag
         with:
