@@ -13,40 +13,6 @@ jobs:
   test:
     name: Run DAPI tests
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '12'
-
-      - name: Enable NPM cache
-        uses: actions/cache@v2
-        with:
-          path: '~/.npm'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Check NPM package lock version is updated
-        run: npm run check-package # TODO: does this exist as an action already?
-
-      - name: Install NPM dependencies
-        run: npm ci
-
-      - name: Create dotenv file
-        run: cp .env.example .env
-
-      - name: Run build
-        run: npm run build --if-present
-
-      - name: Run tests
-        run: npm run test
-
-  test_suite:
-    name: Run platform test suite
-    needs: test
-    runs-on: ubuntu-20.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v2
@@ -68,6 +34,15 @@ jobs:
         with:
           concurrency: 8
 
+      - name: Check NPM package lock version is updated
+        run: npm run check-package # TODO: does this exist as an action already?
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Create dotenv file
+        run: cp .env.example .env
+
       - uses: dashevo/gh-action-runtime-vars@master
         id: runtime-vars
         if: ${{ contains(github.event.pull_request.body, '/set-var')}}
@@ -80,23 +55,28 @@ jobs:
           override-dashmate-branch: v0.19-dev
           override-testsuite-branch: v0.19-dev
 
-#       - uses: dashevo/gh-action-start-local-network@master
-#         with:
-#           actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
-#           actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
-#           drive-branch: ${{ steps.platform-branches.outputs.current-branch }}
-#           dapi-branch: ${{ steps.runtime-vars.outputs.dapi-branch }}
-#           dashmate-branch: ${{ steps.platform-branches.outputs.dashmate-branch }}
-#           install-sdk-version: ${{ steps.runtime-vars.outputs.install-sdk-version }}
-# 
-#       - uses: dashevo/gh-action-run-platform-test-suite@master
-#         with:
-#           sdk-install: ${{ steps.runtime-vars.outputs.install-sdk-version }}
-#           faucet-private-key: ${{ env.faucet-private-key }}
-#           dpns-contract-id: ${{ env.dpns-contract-id }}
-#           dpns-top-level-identity-id: ${{ env.dpns-top-level-identity-id }}
-#           dpns-top-level-identity-private-key: ${{ env.dpns-top-level-identity-private-key }}
-#           platform-test-suite-branch: ${{ steps.platform-branches.outputs.testsuite-branch }}
+      - uses: dashevo/gh-action-start-local-network@master
+        with:
+          actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
+          actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
+          drive-branch: ${{ steps.platform-branches.outputs.current-branch }}
+          dapi-branch: ${{ steps.runtime-vars.outputs.dapi-branch }}
+          dashmate-branch: ${{ steps.platform-branches.outputs.dashmate-branch }}
+          install-sdk-version: ${{ steps.runtime-vars.outputs.install-sdk-version }}
+
+      - name: Run tests
+        run: |
+          npm run check-package
+          npm run test
+
+      - uses: dashevo/gh-action-run-platform-test-suite@master
+        with:
+          sdk-install: ${{ steps.runtime-vars.outputs.install-sdk-version }}
+          faucet-private-key: ${{ env.faucet-private-key }}
+          dpns-contract-id: ${{ env.dpns-contract-id }}
+          dpns-top-level-identity-id: ${{ env.dpns-top-level-identity-id }}
+          dpns-top-level-identity-private-key: ${{ env.dpns-top-level-identity-private-key }}
+          platform-test-suite-branch: ${{ steps.platform-branches.outputs.testsuite-branch }}
 
       - name: Show Docker logs
         if: ${{ failure() }}
