@@ -107,6 +107,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Install NPM dependencies
+        run: npm ci
+
       - name: NPM meta
         uses: actions/github-script@v3
         id: tag
