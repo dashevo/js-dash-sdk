@@ -108,14 +108,12 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: NPM meta
+        uses: actions/github-script@v3
         id: tag
-        run: |
-          if [[ ${{ contains(github.event.release.tag_name, 'dev') }} = true ]]
-          then
-            echo '::set-output name=result::dev'
-          else
-            echo '::set-output name=result::latest'
-          fi
+        with:
+          result-encoding: string
+          script: |
+            return (context.payload.release.tag_name.includes('dev') ? 'dev' : 'latest');
 
       - run: npm publish --tag ${{ steps.tag.outputs.result }}
         env:
