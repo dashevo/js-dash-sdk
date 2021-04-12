@@ -118,9 +118,14 @@ jobs:
           script: |
             return (context.payload.release.tag_name.includes('dev') ? 'dev' : 'latest');
 
-      - run: npm publish --tag ${{ steps.tag.outputs.result }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: ${{ steps.tag.outputs.result }}
+
+      # - run: npm publish --tag ${{ steps.tag.outputs.result }}
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
