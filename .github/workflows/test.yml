@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    name: Run DAPI tests
+    name: Run tests
     runs-on: ubuntu-20.04
     timeout-minutes: 60
     steps:
@@ -66,6 +66,12 @@ jobs:
 
       - name: Run tests
         run: |
+          FAUCET_PRIVATE_KEY=${{ env.faucet-private-key }}
+          echo $FAUCET_PRIVATE_KEY
+          DPNS_CONTRACT_ID=${{ env.dpns-contract-id }}
+          echo $DPNS_CONTRACT_ID
+          NETWORK=regtest
+          DAPI_SEED=localhost
           npm run check-package
           npm run test
 
