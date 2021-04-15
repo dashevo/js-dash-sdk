@@ -28,20 +28,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Check NPM package lock version is updated
+        run: npm run check-package # TODO: does this exist as an action already?
+
       - name: Cache Docker layers
         uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
         with:
           concurrency: 8
-
-      - name: Check NPM package lock version is updated
-        run: npm run check-package # TODO: does this exist as an action already?
-
-      - name: Install NPM dependencies
-        run: npm ci
-
-      - name: Create dotenv file
-        run: cp .env.example .env
 
       - uses: dashevo/gh-action-runtime-vars@master
         id: runtime-vars
@@ -65,14 +62,15 @@ jobs:
           dashmate-branch: ${{ steps.platform-branches.outputs.dashmate-branch }}
           install-sdk-version: ${{ steps.runtime-vars.outputs.install-sdk-version }}
 
-      - name: Run SDK tests
+      - name: Parametrize environment
         run: |
           echo "DAPI_SEED=127.0.0.1" > .env
           echo "FAUCET_PRIVATE_KEY=${{ env.faucet-private-key }}" >> .env
           echo "NETWORK=regtest" >> .env
           echo "DPNS_CONTRACT_ID=${{ env.dpns-contract-id }}" >> .env
-          npm run check-package
-          npm run test
+
+      - name: Run SDK tests
+        run: npm run test
 
       - uses: dashevo/gh-action-run-platform-test-suite@master
         with:
