@@ -88,7 +88,7 @@ jobs:
         uses: jwalton/gh-docker-logs@v1
 
   release:
-    name: Release to NPM
+    name: Release NPM package
     runs-on: ubuntu-20.04
     needs: test
     if: ${{ github.event_name == 'release' }}
@@ -119,7 +119,8 @@ jobs:
           script: |
             return (context.payload.release.tag_name.includes('dev') ? 'dev' : 'latest');
 
-      - uses: JS-DevTools/npm-publish@v1
+      - name: Publish NPM package
+        uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ steps.tag.outputs.result }}
