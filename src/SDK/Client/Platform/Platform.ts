@@ -135,7 +135,7 @@ export class Platform {
             // This check still exists on the client side, however there's no need to
             // perform the check as in this client we always use a new transaction
             // register/top up identity
-            checkAssetLockTransactionOutPointExists() { return false; },
+            isAssetLockTransactionOutPointAlreadyUsed() { return false; },
             verifyInstantLock() { return true; },
         };
 
