@@ -41,7 +41,7 @@ jobs:
           concurrency: 8
 
       - name: Parse variables from PR body
-        uses: dashevo/gh-action-runtime-vars@master
+        uses: dashevo/gh-action-pr-vars@master
         id: runtime-vars
         if: ${{ contains(github.event.pull_request.body, '/set-var')}}
 
@@ -74,7 +74,7 @@ jobs:
         run: npm run test
 
       - name: Run Platform Test Suite
-        uses: dashevo/gh-action-run-platform-test-suite@master
+        uses: dashevo/gh-action-run-platform-test-suite@fix-sdk-branch-syntax
         with:
           sdk-install: ${{ steps.runtime-vars.outputs.install-sdk-version }}
           faucet-private-key: ${{ env.faucet-private-key }}
