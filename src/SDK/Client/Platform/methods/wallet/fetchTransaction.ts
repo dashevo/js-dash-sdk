@@ -15,7 +15,7 @@ export async function fetchTransaction(this: Platform, id: string): Promise<any>
   const transaction = await this.client.getWalletAccount().getTransaction(id);
 
   return {
-    hex: transaction,
+    data: transaction.toBuffer(),
     height: 1,
   };
 }
