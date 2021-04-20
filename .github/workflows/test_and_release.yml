@@ -112,18 +112,15 @@ jobs:
       - name: Install NPM dependencies
         run: npm ci
 
-      - name: Install semver
-         run: npm install semver
-
       - name: Set release tag
         uses: actions/github-script@v3
         id: tag
         with:
           result-encoding: string
           script: |
-            const semver = require(`${process.env.GITHUB_WORKSPACE}/node_modules/semver`);
             const tag = context.payload.release.tag_name;
-            return (tag.includes('dev') ? `${semver.major(tag)}.${semver.minor(tag)}-dev` : 'latest');
+            const [, major, minor] = tag.match(/^v([0-9]+)\.([0-9]+)/);
+            return (tag.includes('dev') ? `${major}.${minor}-dev` : 'latest');
 
       - name: Publish NPM package
         uses: JS-DevTools/npm-publish@v1
