@@ -21,6 +21,8 @@ import resolveNameByRecord from "./methods/names/resolveByRecord";
 import searchName from "./methods/names/search";
 import broadcastStateTransition from "./broadcastStateTransition";
 import { IPlatformStateProof } from "./IPlatformStateProof";
+import fetchLatestPlatformBlockHeader from './methods/wallet/fetchLatestPlatformBlockHeader';
+import fetchTransaction from './methods/wallet/fetchTransaction';
 
 /**
  * Interface for PlatformOpts
@@ -137,6 +139,8 @@ export class Platform {
             // register/top up identity
             isAssetLockTransactionOutPointAlreadyUsed() { return false; },
             verifyInstantLock() { return true; },
+            fetchTransaction: fetchTransaction.bind(this),
+            fetchLatestPlatformBlockHeader: fetchLatestPlatformBlockHeader.bind(this),
         };
 
         this.dpp = new DashPlatformProtocol({
