@@ -55,7 +55,7 @@ jobs:
           override-testsuite-branch: ${{ env.TEST_SUITE_BRANCH }}
 
       - name: Start Dash local network
-        uses: dashevo/gh-action-start-local-network@rename-sdk-var
+        uses: dashevo/gh-action-start-local-network@master
         with:
           actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
           actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
