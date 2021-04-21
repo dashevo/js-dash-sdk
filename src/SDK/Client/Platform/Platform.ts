@@ -21,8 +21,7 @@ import resolveNameByRecord from "./methods/names/resolveByRecord";
 import searchName from "./methods/names/search";
 import broadcastStateTransition from "./broadcastStateTransition";
 import { IPlatformStateProof } from "./IPlatformStateProof";
-import fetchLatestPlatformBlockHeader from './methods/wallet/fetchLatestPlatformBlockHeader';
-import fetchTransaction from './methods/wallet/fetchTransaction';
+import StateRepository from './StateRepository';
 
 /**
  * Interface for PlatformOpts
@@ -131,23 +130,14 @@ export class Platform {
             topUp: topUpIdentity.bind(this),
         };
 
-        const stateRepository = {
-            fetchIdentity: getIdentity.bind(this),
-            fetchDataContract: getContract.bind(this),
-            // This check still exists on the client side, however there's no need to
-            // perform the check as in this client we always use a new transaction
-            // register/top up identity
-            isAssetLockTransactionOutPointAlreadyUsed() { return false; },
-            verifyInstantLock() { return true; },
-            fetchTransaction: fetchTransaction.bind(this),
-            fetchLatestPlatformBlockHeader: fetchLatestPlatformBlockHeader.bind(this),
-        };
+        this.client = options.client;
+
+        const dppForParsingContracts = new DashPlatformProtocol();
+        const stateRepository = new StateRepository(this.client, dppForParsingContracts);
 
         this.dpp = new DashPlatformProtocol({
             stateRepository,
             ...options,
         });
-
-        this.client = options.client;
     }
 }
