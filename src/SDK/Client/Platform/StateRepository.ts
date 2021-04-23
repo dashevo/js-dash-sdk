@@ -64,7 +64,7 @@ class StateRepository {
   }
 
   async verifyInstantLock(): Promise<boolean> {
-    return false;
+    return true;
   }
 
   async fetchTransaction(id: string): Promise<{ data: Buffer, height: number }> {
