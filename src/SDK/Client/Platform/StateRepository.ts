@@ -68,18 +68,19 @@ class StateRepository {
   }
 
   async fetchTransaction(id: string): Promise<{ data: Buffer, height: number }> {
-    // @ts-ignore
-    const transaction = await this.client.getWalletAccount().getTransaction(id);
+    const walletAccount = await this.client.getWalletAccount();
+
+    const transaction = await walletAccount.getTransaction(id);
 
     return {
+      // @ts-ignore
       data: transaction.toBuffer(),
       height: 1,
     };
   }
 
   async fetchLatestPlatformBlockHeader(id: string): Promise<{ coreChainLockedHeight: number }> {
-    // @ts-ignore
-    const coreChainLockedHeight = await this.client.wallet.transport.getBestBlockHeight();
+    const coreChainLockedHeight = await this.client.wallet!.transport.getBestBlockHeight();
 
     return {
       coreChainLockedHeight,
