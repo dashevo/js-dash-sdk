@@ -64,6 +64,7 @@ class StateRepository {
   }
 
   async verifyInstantLock(): Promise<boolean> {
+    // verification will be implemented later with DAPI SPV functionality
     return true;
   }
 
@@ -75,6 +76,7 @@ class StateRepository {
     return {
       // @ts-ignore
       data: transaction.toBuffer(),
+      // we don't have transaction heights atm and it will be implemented later with DAPI SPV functionality
       height: 1,
     };
   }
