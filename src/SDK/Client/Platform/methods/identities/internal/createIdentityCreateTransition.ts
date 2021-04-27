@@ -1,4 +1,4 @@
-import { PrivateKey, Transaction } from "@dashevo/dashcore-lib";
+import { PrivateKey } from "@dashevo/dashcore-lib";
 import { Platform } from "../../../Platform";
 
 /**
