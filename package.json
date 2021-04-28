@@ -20,7 +20,6 @@
     "prepublishOnly": "npm run build",
     "prepare": "npm run build"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dashevo/DashJS.git"
