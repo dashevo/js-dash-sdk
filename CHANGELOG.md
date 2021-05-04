@@ -20,7 +20,7 @@
 
 ### Bug Fixes
 
-* `tranasction.isCoinbase` is not a function and other fixes from wallet-lib 7.18.1 ([#236](https://github.com/dashevo/wallet-lib/issues/236))
+* `transaction.isCoinbase` is not a function and other fixes from wallet-lib 7.18.1 ([#236](https://github.com/dashevo/wallet-lib/issues/236))
 
 
 
