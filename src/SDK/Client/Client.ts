@@ -109,7 +109,9 @@ export class Client extends EventEmitter {
             dpns: {
                 contractId: '76wgB8KBxLGhtEzn4Hp5zgheyzzpHYvfcWGLs69B2ahq'
             },
-            }
+            dashpay: {
+                contractId: '6wfobip5Mfn6NNGK9JTQ5eHtZozpkNx4aZUsnCxkfgj5',
+            },
         }, this.options.apps));
 
         this.platform = new Platform({
