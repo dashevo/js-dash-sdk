@@ -55,7 +55,8 @@ jobs:
           override-testsuite-branch: ${{ env.TEST_SUITE_BRANCH }}
 
       - name: Start Dash local network
-        uses: dashevo/gh-action-start-local-network@master
+        uses: dashevo/gh-action-start-local-network@use-outputs
+        is: start-local-network
         with:
           actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
           actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
@@ -78,10 +79,10 @@ jobs:
         uses: dashevo/gh-action-run-platform-test-suite@master
         with:
           sdk-branch: ${{ steps.platform-branches.outputs.current-branch }}
-          faucet-private-key: ${{ env.faucet-private-key }}
-          dpns-contract-id: ${{ env.dpns-contract-id }}
-          dpns-top-level-identity-id: ${{ env.dpns-top-level-identity-id }}
-          dpns-top-level-identity-private-key: ${{ env.dpns-top-level-identity-private-key }}
+          faucet-private-key: ${{ steps.start-local-network.outputs.faucet-private-key }}
+          dpns-contract-id: ${{ steps.start-local-network.outputs.dpns-contract-id }}
+          dpns-top-level-identity-id: ${{ steps.start-local-network.outputs.dpns-top-level-identity-id }}
+          dpns-top-level-identity-private-key: ${{ steps.start-local-network.outputs.dpns-top-level-identity-private-key }}
           platform-test-suite-branch: ${{ steps.platform-branches.outputs.testsuite-branch }}
 
       - name: Show Docker logs
