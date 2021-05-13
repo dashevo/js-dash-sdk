@@ -56,7 +56,7 @@ jobs:
 
       - name: Start Dash local network
         uses: dashevo/gh-action-start-local-network@use-outputs
-        is: start-local-network
+        id: start-local-network
         with:
           actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
           actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
