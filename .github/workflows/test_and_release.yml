@@ -68,9 +68,9 @@ jobs:
       - name: Create dotenv file
         run: |
           echo "DAPI_SEED=127.0.0.1" > .env
-          echo "FAUCET_PRIVATE_KEY=${{ env.faucet-private-key }}" >> .env
+          echo "FAUCET_PRIVATE_KEY=${{ steps.start-local-network.outputs.faucet-private-key }}" >> .env
           echo "NETWORK=regtest" >> .env
-          echo "DPNS_CONTRACT_ID=${{ env.dpns-contract-id }}" >> .env
+          echo "DPNS_CONTRACT_ID=${{ steps.start-local-network.outputs.dpns-contract-id }}" >> .env
 
       - name: Run SDK tests
         run: npm run test
