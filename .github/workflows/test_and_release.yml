@@ -75,6 +75,15 @@ jobs:
       - name: Run SDK tests
         run: npm run test
 
+      - name: Debug
+        run: |
+          echo ${{ steps.platform-branches.outputs.current-branch }}
+          echo ${{ steps.start-local-network.outputs.faucet-private-key }}
+          echo ${{ steps.start-local-network.outputs.dpns-contract-id }}
+          echo ${{ steps.start-local-network.outputs.dpns-top-level-identity-id }}
+          echo ${{ steps.start-local-network.outputs.dpns-top-level-identity-private-key }}
+          echo ${{ steps.platform-branches.outputs.testsuite-branch }}
+
       - name: Run Platform Test Suite
         uses: dashevo/gh-action-run-platform-test-suite@master
         with:
