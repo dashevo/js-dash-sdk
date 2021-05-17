@@ -47,7 +47,7 @@ jobs:
           env-file: .github/workflows/.env
 
       - name: Set compatible branches for Platform components
-        uses: dashevo/gh-action-platform-branches@master
+        uses: dashevo/gh-action-platform-branches@v1
         id: platform-branches
         with:
           override-major-version: 0
@@ -55,7 +55,7 @@ jobs:
           override-testsuite-branch: ${{ env.TEST_SUITE_BRANCH }}
 
       - name: Start Dash local network
-        uses: dashevo/gh-action-start-local-network@master
+        uses: dashevo/gh-action-start-local-network@v1
         with:
           actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
           actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
@@ -75,7 +75,7 @@ jobs:
         run: npm run test
 
       - name: Run Platform Test Suite
-        uses: dashevo/gh-action-run-platform-test-suite@master
+        uses: dashevo/gh-action-run-platform-test-suite@v1
         with:
           sdk-branch: ${{ steps.platform-branches.outputs.current-branch }}
           faucet-private-key: ${{ env.faucet-private-key }}
