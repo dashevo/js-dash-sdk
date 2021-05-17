@@ -11,18 +11,26 @@ import { IPlatformStateProof } from "./IPlatformStateProof";
 export default async function broadcastStateTransition(platform: Platform, stateTransition: any): Promise<IPlatformStateProof|void> {
     const { client, dpp } = platform;
 
+    console.log('validating structure');
     const result = await dpp.stateTransition.validateStructure(stateTransition);
 
     if (!result.isValid()) {
         throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     }
 
+    console.log('Creating hash');
     // Subscribing to future result
     const hash = crypto.createHash('sha256')
       .update(stateTransition.toBuffer())
       .digest();
 
+    console.log('state transition:');
+    console.log(stateTransition.toBuffer().toString('hex'));
     // Broadcasting state transition
+
+    const parsed = await dpp.stateTransition.createFromBuffer(stateTransition.toBuffer());
+    console.log(parsed);
+    console.log('Broadcasting transition');
     try {
         await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
     } catch (e) {
