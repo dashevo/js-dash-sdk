@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Check NPM package lock version is updated
-        run: npm run check-package # TODO: does this exist as an action already?
+        uses: dashevo/gh-action-check-package-lock@v1
 
       - name: Cache Docker layers
         uses: satackey/action-docker-layer-caching@v0.0.11
