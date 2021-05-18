@@ -11,28 +11,21 @@ import { IPlatformStateProof } from "./IPlatformStateProof";
 export default async function broadcastStateTransition(platform: Platform, stateTransition: any): Promise<IPlatformStateProof|void> {
     const { client, dpp } = platform;
 
-    console.log('validating structure');
     const result = await dpp.stateTransition.validateStructure(stateTransition);
 
     if (!result.isValid()) {
         throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     }
 
-    console.log('Creating hash');
     // Subscribing to future result
     const hash = crypto.createHash('sha256')
       .update(stateTransition.toBuffer())
       .digest();
 
-    console.log('state transition:');
-    console.log(stateTransition.toBuffer().toString('hex'));
-    // Broadcasting state transition
+    const serializedStateTransition = stateTransition.toBuffer();
 
-    const parsed = await dpp.stateTransition.createFromBuffer(stateTransition.toBuffer());
-    console.log(parsed);
-    console.log('Broadcasting transition');
     try {
-        await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
+        await client.getDAPIClient().platform.broadcastStateTransition(serializedStateTransition);
     } catch (e) {
         let data;
         let message;
@@ -45,7 +38,16 @@ export default async function broadcastStateTransition(platform: Platform, state
                 data = {};
                 data.errors = errors && errors.length > 0 ? JSON.parse(errors) : errors;
             } else {
-                data = e.metadata;
+                // This branch can happened only if deserialization failed and no errors
+                // were provided in the metadata, so we can deserialize here again
+                // and see the details locally
+                try {
+                    await dpp.stateTransition.createFromBuffer(serializedStateTransition);
+                } catch (deserializationError) {
+                    data = {};
+                    data.errors = deserializationError.errors;
+                    data.rawStateTransition = deserializationError.rawStateTransition;
+                }
             }
         }
 
