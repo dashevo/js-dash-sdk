@@ -1,3 +1,10 @@
+## [3.19.4](https://github.com/dashevo/DashJS/compare/v3.19.3...v3.19.4) (2021-05-18)
+
+
+### Bug Fixes
+
+* Binary properties in platform queries not encoded properly ([#223](https://github.com/dashevo/js-dash-sdk/pull/223))
+
 ## [3.19.3](https://github.com/dashevo/DashJS/compare/v3.19.2...v3.19.3) (2021-05-18)
 
 
