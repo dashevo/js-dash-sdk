@@ -40,6 +40,8 @@ describe('Dash - Client', function suite() {
       }
     });
 
+    await client.initialize();
+
     ({ txStreamMock, transportMock, dapiClientMock } = await createAndAttachTransportMocksToClient(client, this.sinon));
 
     account = await client.getWalletAccount();

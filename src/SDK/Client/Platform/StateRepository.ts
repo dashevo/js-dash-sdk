@@ -22,6 +22,7 @@ class StateRepository {
       return null;
     }
 
+    console.log(this.dpp);
     return this.dpp.identity.createFromBuffer(identityBuffer);
   }
 
