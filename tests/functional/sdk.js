@@ -32,6 +32,7 @@ describe('SDK', function suite() {
     };
 
     clientInstance = new Dash.Client(clientOpts);
+    await clientInstance.initialize();
   });
 
   it('should init a Client', async () => {
