@@ -13,7 +13,6 @@ declare type ContractIdentifier = string | Identifier;
  * @returns contracts
  */
 export async function get(this: Platform, identifier: ContractIdentifier): Promise<any> {
-    console.log(this);
     await this.initialize();
 
     const contractId : Identifier = Identifier.from(identifier);
