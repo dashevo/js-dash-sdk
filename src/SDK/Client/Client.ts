@@ -119,10 +119,6 @@ export class Client extends EventEmitter {
         });
     }
 
-    async initialize() {
-        await this.platform.initialize();
-    }
-
     /**
      * Get Wallet account
      *
