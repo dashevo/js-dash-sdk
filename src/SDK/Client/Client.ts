@@ -6,7 +6,7 @@ import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 import { ClientApps, ClientAppsOptions } from "./ClientApps";
 
-export interface walletOptions extends Wallet.IWalletOptions {
+export interface WalletOptions extends Wallet.IWalletOptions {
     defaultAccountIndex?: number;
 }
 
@@ -14,8 +14,7 @@ export interface walletOptions extends Wallet.IWalletOptions {
  * Interface Client Options
  *
  * @param {ClientApps?} [apps] - applications
- * @param {Wallet.IWalletOptions} [wallet] - Wallet options
- * @param {Account.Options} [walletAccount] - WalletAccount options
+ * @param {WalletOptions} [wallet] - Wallet options
  * @param {DAPIAddressProvider} [dapiAddressProvider] - DAPI Address Provider instance
  * @param {Array<RawDAPIAddress|DAPIAddress|string>} [dapiAddresses] - DAPI addresses
  * @param {string[]|RawDAPIAddress[]} [seeds] - DAPI seeds
@@ -26,7 +25,7 @@ export interface walletOptions extends Wallet.IWalletOptions {
  */
 export interface ClientOpts {
     apps?: ClientAppsOptions,
-    wallet?: walletOptions,
+    wallet?: WalletOptions,
     dapiAddressProvider?: any,
     dapiAddresses?: any[],
     seeds?: any[],
