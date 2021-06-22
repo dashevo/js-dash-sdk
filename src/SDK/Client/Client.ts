@@ -6,6 +6,10 @@ import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 import { ClientApps, ClientAppsOptions } from "./ClientApps";
 
+export interface walletOptions extends Wallet.IWalletOptions {
+    defaultAccountIndex?: number;
+}
+
 /**
  * Interface Client Options
  *
@@ -22,8 +26,7 @@ import { ClientApps, ClientAppsOptions } from "./ClientApps";
  */
 export interface ClientOpts {
     apps?: ClientAppsOptions,
-    wallet?: Wallet.IWalletOptions,
-    walletAccount?: Account.Options,
+    wallet?: walletOptions,
     dapiAddressProvider?: any,
     dapiAddresses?: any[],
     seeds?: any[],
@@ -42,6 +45,7 @@ export class Client extends EventEmitter {
     public wallet: Wallet | undefined;
     public account: Account | undefined;
     public platform: Platform;
+    public defaultAccountIndex: number | undefined = 0;
     private readonly dapiClient: DAPIClient;
     private readonly apps: ClientApps;
     private options: ClientOpts;
@@ -55,11 +59,6 @@ export class Client extends EventEmitter {
         super();
 
         this.options = options;
-
-        this.options.walletAccount = {
-            index: 0,
-            ...this.options.walletAccount,
-        };
 
         this.network = this.options.network ? this.options.network.toString() : 'testnet';
 
@@ -103,6 +102,9 @@ export class Client extends EventEmitter {
             ));
         }
 
+        // @ts-ignore
+        this.defaultAccountIndex = this.options.wallet?.defaultAccountIndex || 0;
+
         this.apps = new ClientApps(Object.assign({
             dpns: {
                 contractId: '76wgB8KBxLGhtEzn4Hp5zgheyzzpHYvfcWGLs69B2ahq'
@@ -129,7 +131,7 @@ export class Client extends EventEmitter {
         }
 
         options = {
-            ...this.options.walletAccount,
+            index: this.defaultAccountIndex,
             ...options,
         }
 
