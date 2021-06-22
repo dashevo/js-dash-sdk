@@ -11,7 +11,7 @@ import { ClientApps, ClientAppsOptions } from "./ClientApps";
  *
  * @param {ClientApps?} [apps] - applications
  * @param {Wallet.IWalletOptions} [wallet] - Wallet options
- * @param {number} [walletAccountIndex=0] - Wallet account index number
+ * @param {Account.Options} [walletAccount] - WalletAccount options
  * @param {DAPIAddressProvider} [dapiAddressProvider] - DAPI Address Provider instance
  * @param {Array<RawDAPIAddress|DAPIAddress|string>} [dapiAddresses] - DAPI addresses
  * @param {string[]|RawDAPIAddress[]} [seeds] - DAPI seeds
@@ -23,7 +23,7 @@ import { ClientApps, ClientAppsOptions } from "./ClientApps";
 export interface ClientOpts {
     apps?: ClientAppsOptions,
     wallet?: Wallet.IWalletOptions,
-    walletAccountIndex?: number,
+    walletAccount?: Account.Options,
     dapiAddressProvider?: any,
     dapiAddresses?: any[],
     seeds?: any[],
@@ -42,7 +42,6 @@ export class Client extends EventEmitter {
     public wallet: Wallet | undefined;
     public account: Account | undefined;
     public platform: Platform;
-    public walletAccountIndex: number | undefined = 0;
     private readonly dapiClient: DAPIClient;
     private readonly apps: ClientApps;
     private options: ClientOpts;
@@ -55,10 +54,12 @@ export class Client extends EventEmitter {
     constructor(options: ClientOpts = {}) {
         super();
 
-        this.options = {
-            walletAccountIndex: 0,
-            ...options,
-        }
+        this.options = options;
+
+        this.options.walletAccount = {
+            index: 0,
+            ...this.options.walletAccount,
+        };
 
         this.network = this.options.network ? this.options.network.toString() : 'testnet';
 
@@ -100,9 +101,6 @@ export class Client extends EventEmitter {
             this.wallet.on('error', (error, context) => (
                 this.emit('error', error, { wallet: context })
             ));
-
-            // @ts-ignore
-            this.walletAccountIndex = this.options.walletAccountIndex;
         }
 
         this.apps = new ClientApps(Object.assign({
@@ -131,7 +129,7 @@ export class Client extends EventEmitter {
         }
 
         options = {
-            index: this.walletAccountIndex,
+            ...this.options.walletAccount,
             ...options,
         }
 
