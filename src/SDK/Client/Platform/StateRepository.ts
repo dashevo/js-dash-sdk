@@ -39,7 +39,9 @@ class StateRepository {
     }
 
     // Fetch contract otherwise
-    const rawContract = await this.client.getDAPIClient().platform.getDataContract(contractId);
+    const dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
+
+    const rawContract = dataContractResponse.getDataContract();
 
     if (!rawContract) {
       return null;
