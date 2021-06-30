@@ -29,9 +29,9 @@
   "homepage": "https://github.com/dashevo/DashJS#readme",
   "dependencies": {
     "@dashevo/dapi-client": "github:dashevo/dapi-client#feat/more-proofs",
-    "@dashevo/dashcore-lib": "~0.19.23",
-    "@dashevo/dpp": "~0.20.0-dev.2",
-    "@dashevo/wallet-lib": "~7.20.0-dev.3",
+    "@dashevo/dashcore-lib": "~0.19.25",
+    "@dashevo/dpp": "~0.20.0-dev.3",
+    "@dashevo/wallet-lib": "github:dashevo/wallet-lib#update-dapi-client",
     "bs58": "^4.0.1",
     "node-inspect-extracted": "1.0.7"
   },

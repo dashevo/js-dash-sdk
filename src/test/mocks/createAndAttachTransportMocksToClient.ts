@@ -6,6 +6,7 @@ import { createFakeInstantLock } from "../../utils/createFakeIntantLock";
 import { createDapiClientMock } from "./createDapiClientMock";
 
 import { wait } from "../../utils/wait";
+const GetIdentityIdsByPublicKeyHashesResponse = require("@dashevo/dapi-client/lib/methods/platform/getIdentityIdsByPublicKeyHashes/GetIdentityIdsByPublicKeyHashesResponse");
 
 // @ts-ignore
 const TxStreamMock = require('@dashevo/wallet-lib/src/test/mocks/TxStreamMock');
@@ -81,7 +82,10 @@ export async function createAndAttachTransportMocksToClient(client, sinon) {
     await accountPromise;
 
     // Putting data in transport stubs
-    transportMock.getIdentityIdsByPublicKeyHash.resolves([null]);
+    transportMock.getIdentityIdsByPublicKeyHash.resolves(new GetIdentityIdsByPublicKeyHashesResponse({
+        height: 10,
+        coreChainLockedHeight: 42,
+    }, [null]));
     makeTxStreamEmitISLocksForTransactions(transportMock, txStreamMock);
     makeGetIdentityRespondWithIdentity(client, dapiClientMock);
 
