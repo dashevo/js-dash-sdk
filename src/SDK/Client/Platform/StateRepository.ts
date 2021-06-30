@@ -16,7 +16,9 @@ class StateRepository {
   async fetchIdentity(id: Identifier|string): Promise<Identity|null> {
     const identifier = Identifier.from(id);
 
-    const identityBuffer = await this.client.getDAPIClient().platform.getIdentity(identifier);
+    const identityResponse = await this.client.getDAPIClient().platform.getIdentity(identifier);
+
+    const identityBuffer = identityResponse.getIdentity();
 
     if (identityBuffer === null) {
       return null;
