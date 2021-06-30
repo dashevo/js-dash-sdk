@@ -2,6 +2,7 @@ import {Platform} from "../../Platform";
 
 // @ts-ignore
 import Identifier from "@dashevo/dpp/lib/Identifier";
+import Metadata from "@dashevo/dpp/lib/Metadata";
 
 declare type ContractIdentifier = string | Identifier;
 
@@ -28,13 +29,26 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
     // Fetch contract otherwise
 
     // @ts-ignore
-    const rawContract = await this.client.getDAPIClient().platform.getDataContract(contractId);
+    const dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
+
+    const rawContract = dataContractResponse.getDataContract();
 
     if (!rawContract) {
         return null;
     }
 
     const contract = await this.dpp.dataContract.createFromBuffer(rawContract);
+
+
+    let metadata = null;
+    const responseMetadata = dataContractResponse.getMetadata();
+    if (responseMetadata) {
+        metadata = new Metadata({
+            blockHeight: responseMetadata.getHeight(),
+            coreChainLockedHeight: responseMetadata.getCoreChainLockedHeight(),
+        });
+    }
+    contract.setMetadata(metadata);
 
     // Store contract to the cache
 
