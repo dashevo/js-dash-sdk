@@ -7,6 +7,7 @@ import { createDapiClientMock } from "./createDapiClientMock";
 
 import { wait } from "../../utils/wait";
 const GetIdentityIdsByPublicKeyHashesResponse = require("@dashevo/dapi-client/lib/methods/platform/getIdentityIdsByPublicKeyHashes/GetIdentityIdsByPublicKeyHashesResponse");
+const GetIdentityResponse = require("@dashevo/dapi-client/lib/methods/platform/getIdentity/GetIdentityResponse");
 
 // @ts-ignore
 const TxStreamMock = require('@dashevo/wallet-lib/src/test/mocks/TxStreamMock');
@@ -57,7 +58,7 @@ function makeGetIdentityRespondWithIdentity(client, dapiClientMock) {
                 balance: interceptedIdentityStateTransition.getAssetLockProof().getOutput().satoshis,
                 revision: 0,
             });
-            dapiClientMock.platform.getIdentity.withArgs(identityToResolve.getId()).resolves(identityToResolve.toBuffer());
+            dapiClientMock.platform.getIdentity.withArgs(identityToResolve.getId()).resolves(new GetIdentityResponse(undefined, identityToResolve.toBuffer()));
         }
     });
 }
