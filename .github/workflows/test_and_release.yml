@@ -40,12 +40,6 @@ jobs:
       - name: Check NPM package lock version is updated
         uses: dashevo/gh-action-check-package-lock@v1
 
-      # - name: Cache Docker layers
-      #   uses: satackey/action-docker-layer-caching@v0.0.11
-      #   continue-on-error: true
-      #   with:
-      #     concurrency: 8
-
       - name: Load workflow dotenv file
         uses: c-py/action-dotenv-to-setenv@v3
         with:
@@ -63,8 +57,6 @@ jobs:
         uses: dashevo/gh-action-start-local-network@v1
         id: start-local-network
         with:
-          actions-cache-url: ${{ steps.platform-branches.outputs.cache-url }}
-          actions-cache-token: ${{ steps.platform-branches.outputs.cache-token }}
           drive-branch: ${{ env.DRIVE_BRANCH }}
           dapi-branch: ${{ env.DAPI_BRANCH }}
           dashmate-branch: ${{ steps.platform-branches.outputs.dashmate-branch }}
