@@ -2,7 +2,7 @@ import {Platform} from "../../Platform";
 // @ts-ignore
 import Identifier from "@dashevo/dpp/lib/Identifier";
 import Metadata from "@dashevo/dpp/lib/Metadata";
-const grpcErrorCodes = require('@dashevo/grpc-common/lib/server/error/GrpcErrorCodes');
+const NotFoundError = require('@dashevo/dapi-client/lib/methods/errors/NotFoundError');
 
 /**
  * Get an identity from the platform
@@ -20,7 +20,7 @@ export async function get(this: Platform, id: Identifier|string): Promise<any> {
     try {
         identityResponse = await this.client.getDAPIClient().platform.getIdentity(identifier);
     } catch (e) {
-        if (e?.getCode() === grpcErrorCodes.NOT_FOUND) {
+        if (e instanceof NotFoundError) {
             return null;
         }
 

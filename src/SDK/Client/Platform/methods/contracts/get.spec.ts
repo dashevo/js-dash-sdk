@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import getResponseMetadataFixture from '../../../../../test/fixtures/getResponseMetadataFixture';
 import get from "./get";
 import identitiesFixtures from "../../../../../../tests/fixtures/identities.json";
 import contractsFixtures from "../../../../../../tests/fixtures/contracts.json";
@@ -8,6 +9,7 @@ import Identifier from "@dashevo/dpp/lib/Identifier";
 import 'mocha';
 import { ClientApps } from "../../../ClientApps";
 const GetDataContractResponse = require("@dashevo/dapi-client/lib/methods/platform/getDataContract/GetDataContractResponse");
+const NotFoundError = require('@dashevo/dapi-client/lib/methods/errors/NotFoundError');
 
 const factory = new DataContractFactory(
     () => {
@@ -35,10 +37,10 @@ describe('Client - Platform - Contracts - .get()', () => {
 
             if (id.equals(fixtureIdentifier)) {
                 const contract = await dpp.dataContract.createFromObject(contractsFixtures.ratePlatform);
-                return new GetDataContractResponse(undefined, contract.toBuffer());
+                return new GetDataContractResponse(contract.toBuffer(), getResponseMetadataFixture());
             }
 
-            return new GetDataContractResponse(undefined, null);
+            throw new NotFoundError();
         };
 
         client = {

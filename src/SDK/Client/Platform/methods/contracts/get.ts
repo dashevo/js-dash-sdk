@@ -3,7 +3,7 @@ import {Platform} from "../../Platform";
 // @ts-ignore
 import Identifier from "@dashevo/dpp/lib/Identifier";
 import Metadata from "@dashevo/dpp/lib/Metadata";
-const grpcErrorCodes = require('@dashevo/grpc-common/lib/server/error/GrpcErrorCodes');
+const NotFoundError = require('@dashevo/dapi-client/lib/methods/errors/NotFoundError');
 
 declare type ContractIdentifier = string | Identifier;
 
@@ -32,7 +32,7 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
     try {
         dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
     } catch (e) {
-        if (e?.getCode() === grpcErrorCodes.NOT_FOUND) {
+        if (e instanceof NotFoundError) {
             return null;
         }
 

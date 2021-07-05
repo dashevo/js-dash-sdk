@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import getResponseMetadataFixture from '../../test/fixtures/getResponseMetadataFixture';
 import { Client } from "./index";
 import 'mocha';
 import { Transaction } from "@dashevo/dashcore-lib";
@@ -53,8 +54,8 @@ describe('Dash - Client', function suite() {
     dataContractFixture = getDataContractFixture();
     documentsFixture = getDocumentsFixture(dataContractFixture);
 
-    dapiClientMock.platform.getIdentity.resolves(new GetIdentityResponse(undefined,  identityFixture.toBuffer()));
-    dapiClientMock.platform.getDataContract.resolves(new GetDataContractResponse(undefined, dataContractFixture.toBuffer()));
+    dapiClientMock.platform.getIdentity.resolves(new GetIdentityResponse(identityFixture.toBuffer(), getResponseMetadataFixture()));
+    dapiClientMock.platform.getDataContract.resolves(new GetDataContractResponse(dataContractFixture.toBuffer(), getResponseMetadataFixture()));
   });
 
   it('should provide expected class', function () {

@@ -2,7 +2,7 @@ import DashPlatformProtocol from "@dashevo/dpp";
 import DataContract from "@dashevo/dpp/lib/dataContract/DataContract";
 import Identity from "@dashevo/dpp/lib/identity/Identity";
 import Identifier from "@dashevo/dpp/lib/Identifier";
-const grpcErrorCodes = require('@dashevo/grpc-common/lib/server/error/GrpcErrorCodes');
+const NotFoundError = require('@dashevo/dapi-client/lib/methods/errors/NotFoundError');
 import Client from '../Client';
 
 class StateRepository {
@@ -21,7 +21,7 @@ class StateRepository {
     try {
       identityResponse = await this.client.getDAPIClient().platform.getIdentity(identifier);
     } catch (e) {
-      if (e?.getCode() === grpcErrorCodes.NOT_FOUND) {
+      if (e instanceof NotFoundError) {
         return null;
       }
 
@@ -47,7 +47,7 @@ class StateRepository {
     try {
       dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
     } catch (e) {
-      if (e?.getCode() === grpcErrorCodes.NOT_FOUND) {
+      if (e instanceof NotFoundError) {
         return null;
       }
 

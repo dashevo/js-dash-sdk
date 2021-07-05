@@ -3,10 +3,10 @@ import stateTransitionTypes from "@dashevo/dpp/lib/stateTransition/stateTransiti
 import Identity from "@dashevo/dpp/lib/identity/Identity";
 
 import { createFakeInstantLock } from "../../utils/createFakeIntantLock";
+import getResponseMetadataFixture from '../fixtures/getResponseMetadataFixture';
 import { createDapiClientMock } from "./createDapiClientMock";
 
 import { wait } from "../../utils/wait";
-const GetIdentityIdsByPublicKeyHashesResponse = require("@dashevo/dapi-client/lib/methods/platform/getIdentityIdsByPublicKeyHashes/GetIdentityIdsByPublicKeyHashesResponse");
 const GetIdentityResponse = require("@dashevo/dapi-client/lib/methods/platform/getIdentity/GetIdentityResponse");
 
 // @ts-ignore
@@ -58,7 +58,7 @@ function makeGetIdentityRespondWithIdentity(client, dapiClientMock) {
                 balance: interceptedIdentityStateTransition.getAssetLockProof().getOutput().satoshis,
                 revision: 0,
             });
-            dapiClientMock.platform.getIdentity.withArgs(identityToResolve.getId()).resolves(new GetIdentityResponse(undefined, identityToResolve.toBuffer()));
+            dapiClientMock.platform.getIdentity.withArgs(identityToResolve.getId()).resolves(new GetIdentityResponse(identityToResolve.toBuffer(), getResponseMetadataFixture()));
         }
     });
 }
@@ -83,10 +83,7 @@ export async function createAndAttachTransportMocksToClient(client, sinon) {
     await accountPromise;
 
     // Putting data in transport stubs
-    transportMock.getIdentityIdsByPublicKeyHash.resolves(new GetIdentityIdsByPublicKeyHashesResponse({
-        height: 10,
-        coreChainLockedHeight: 42,
-    }, [null]));
+    transportMock.getIdentityIdsByPublicKeyHash.resolves([null]);
     makeTxStreamEmitISLocksForTransactions(transportMock, txStreamMock);
     makeGetIdentityRespondWithIdentity(client, dapiClientMock);
 
