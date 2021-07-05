@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/dashevo/DashJS#readme",
   "dependencies": {
-    "@dashevo/dapi-client": "github:dashevo/dapi-client#feat/more-proofs",
+    "@dashevo/dapi-client": "~0.20.0-dev.4",
     "@dashevo/dashcore-lib": "~0.19.25",
     "@dashevo/dpp": "~0.20.0-dev.3",
     "@dashevo/wallet-lib": "github:dashevo/wallet-lib#update-dapi-client",

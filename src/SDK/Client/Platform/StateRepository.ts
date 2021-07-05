@@ -2,6 +2,7 @@ import DashPlatformProtocol from "@dashevo/dpp";
 import DataContract from "@dashevo/dpp/lib/dataContract/DataContract";
 import Identity from "@dashevo/dpp/lib/identity/Identity";
 import Identifier from "@dashevo/dpp/lib/Identifier";
+const grpcErrorCodes = require('@dashevo/grpc-common/lib/server/error/GrpcErrorCodes');
 import Client from '../Client';
 
 class StateRepository {
@@ -16,15 +17,18 @@ class StateRepository {
   async fetchIdentity(id: Identifier|string): Promise<Identity|null> {
     const identifier = Identifier.from(id);
 
-    const identityResponse = await this.client.getDAPIClient().platform.getIdentity(identifier);
+    let identityResponse;
+    try {
+      identityResponse = await this.client.getDAPIClient().platform.getIdentity(identifier);
+    } catch (e) {
+      if (e?.getCode() === grpcErrorCodes.NOT_FOUND) {
+        return null;
+      }
 
-    const identityBuffer = identityResponse.getIdentity();
-
-    if (identityBuffer === null) {
-      return null;
+      throw e;
     }
 
-    return this.dpp.identity.createFromBuffer(identityBuffer);
+    return this.dpp.identity.createFromBuffer(identityResponse.getIdentity());
   }
 
   async fetchDataContract(identifier: Identifier|string): Promise<DataContract|null> {
@@ -39,15 +43,18 @@ class StateRepository {
     }
 
     // Fetch contract otherwise
-    const dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
+    let dataContractResponse;
+    try {
+      dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
+    } catch (e) {
+      if (e?.getCode() === grpcErrorCodes.NOT_FOUND) {
+        return null;
+      }
 
-    const rawContract = dataContractResponse.getDataContract();
-
-    if (!rawContract) {
-      return null;
+      throw e;
     }
 
-    const contract = await this.dpp.dataContract.createFromBuffer(rawContract);
+    const contract = await this.dpp.dataContract.createFromBuffer(dataContractResponse.getDataContract());
 
     // Store contract to the cache
     for (const appName of this.client.getApps().getNames()) {

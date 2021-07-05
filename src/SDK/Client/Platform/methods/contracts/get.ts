@@ -3,6 +3,7 @@ import {Platform} from "../../Platform";
 // @ts-ignore
 import Identifier from "@dashevo/dpp/lib/Identifier";
 import Metadata from "@dashevo/dpp/lib/Metadata";
+const grpcErrorCodes = require('@dashevo/grpc-common/lib/server/error/GrpcErrorCodes');
 
 declare type ContractIdentifier = string | Identifier;
 
@@ -27,18 +28,18 @@ export async function get(this: Platform, identifier: ContractIdentifier): Promi
     }
 
     // Fetch contract otherwise
+    let dataContractResponse;
+    try {
+        dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
+    } catch (e) {
+        if (e?.getCode() === grpcErrorCodes.NOT_FOUND) {
+            return null;
+        }
 
-    // @ts-ignore
-    const dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
-
-    const rawContract = dataContractResponse.getDataContract();
-
-    if (!rawContract) {
-        return null;
+        throw e;
     }
 
-    const contract = await this.dpp.dataContract.createFromBuffer(rawContract);
-
+    const contract = await this.dpp.dataContract.createFromBuffer(dataContractResponse.getDataContract());
 
     let metadata = null;
     const responseMetadata = dataContractResponse.getMetadata();
