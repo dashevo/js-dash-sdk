@@ -15,60 +15,11 @@ class StateRepository {
   }
 
   async fetchIdentity(id: Identifier|string): Promise<Identity|null> {
-    const identifier = Identifier.from(id);
-
-    let identityResponse;
-    try {
-      identityResponse = await this.client.getDAPIClient().platform.getIdentity(identifier);
-    } catch (e) {
-      if (e instanceof NotFoundError) {
-        return null;
-      }
-
-      throw e;
-    }
-
-    const identity = await this.dpp.identity.createFromBuffer(identityResponse.getIdentity());
-    identity.setMetadata(identityResponse.getMetadata());
-
-    return identity;
+    return this.client.platform.identities.get(id);
   }
 
   async fetchDataContract(identifier: Identifier|string): Promise<DataContract|null> {
-    const contractId: Identifier = Identifier.from(identifier);
-
-    // Try to get contract from the cache
-    for (const appName of this.client.getApps().getNames()) {
-      const appDefinition = this.client.getApps().get(appName);
-      if (appDefinition.contractId.equals(contractId) && appDefinition.contract) {
-        return appDefinition.contract;
-      }
-    }
-
-    // Fetch contract otherwise
-    let dataContractResponse;
-    try {
-      dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
-    } catch (e) {
-      if (e instanceof NotFoundError) {
-        return null;
-      }
-
-      throw e;
-    }
-
-    const contract = await this.dpp.dataContract.createFromBuffer(dataContractResponse.getDataContract());
-    contract.setMetadata(dataContractResponse.getMetadata());
-
-    // Store contract to the cache
-    for (const appName of this.client.getApps().getNames()) {
-      const appDefinition = this.client.getApps().get(appName);
-      if (appDefinition.contractId.equals(contractId)) {
-        appDefinition.contract = contract;
-      }
-    }
-
-    return contract;
+    return this.client.platform.contracts.get(identifier);
   }
 
   async isAssetLockTransactionOutPointAlreadyUsed(): Promise<boolean> {

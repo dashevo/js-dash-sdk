@@ -28,7 +28,17 @@ export async function get(this: Platform, id: Identifier|string): Promise<any> {
     }
 
     const identity = this.dpp.identity.createFromBuffer(identityResponse.getIdentity());
-    identity.setMetadata(identityResponse.getMetadata());
+
+    let metadata = null;
+    const responseMetadata = identityResponse.getMetadata();
+    if (responseMetadata) {
+        metadata = new Metadata({
+            blockHeight: responseMetadata.getHeight(),
+            coreChainLockedHeight: responseMetadata.getCoreChainLockedHeight(),
+        });
+    }
+
+    identity.setMetadata(metadata);
 
     return identity;
 }
