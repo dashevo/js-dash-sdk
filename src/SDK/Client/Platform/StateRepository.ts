@@ -1,4 +1,3 @@
-import DashPlatformProtocol from "@dashevo/dpp";
 import DataContract from "@dashevo/dpp/lib/dataContract/DataContract";
 import Identity from "@dashevo/dpp/lib/identity/Identity";
 import Identifier from "@dashevo/dpp/lib/Identifier";
@@ -6,11 +5,9 @@ import Client from '../Client';
 
 class StateRepository {
   private readonly client: Client;
-  private readonly dpp: DashPlatformProtocol;
 
-  constructor(client: Client, dpp: DashPlatformProtocol) {
+  constructor(client: Client) {
     this.client = client;
-    this.dpp = dpp;
   }
 
   async fetchIdentity(id: Identifier|string): Promise<Identity|null> {
