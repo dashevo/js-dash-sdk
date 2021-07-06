@@ -2,7 +2,6 @@ import DashPlatformProtocol from "@dashevo/dpp";
 import DataContract from "@dashevo/dpp/lib/dataContract/DataContract";
 import Identity from "@dashevo/dpp/lib/identity/Identity";
 import Identifier from "@dashevo/dpp/lib/Identifier";
-const NotFoundError = require('@dashevo/dapi-client/lib/methods/errors/NotFoundError');
 import Client from '../Client';
 
 class StateRepository {
