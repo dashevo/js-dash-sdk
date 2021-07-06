@@ -65,6 +65,8 @@ describe('Client - Platform - Contracts - .get()', () => {
             // @ts-ignore
             const contract = await get.call({apps, dpp, client, initialize}, contractsFixtures.ratePlatform.$id);
             expect(contract.toJSON()).to.deep.equal(contractsFixtures.ratePlatform);
+            expect(contract.getMetadata().getHeight()).to.equal(10);
+            expect(contract.getMetadata().getCoreChainLockedHeight()).to.equal(42);
             expect(askedFromDapi).to.equal(1);
         });
 
@@ -72,6 +74,8 @@ describe('Client - Platform - Contracts - .get()', () => {
             // @ts-ignore
             const contract = await get.call({apps, dpp, client, initialize}, contractsFixtures.ratePlatform.$id);
             expect(contract.toJSON()).to.deep.equal(contractsFixtures.ratePlatform);
+            expect(contract.getMetadata().getHeight()).to.equal(10);
+            expect(contract.getMetadata().getCoreChainLockedHeight()).to.equal(42);
             expect(askedFromDapi).to.equal(1);
         });
     })

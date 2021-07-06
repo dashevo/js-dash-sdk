@@ -28,7 +28,10 @@ class StateRepository {
       throw e;
     }
 
-    return this.dpp.identity.createFromBuffer(identityResponse.getIdentity());
+    const identity = await this.dpp.identity.createFromBuffer(identityResponse.getIdentity());
+    identity.setMetadata(identityResponse.getMetadata());
+
+    return identity;
   }
 
   async fetchDataContract(identifier: Identifier|string): Promise<DataContract|null> {
@@ -55,6 +58,7 @@ class StateRepository {
     }
 
     const contract = await this.dpp.dataContract.createFromBuffer(dataContractResponse.getDataContract());
+    contract.setMetadata(dataContractResponse.getMetadata());
 
     // Store contract to the cache
     for (const appName of this.client.getApps().getNames()) {
