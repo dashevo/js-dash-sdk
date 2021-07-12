@@ -5,6 +5,7 @@ import { Platform } from './Platform';
 import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 import { ClientApps, ClientAppsOptions } from "./ClientApps";
+import { DashPayWorker } from "./DashPayWorker/DashPayWorker";
 
 export interface WalletOptions extends Wallet.IWalletOptions {
     defaultAccountIndex?: number;
@@ -90,11 +91,21 @@ export class Client extends EventEmitter {
 
             const transport = new DAPIClientTransport(this.dapiClient);
 
-            this.wallet = new Wallet({
+            const walletOptions = {
                 transport,
                 network: this.network,
-                ...this.options.wallet,
-            });
+            ...this.options.wallet,
+            }
+
+            // If it's a bip44 wallet, we pass the DashPay Worker
+            if(
+                !this.options.wallet.privateKey &&
+                this.options.wallet.offlineMode !== true
+            ){
+                walletOptions.plugins = [new DashPayWorker(this)];
+            }
+
+            this.wallet = new Wallet(walletOptions);
 
             // @ts-ignore
             this.wallet.on('error', (error, context) => (
