@@ -6,6 +6,7 @@ import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 import { ClientApps, ClientAppsOptions } from "./ClientApps";
 import { DashPayWorker } from "./DashPayWorker/DashPayWorker";
+import { DashPayPlugin } from "./DashPayPlugin/DashPayPlugin";
 
 export interface WalletOptions extends Wallet.IWalletOptions {
     defaultAccountIndex?: number;
@@ -97,12 +98,14 @@ export class Client extends EventEmitter {
             ...this.options.wallet,
             }
 
-            // If it's a bip44 wallet, we pass the DashPay Worker
+            // If it's a bip44 wallet, we pass the DashPay Worker and DashPay plugin
             if(
                 !this.options.wallet.privateKey &&
                 this.options.wallet.offlineMode !== true
             ){
-                walletOptions.plugins = [new DashPayWorker(this)];
+                console.log(DashPayPlugin);
+                walletOptions.plugins = [new DashPayPlugin()];
+                // walletOptions.plugins = [new DashPayWorker()];
             }
 
             this.wallet = new Wallet(walletOptions);
@@ -130,6 +133,7 @@ export class Client extends EventEmitter {
             network: this.network,
             driveProtocolVersion: this.options.driveProtocolVersion,
         });
+
     }
 
     /**
@@ -148,6 +152,12 @@ export class Client extends EventEmitter {
             ...options,
         }
 
+        const account = await this.wallet.getAccount(options);
+        const dashpayPlugin = account.getPlugin('dashpay');
+        if(dashpayPlugin){
+            // @ts-ignore
+            dashpayPlugin.inject('platform', this.platform, true)
+        }
         return this.wallet.getAccount(options);
     }
 
