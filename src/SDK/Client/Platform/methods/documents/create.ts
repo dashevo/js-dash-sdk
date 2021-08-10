@@ -26,7 +26,7 @@ export async function create(this: Platform, typeLocator: string, identity: any,
 
     const dataContract = await this.contracts.get(contractId);
 
-    if( dataContract === null ) {
+    if (dataContract === null) {
         throw new Error(`Contract ${appName} not found. Ensure contractId ${contractId} is correct.`)
     }
 
