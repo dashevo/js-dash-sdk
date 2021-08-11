@@ -4,6 +4,7 @@ import DAPIClientTransport from "@dashevo/wallet-lib/src/transport/DAPIClientTra
 import { Platform } from './Platform';
 import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
+import { latestVersion as latestProtocolVersion } from "@dashevo/dpp/lib/protocolVersion";
 import { ClientApps, ClientAppsOptions } from "./ClientApps";
 
 export interface WalletOptions extends Wallet.IWalletOptions {
@@ -33,6 +34,7 @@ export interface ClientOpts {
     timeout?: number,
     retries?: number,
     baseBanTime?: number,
+    driveProtocolVersion?: number,
 }
 
 /**
@@ -45,9 +47,14 @@ export class Client extends EventEmitter {
     public account: Account | undefined;
     public platform: Platform;
     public defaultAccountIndex: number | undefined = 0;
+    public driveProtocolVersion: number;
     private readonly dapiClient: DAPIClient;
     private readonly apps: ClientApps;
     private options: ClientOpts;
+    private static readonly networkToProtocolVersion: Map<string, number> = new Map([
+        ['testnet', 0],
+        ['regtest', 0],
+    ]);
 
     /**
      * Construct some instance of SDK Client
@@ -60,6 +67,17 @@ export class Client extends EventEmitter {
         this.options = options;
 
         this.network = this.options.network ? this.options.network.toString() : 'testnet';
+
+        const mappedProtocolVersion = Client.networkToProtocolVersion.get(
+            this.network,
+        );
+
+        // use protocol version from options if set
+        // use mapped one otherwise
+        // fallback to one that set in dpp as the last option
+        this.driveProtocolVersion = this.options.driveProtocolVersion !== undefined
+          ? this.options.driveProtocolVersion
+          : (mappedProtocolVersion !== undefined ? mappedProtocolVersion : latestProtocolVersion);
 
         // Initialize DAPI Client
         const dapiClientOptions = {

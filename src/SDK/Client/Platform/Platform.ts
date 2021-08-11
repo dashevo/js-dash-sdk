@@ -136,6 +136,7 @@ export class Platform {
 
         this.dpp = new DashPlatformProtocol({
             stateRepository,
+            protocolVersion: this.client.driveProtocolVersion,
             ...options,
         });
     }
