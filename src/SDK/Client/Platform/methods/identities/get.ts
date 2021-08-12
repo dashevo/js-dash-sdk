@@ -27,7 +27,7 @@ export async function get(this: Platform, id: Identifier|string): Promise<any> {
         throw e;
     }
 
-    if (!identityResponse.getIdentity()) {
+    if (!identityResponse.getIdentity() || identityResponse.getIdentity().length === 0) {
         return null;
     }
 
