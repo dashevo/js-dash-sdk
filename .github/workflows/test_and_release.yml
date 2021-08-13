@@ -107,7 +107,7 @@ jobs:
         run: npm run test
 
       - name: Run Platform Test Suite
-        uses: dashevo/gh-action-run-platform-test-suite@v1
+        uses: dashevo/gh-action-run-platform-test-suite@v1.0.1
         with:
           sdk-branch: ${{ steps.platform-branches.outputs.current-branch }}
           faucet-private-key: ${{ steps.start-local-network.outputs.faucet-private-key }}
