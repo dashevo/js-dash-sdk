@@ -15,9 +15,11 @@ const factory = new DataContractFactory(
     undefined,
     () => {
         return new ValidationResult();
-    });
+    },
+    () => [42, contractsFixtures.ratePlatform]);
 const dpp = {
-    dataContract: factory
+    dataContract: factory,
+    getProtocolVersion: () => 42,
 }
 factory.dpp = dpp;
 
