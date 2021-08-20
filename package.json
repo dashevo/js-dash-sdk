@@ -30,8 +30,8 @@
   "dependencies": {
     "@dashevo/dapi-client": "~0.21.0-dev.6",
     "@dashevo/dashcore-lib": "~0.19.25",
-    "@dashevo/dpp": "~0.21.0-dev.2",
-    "@dashevo/wallet-lib": "github:dashevo/wallet-lib#update-dpp",
+    "@dashevo/dpp": "~0.21.0-dev.3",
+    "@dashevo/wallet-lib": "~7.21.0-dev.5",
     "bs58": "^4.0.1",
     "node-inspect-extracted": "1.0.7"
   },
