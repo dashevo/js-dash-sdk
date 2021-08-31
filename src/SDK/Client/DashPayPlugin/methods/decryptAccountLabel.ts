@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js"
 
-export default function decryptAccountLabel(encryptedAccountLabel, sharedSecret) {
+export function decryptAccountLabel(encryptedAccountLabel, sharedSecret) {
     const encryptAccountLabelBuffer = Buffer.from(encryptedAccountLabel, 'base64');
     const parsedSharedSecret = CryptoJS.enc.Hex.parse(sharedSecret);
 

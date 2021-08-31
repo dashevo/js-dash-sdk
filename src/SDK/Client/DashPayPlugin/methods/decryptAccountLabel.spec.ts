@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import decryptAccountLabel from "./decryptAccountLabel";
+import { decryptAccountLabel } from "./decryptAccountLabel";
 
 describe('DashPayPlugin - decryptAccountLabel', () => {
     it('should decrypt an account label', function () {

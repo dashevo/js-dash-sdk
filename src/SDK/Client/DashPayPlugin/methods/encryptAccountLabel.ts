@@ -6,7 +6,7 @@ import CryptoJS from "crypto-js"
  * @param accountLabel
  * @param cipherIv
  */
-export default function encryptAccountLabel(
+export function encryptAccountLabel(
     sharedSecret: string,
     accountLabel:string = 'Default Account',
     cipherIv?: string

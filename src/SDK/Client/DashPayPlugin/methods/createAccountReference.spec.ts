@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import createAccountReference from "./createAccountReference";
+import { createAccountReference } from "./createAccountReference";
 
 describe('DashPayPlugin - createAccountReference', () => {
     it('create an account reference', function () {

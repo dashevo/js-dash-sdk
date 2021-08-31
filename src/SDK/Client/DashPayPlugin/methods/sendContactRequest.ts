@@ -3,7 +3,7 @@
  * @param contactName
  * @param accountLabel
  */
-export default async function sendContactRequest(this: any, contactName, accountLabel = 'Default account'){
+export async function sendContactRequest(this: any, contactName, accountLabel = 'Default account'){
     // @ts-ignore
     const identities = this.storage.getIndexedIdentityIds(this.walletId);
     const senderDashUniqueIdentityId = identities[0];
