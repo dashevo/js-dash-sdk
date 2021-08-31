@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import getResponseMetadataFixture from '../../test/fixtures/getResponseMetadataFixture';
 import { Client } from "./index";
 import 'mocha';
-import { Transaction } from "@dashevo/dashcore-lib";
+import { Transaction, PrivateKey, Networks } from "@dashevo/dashcore-lib";
 import { createFakeInstantLock } from "../../utils/createFakeIntantLock";
 import stateTransitionTypes from '@dashevo/dpp/lib/stateTransition/stateTransitionTypes';
 import { StateTransitionBroadcastError } from '../../errors/StateTransitionBroadcastError';
@@ -17,6 +17,7 @@ const GetDataContractResponse = require("@dashevo/dapi-client/lib/methods/platfo
 import { createIdentityFixtureInAccount } from '../../test/fixtures/createIdentityFixtureInAccount';
 import { createTransactionInAccount } from '../../test/fixtures/createTransactionFixtureInAccount';
 import { createAndAttachTransportMocksToClient } from '../../test/mocks/createAndAttachTransportMocksToClient';
+import {Address} from "@dashevo/dashcore-lib/typings/Address";
 
 describe('Dash - Client', function suite() {
   this.timeout(30000);
@@ -99,6 +100,46 @@ describe('Dash - Client', function suite() {
     await client.wallet?.disconnect();
 
     const account = await client.getWalletAccount();
+    await account.disconnect();
+  });
+
+
+  it('should initiate wallet-lib with an address', async ()=>{
+    const publicKey = new PrivateKey().toPublicKey();
+    const address = publicKey.toAddress(Networks.testnet);
+    const client = new Client({
+      wallet: {
+        address,
+        offlineMode: true,
+      }
+    });
+    expect(client.wallet).to.exist;
+    expect(client.wallet!.offlineMode).to.be.equal(true);
+
+    await client.wallet?.storage.stopWorker();
+    await client.wallet?.disconnect();
+    expect(client.wallet?.exportWallet()).to.equal(address.toString());
+    const account = await client.getWalletAccount();
+    expect(account.getUnusedAddress().address).to.equal(address.toString());
+    await account.disconnect();
+  });
+  it('should initiate wallet-lib with a publicKey', async ()=>{
+    const publicKey = new PrivateKey().toPublicKey();
+    const address = publicKey.toAddress(Networks.testnet);
+    const client = new Client({
+      wallet: {
+        publicKey,
+        offlineMode: true,
+      }
+    });
+    expect(client.wallet).to.exist;
+    expect(client.wallet!.offlineMode).to.be.equal(true);
+
+    await client.wallet?.storage.stopWorker();
+    await client.wallet?.disconnect();
+    expect(client.wallet?.exportWallet()).to.equal(publicKey.toString());
+    const account = await client.getWalletAccount();
+    expect(account.getUnusedAddress().address).to.equal(address.toString());
     await account.disconnect();
   });
 
