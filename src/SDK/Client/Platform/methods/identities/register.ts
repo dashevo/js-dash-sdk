@@ -25,21 +25,14 @@ export default async function register(
         privateKey: assetLockPrivateKey,
         outputIndex: assetLockOutputIndex
     } = await createAssetLockTransaction(this, fundingAmount);
-    console.log('identity.register.createAssetLockTransaction.assetLockPrivateKey', assetLockPrivateKey)
-    console.log('identity.register.createAssetLockTransaction.outputIndex', assetLockOutputIndex)
-    console.log('identity.register.createAssetLockTransaction.outputIndex', assetLockTransaction)
 
     // Broadcast Asset Lock transaction
     await account.broadcastTransaction(assetLockTransaction);
     const assetLockProof = await createAssetLockProof(this, assetLockTransaction, assetLockOutputIndex);
-    console.log('identity.register.assetLockProof', assetLockProof)
 
     const { identity, identityCreateTransition, identityIndex } = await createIdentityCreateTransition(
         this, assetLockProof, assetLockPrivateKey
     );
-    console.log('identity.register.identity', identity)
-    console.log('identity.register.identityIndex', identityIndex)
-    console.log('identity.register.identityCreateTransition', identityCreateTransition)
     await broadcastStateTransition(this, identityCreateTransition);
 
     // If state transition was broadcast without any errors, import identity to the account

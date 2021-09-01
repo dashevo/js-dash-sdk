@@ -20,7 +20,6 @@ export default async function createAssetLockTransaction(platform : Platform, fu
     const assetLockOneTimePublicKey = assetLockOneTimePrivateKey.toPublicKey();
 
     const identityAddress = assetLockOneTimePublicKey.toAddress(platform.client.network).toString();
-    console.dir({identityAddress}, {depth:null});
 
     const changeAddress = account.getUnusedAddress('internal').address;
 
@@ -33,35 +32,28 @@ export default async function createAssetLockTransaction(platform : Platform, fu
 
     const utxos = account.getUTXOS();
     const balance = account.getTotalBalance();
-    console.log({utxos});
-    console.dir({balance}, {depth:null});
 
     if (balance < output.satoshis) {
         throw new Error(`Not enough balance (${balance}) to cover burn amount of ${fundingAmount}`);
     }
 
     const selection = utils.coinSelection(utxos, [output]);
-    console.dir({selection}, {depth:2});
+
     lockTransaction
         .from(selection.utxos)
         // @ts-ignore
         .addBurnOutput(output.satoshis, assetLockOneTimePublicKey._getID())
         .change(changeAddress);
-    console.log({lockTransaction});
 
     const utxoAddresses = selection.utxos.map((utxo: any) => utxo.address.toString());
-    console.log({utxoAddresses});
 
     // @ts-ignore
     const utxoHDPrivateKey = account.getPrivateKeys(utxoAddresses);
-    console.log({utxoHDPrivateKey});
 
     // @ts-ignore
     const signingKeys = utxoHDPrivateKey.map((hdprivateKey) => hdprivateKey.privateKey);
-    console.dir({signingKeys}, {depth:2});
 
     const transaction = lockTransaction.sign(signingKeys);
-    console.log({lockSignedTransaction: transaction});
 
     return {
         transaction,
