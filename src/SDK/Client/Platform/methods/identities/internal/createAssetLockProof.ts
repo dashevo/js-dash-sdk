@@ -14,9 +14,12 @@ export default async function createAssetLockProof(platform : Platform, assetLoc
 
     const account = await platform.client.getWalletAccount();
     const { dpp } = platform;
-
+    console.log('createAssetLockProof.assetLockTransaction',assetLockTransaction)
+    console.log('createAssetLockProof.assetLockTransaction.hash',assetLockTransaction.hash)
     let instantLock = await account.waitForInstantLock(assetLockTransaction.hash);
     // Create poof that the transaction won't be double spend
+    console.log('createAssetLockProof.instantLock',instantLock)
+    console.log('createAssetLockProof.outputIndex',outputIndex)
 
     // @ts-ignore
     return dpp.identity.createInstantAssetLockProof(instantLock, assetLockTransaction, outputIndex);

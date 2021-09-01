@@ -26,17 +26,20 @@ export default async function createIdentityCreateTransition(platform : Platform
     const identity = dpp.identity.create(
         assetLockProof, [identityPublicKey]
     );
+    console.log('createIdentityCreateTransition.identityCreate', identity);
 
     // Create ST
     const identityCreateTransition = dpp.identity.createIdentityCreateTransition(identity);
 
     identityCreateTransition.signByPrivateKey(assetLockPrivateKey);
 
+    console.log('createIdentityCreateTransition.identityCreateTransition', identityCreateTransition)
     const result = await dpp.stateTransition.validateBasic(identityCreateTransition);
 
     if (!result.isValid()) {
         throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
     }
+    console.log('createIdentityCreateTransition.return', identity, identityIndex);
 
     return { identity, identityCreateTransition, identityIndex };
 }
