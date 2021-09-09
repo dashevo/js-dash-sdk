@@ -6,6 +6,9 @@
 export async function sendContactRequest(this: any, contactName, accountLabel = 'Default account'){
     // @ts-ignore
     const identities = this.storage.getIndexedIdentityIds(this.walletId);
+    if(!identities.length){
+        throw new Error('Require an identity to send a contact request');
+    }
     const senderDashUniqueIdentityId = identities[0];
     const senderIdentity = await this.platform.identities.get(senderDashUniqueIdentityId);
 
@@ -26,18 +29,18 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
     const extendedPublicKey = extendedPrivateKey.hdPublicKey;
     const extendedPublicKeyBuffers = Buffer.concat([extendedPublicKey._buffers.parentFingerPrint, extendedPublicKey._buffers.chainCode, extendedPublicKey._buffers.publicKey]);
 
-    const sharedSecret = this.keyChain.encryptSharedKey(senderPrivateKeyBuffer, receiverPublicKeyBuffer);
-    const accountReference = this.createAccountReference(senderPrivateKeyBuffer, extendedPublicKeyBuffers);
-    const encryptedPublicKey = this.keyChain.encryptPublicKey(extendedPublicKeyBuffers, sharedSecret);
+    const sharedSecret = this.encryptSharedKey(senderPrivateKeyBuffer, receiverPublicKeyBuffer);
+    const accountReference = this.createAccountReference(senderPrivateKeyBuffer, extendedPublicKey.toBuffer());
+    const encryptedPublicKey = this.encryptPublicKey(extendedPublicKeyBuffers, sharedSecret);
     const encryptedPublicKeyBuffer = Buffer.from(encryptedPublicKey, 'hex');
     const encryptedAccountLabelBuffer = Buffer.from(this.encryptAccountLabel(sharedSecret, accountLabel), 'base64')
 
     const contactRequest = {
         toUserId: receiverIdentity.getId(),
-        senderKeyIndex: 0,
-        accountReference,
-        recipientKeyIndex: 0,
         encryptedPublicKey: encryptedPublicKeyBuffer ,
+        senderKeyIndex: 0,
+        recipientKeyIndex: 0,
+        accountReference,
         encryptedAccountLabel: encryptedAccountLabelBuffer ,
     };
 
@@ -50,9 +53,9 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
     console.log('contactRequestDocument ', contactRequestDocument.toJSON());
 
     const documentBatch = {
-        create: [contactRequest], // Document(s) to create
-        replace: [], // Document(s) to update
-        delete: [], // Document(s) to delete
+        create: [contactRequest],
+        replace: [],
+        delete: [],
     };
 
     console.log(documentBatch);
