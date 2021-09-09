@@ -22,7 +22,7 @@ import searchName from "./methods/names/search";
 import broadcastStateTransition from "./broadcastStateTransition";
 import { IPlatformStateProof } from "./IPlatformStateProof";
 import StateRepository from './StateRepository';
-import { latestVersion as latestProtocolVersion } from "@dashevo/dpp/lib/protocolVersion";
+import { latestVersion as latestProtocolVersion } from "@dashevo/dpp/lib/version/protocolVersion";
 
 /**
  * Interface for PlatformOpts

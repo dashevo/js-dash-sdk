@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { Platform } from "./index";
 import 'mocha';
 import Client from '../Client';
-import { latestVersion as latestProtocolVersion } from "@dashevo/dpp/lib/protocolVersion";
+import { latestVersion as latestProtocolVersion } from "@dashevo/dpp/lib/version/protocolVersion";
 
 describe('Dash - Platform', () => {
 
