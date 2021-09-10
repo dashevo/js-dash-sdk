@@ -27,7 +27,7 @@ export class DashPaySyncWorker extends plugins.Worker {
             injectionOrder:{
                 after: [
                     'IdentitySyncWorker',
-                    'DashPayPlugin'
+                    'DashPay'
                 ]
             }
         });
