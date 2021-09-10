@@ -1,13 +1,15 @@
 import { plugins } from "@dashevo/wallet-lib"
 
+import { acceptContactRequest } from "./methods/acceptContactRequest";
 import { createAccountReference } from "./methods/createAccountReference";
-import { encryptAccountLabel } from "./methods/encryptAccountLabel";
 import { decryptAccountLabel }from "./methods/decryptAccountLabel";
-import { sendContactRequest } from "./methods/sendContactRequest";
+import { encryptAccountLabel } from "./methods/encryptAccountLabel";
 import { encryptPublicKey } from "./methods/encryptPublicKey";
 import { encryptSharedKey } from "./methods/encryptSharedKey";
+import { sendContactRequest } from "./methods/sendContactRequest";
 
 export class DashPayPlugin extends plugins.StandardPlugin {
+    acceptContactRequest: any;
     createAccountReference: any;
     decryptAccountLabel: any;
     encryptAccountLabel: any;
@@ -36,6 +38,7 @@ export class DashPayPlugin extends plugins.StandardPlugin {
         });
     }
 }
+DashPayPlugin.prototype.acceptContactRequest = acceptContactRequest;
 DashPayPlugin.prototype.createAccountReference = createAccountReference;
 DashPayPlugin.prototype.decryptAccountLabel = decryptAccountLabel;
 DashPayPlugin.prototype.encryptAccountLabel = encryptAccountLabel;

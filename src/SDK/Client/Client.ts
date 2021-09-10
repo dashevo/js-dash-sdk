@@ -5,7 +5,7 @@ import { Platform } from './Platform';
 import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 import { ClientApps, ClientAppsOptions } from "./ClientApps";
-import { DashPayWorker } from "./DashPayWorker/DashPayWorker";
+import { DashPaySyncWorker } from "./DashPaySyncWorker/DashPaySyncWorker";
 import { DashPayPlugin } from "./DashPayPlugin/DashPayPlugin";
 
 export interface WalletOptions extends Wallet.IWalletOptions {
@@ -103,11 +103,9 @@ export class Client extends EventEmitter {
                 !this.options.wallet.privateKey &&
                 this.options.wallet.offlineMode !== true
             ){
-                console.log(DashPayPlugin);
-                walletOptions.plugins = [new DashPayPlugin()];
-                // walletOptions.plugins = [new DashPayWorker()];
+                //@ts-ignore
+                walletOptions.plugins = [new DashPayPlugin(), new DashPaySyncWorker()];
             }
-
             this.wallet = new Wallet(walletOptions);
 
             // @ts-ignore
@@ -121,10 +119,10 @@ export class Client extends EventEmitter {
 
         this.apps = new ClientApps(Object.assign({
             dpns: {
-                contractId: 'H2P7t8e3z2Naf55RiUrEK63fLfeGzaza5x5etm9J1ppG'
+                contractId: 'DRwR6AwqxUKfC1ux6kaBeo2F2YcQRQ1GaiVEv3P5y5BP'
             },
             dashpay: {
-                contractId: 'HpJZGdjnHjUucndek2kc1P9RBhTQZxjHFeQKnanxVVJp',
+                contractId: 'B5kbZtUfzuPVH3MUcmQpUcZTFZBf7nfEZd1bmRDD7km6',
             },
         }, this.options.apps));
 
@@ -143,7 +141,8 @@ export class Client extends EventEmitter {
      * @returns {Promise<Account>}
      */
     async getWalletAccount(options: Account.Options = {}) : Promise<Account> {
-        if (!this.wallet) {
+        const { wallet } = this;
+        if (!wallet) {
             throw new Error('Wallet is not initialized, pass `wallet` option to Client');
         }
 
@@ -152,13 +151,18 @@ export class Client extends EventEmitter {
             ...options,
         }
 
-        const account = await this.wallet.getAccount(options);
-        const dashpayPlugin = account.getPlugin('dashpay');
-        if(dashpayPlugin){
+        const account = await wallet.getAccount(options);
+
+        try {
+            const dashpayPlugin = account.getPlugin('dashpay');
+            const dashpayworker = account.getWorker('DashPaySyncWorker');
             // @ts-ignore
             dashpayPlugin.inject('platform', this.platform, true)
-        }
-        return this.wallet.getAccount(options);
+            // @ts-ignore
+            dashpayworker.inject('platform', this.platform, true)
+        } catch {}
+
+        return account;
     }
 
     /**
