@@ -21,12 +21,12 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
 
     const contactDashUniqueIdentityId = retrieveContactName.ownerId.toString();
     const receiverIdentity = await this.platform.identities.get(retrieveContactName.ownerId);
-
     const receiverPublicKey = receiverIdentity.toJSON().publicKeys[0].data;
     const receiverPublicKeyBuffer = Buffer.from(receiverPublicKey, 'base64');
 
     const extendedPrivateKey = this.keyChain.getDIP15ExtendedKey('0x'+ senderDashUniqueIdentityId, '0x'+contactDashUniqueIdentityId);
     const extendedPublicKey = extendedPrivateKey.hdPublicKey;
+
     const extendedPublicKeyBuffers = Buffer.concat([extendedPublicKey._buffers.parentFingerPrint, extendedPublicKey._buffers.chainCode, extendedPublicKey._buffers.publicKey]);
 
     const sharedSecret = this.encryptSharedKey(senderPrivateKeyBuffer, receiverPublicKeyBuffer);
@@ -34,7 +34,6 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
     const encryptedPublicKey = this.encryptPublicKey(extendedPublicKeyBuffers, sharedSecret);
     const encryptedPublicKeyBuffer = Buffer.from(encryptedPublicKey, 'hex');
     const encryptedAccountLabelBuffer = Buffer.from(this.encryptAccountLabel(sharedSecret, accountLabel), 'base64')
-
     const contactRequest = {
         toUserId: receiverIdentity.getId(),
         encryptedPublicKey: encryptedPublicKeyBuffer ,
@@ -43,24 +42,17 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
         accountReference,
         encryptedAccountLabel: encryptedAccountLabelBuffer ,
     };
-
     const contactRequestDocument = await this.platform.documents.create(
         'dashpay.contactRequest',
         senderIdentity,
         contactRequest,
     );
 
-    console.log('contactRequestDocument ', contactRequestDocument.toJSON());
-
     const documentBatch = {
-        create: [contactRequest],
+        create: [contactRequestDocument],
         replace: [],
         delete: [],
     };
-
-    console.log(documentBatch);
-    return;
     // // Sign and submit the document(s)
-    // //@ts-ignore
-    // return this.platform.documents.broadcast(documentBatch, senderDashUniqueIdentityId);
+    return this.platform.documents.broadcast(documentBatch, senderDashUniqueIdentityId);
 }

@@ -9,7 +9,6 @@ import { sha256hmac } from "@dashevo/dashcore-lib/lib/crypto/hash"
  * @param version
  */
 export function createAccountReference(senderPrivateKeyBuffer, extendedPublicKeyBuffer, accountIndex = 0, version = 0){
-    console.log({senderPrivateKeyBuffer, extendedPublicKeyBuffer})
     const AccountSecretKeyBuffer = sha256hmac(senderPrivateKeyBuffer, extendedPublicKeyBuffer);
     const AccountSecretKey32Buffer = AccountSecretKeyBuffer.slice(0, 4);
     const AccountSecretKey28Buffer = parseInt(AccountSecretKey32Buffer.toString('hex'), 16) >> 4;
