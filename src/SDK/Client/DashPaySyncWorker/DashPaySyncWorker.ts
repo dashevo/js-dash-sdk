@@ -1,6 +1,13 @@
 import { plugins } from "@dashevo/wallet-lib"
+import {sendContactRequest} from "../DashPayPlugin/methods/sendContactRequest";
+import {DashPayPlugin} from "../DashPayPlugin/DashPayPlugin";
 
-export class DashPayWorker extends plugins.Worker {
+import { fetchContactRequests } from "./methods/fetchContactRequests";
+
+export class DashPaySyncWorker extends plugins.Worker {
+    fetchContactRequests: any;
+    private fromTimestamp: number;
+
     constructor() {
         super({
             name: 'DashPaySyncWorker',
@@ -10,15 +17,21 @@ export class DashPayWorker extends plugins.Worker {
             workerIntervalTime: 60 * 1000,
             dependencies: [
                 'storage',
+                'getWorker',
+                'getPlugin',
                 'keyChain',
                 'walletId',
                 'identities',
                 'getUnusedIdentityIndex'
             ],
             injectionOrder:{
-                after: ['IdentitySyncWorker']
+                after: [
+                    'IdentitySyncWorker',
+                    'DashPayPlugin'
+                ]
             }
         });
+        this.fromTimestamp = 0;
     }
     async onStart(){
         // Force identities sync before return unused index
@@ -33,9 +46,13 @@ export class DashPayWorker extends plugins.Worker {
     }
 
     async execute(){
-        // TODO
+        // await this.fetchContactRequests(this.fromTimestamp);
+        // set 10 minute before last query
+        // see: https://github.com/dashpay/dips/blob/master/dip-0015.md#fetching-contact-requests
+        // this.fromTimestamp = +new Date() - 10*60*1000;
     }
 
     async onStop(){
     }
 }
+DashPaySyncWorker.prototype.fetchContactRequests = fetchContactRequests;
