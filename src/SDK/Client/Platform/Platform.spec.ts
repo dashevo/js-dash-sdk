@@ -27,7 +27,10 @@ describe('Dash - Platform', () => {
       network: 'testnet',
     });
 
-    expect(platform.dpp.protocolVersion).to.equal(0);
+    // @ts-ignore
+    const testnetProtocolVersion = Platform.networkToProtocolVersion.get('testnet');
+
+    expect(platform.dpp.protocolVersion).to.equal(testnetProtocolVersion);
   });
 
   it('should set protocol version for DPP using latest version', () => {
