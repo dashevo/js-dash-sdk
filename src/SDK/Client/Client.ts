@@ -5,8 +5,8 @@ import { Platform } from './Platform';
 import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 import { ClientApps, ClientAppsOptions } from "./ClientApps";
-import { DashPaySyncWorker } from "./DashPaySyncWorker/DashPaySyncWorker";
-import { DashPayPlugin } from "./DashPayPlugin/DashPayPlugin";
+import { DashPaySyncWorker } from "./plugins/DashPaySyncWorker/DashPaySyncWorker";
+import { DashPay } from "./plugins/DashPay/DashPay";
 
 export interface WalletOptions extends Wallet.IWalletOptions {
     defaultAccountIndex?: number;
@@ -104,7 +104,7 @@ export class Client extends EventEmitter {
                 this.options.wallet.offlineMode !== true
             ){
                 //@ts-ignore
-                walletOptions.plugins = [new DashPayPlugin(), new DashPaySyncWorker()];
+                walletOptions.plugins = [new DashPay(), new DashPaySyncWorker()];
             }
             this.wallet = new Wallet(walletOptions);
 
@@ -157,9 +157,9 @@ export class Client extends EventEmitter {
             const dashpayPlugin = account.getPlugin('dashpay');
             const dashpayworker = account.getWorker('DashPaySyncWorker');
             // @ts-ignore
-            dashpayPlugin.inject('platform', this.platform, true)
+            await dashpayPlugin.inject('platform', this.platform, true)
             // @ts-ignore
-            dashpayworker.inject('platform', this.platform, true)
+            await dashpayworker.inject('platform', this.platform, true)
         } catch {}
 
         return account;

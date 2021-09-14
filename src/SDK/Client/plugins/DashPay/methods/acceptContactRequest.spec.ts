@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import DataContract from '@dashevo/dpp/lib/dataContract/DataContract'
 import Document from '@dashevo/dpp/lib/document/Document'
 
-describe('DashPayPlugin - sendContactRequest', () => {
+describe('DashPayPlugin - acceptContactRequest', () => {
     let storage;
     let platform;
     let sinonSandbox = sinon.createSandbox();
