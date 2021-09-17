@@ -36,24 +36,4 @@ export function decryptPublicKey(encryptedPublicKeyBuffer, encryptedSharedSecret
     return decryptedPublicKey
         .toString(CryptoJS.enc.Hex)
 
-    // Derive receiving address
-    //const xpubkeyBuffers = Buffer.from(decryptedPublicKey, 'hex');
-
-    //const parentFingerPrint = xpubkeyBuffers.slice(0, 4);
-
-    //const chainCode = xpubkeyBuffers.slice(4, 36);
-
-    //const publicKey = xpubkeyBuffers.slice(36, 69);
-
-    //const depth = Buffer.alloc(1);
-
-    //const childIndex = Buffer.alloc(4);
-
-    //const xpubkey = dashcore.HDPublicKey.fromObject({
-    //parentFingerPrint, chainCode, publicKey, network: 'testnet', depth, childIndex,
-    //});
-
-    // const receivingAddress = dashcore.Address(xpubkey.publicKey, 'testnet').toString();
-    // console.log('receivingAddress :>> ', receivingAddress);
-
 };
