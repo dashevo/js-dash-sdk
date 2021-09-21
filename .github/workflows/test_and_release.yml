@@ -53,6 +53,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Verify NPM cache
+        run: npm cache verify
+
       - name: Enable buildkit cache
         uses: actions/cache@v2
         with:
