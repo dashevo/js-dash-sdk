@@ -106,8 +106,7 @@ export class Platform {
     client: Client;
 
     private static readonly networkToProtocolVersion: Map<string, number> = new Map([
-        ['testnet', 0],
-        ['regtest', 0],
+        ['testnet', 1],
     ]);
 
     /**
