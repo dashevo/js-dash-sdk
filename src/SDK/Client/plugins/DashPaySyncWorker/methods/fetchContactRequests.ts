@@ -11,14 +11,22 @@ export async function fetchContactRequests(this: any, fromTimestamp = 0){
     console.log(receiverDashUniqueIdentityId);
     const receiverIdentity = await this.platform.identities.get(receiverDashUniqueIdentityId);
     console.log(receiverIdentity.getId())
-    const contactRequests = await this.platform.documents.get('dashpay.contactRequest', {
+    const receivedContactRequests = await this.platform.documents.get('dashpay.contactRequest', {
+        where: [
+            ['toUserId', '==', receiverIdentity.getId()],
+            ['$createdAt', '>', fromTimestamp]
+        ],
+    });
+    const sentContactRequests = await this.platform.documents.get('dashpay.contactRequest', {
         where: [
             ['$ownerId', '==', receiverIdentity.getId()],
             ['$createdAt', '>', fromTimestamp]
         ],
     });
-    console.log(+new Date());
 
-    console.log(contactRequests);
+    // TODO :
+
+    // We
+    // console.log(receivedContactRequests);
     // return this.platform.documents.broadcast(documentBatch, senderDashUniqueIdentityId);
 }
