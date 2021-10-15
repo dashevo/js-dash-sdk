@@ -6,6 +6,10 @@ export class DashPaySyncWorker extends plugins.Worker {
     fetchContactRequests: any;
     private fromTimestamp: number;
     private platform?: any;
+    private walletId: string | undefined;
+    private identities: any;
+    private getPlugin: any;
+    private storage: any;
 
     constructor() {
         super({
@@ -21,7 +25,7 @@ export class DashPaySyncWorker extends plugins.Worker {
                 'keyChain',
                 'walletId',
                 'identities',
-                'getUnusedIdentityIndex'
+                'getUnusedIdentityIndex',
             ],
             injectionOrder:{
                 after: [
@@ -35,21 +39,25 @@ export class DashPaySyncWorker extends plugins.Worker {
 
     async execute(){
         if(this.platform && this.platform.identities){
-            // @ts-ignore
             const dashPay = await this.getPlugin('DashPay');
+            const identities = this.storage.getIndexedIdentityIds(this.walletId);
 
-            const contacts = await dashPay.fetchEstablishedContacts(this.fromTimestamp);
-            // set 10 minute before last query
-            // see: https://github.com/dashpay/dips/blob/master/dip-0015.md#fetching-contact-requests
-            this.fromTimestamp = +new Date() - 10*60*1000;
-            contacts.forEach((contact)=>{
-                console.log(`DashPaySyncWorker - Fetched contact ${contact.username}`);
-                console.log(contact);
-            })
+            // We require an identity to fetch contacts
+            if(identities.length) {
+                const contacts = await dashPay.fetchEstablishedContacts(this.fromTimestamp);
+                // set 10 minute before last query
+                // see: https://github.com/dashpay/dips/blob/master/dip-0015.md#fetching-contact-requests
+                this.fromTimestamp = +new Date() - 10*60*1000;
+                contacts.forEach((contact)=>{
+                    console.log(`DashPaySyncWorker - Fetched contact ${contact.username}`);
+                    console.log(contact);
+                })
+            }
         }
     }
 
     async onStop(){
     }
+
 }
 DashPaySyncWorker.prototype.fetchContactRequests = fetchContactRequests;
