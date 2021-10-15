@@ -1,9 +1,6 @@
 import { plugins } from "@dashevo/wallet-lib"
 
-import { fetchContactRequests } from "./methods/fetchContactRequests";
-
 export class DashPaySyncWorker extends plugins.Worker {
-    fetchContactRequests: any;
     private fromTimestamp: number;
     private platform?: any;
     private walletId: string | undefined;
@@ -58,6 +55,4 @@ export class DashPaySyncWorker extends plugins.Worker {
 
     async onStop(){
     }
-
 }
-DashPaySyncWorker.prototype.fetchContactRequests = fetchContactRequests;
