@@ -56,6 +56,7 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
         replace: [],
         delete: [],
     };
+
     // // Sign and submit the document(s)
     return this.platform.documents.broadcast(documentBatch, senderIdentity);
 }
