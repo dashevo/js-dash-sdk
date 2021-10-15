@@ -9,6 +9,7 @@ describe('DashPayPlugin - encryptPublicKey', () => {
         const receiverPublicKeyBuffer = Buffer.from('03a9f4f3c1409fa84da275efff6ff2203203db5d5c784d543a86e1b2f0bf4c3e8f', 'hex');
         const encryptedSharedSecret = encryptSharedKey(senderPrivateKeyBuffer, receiverPublicKeyBuffer);
         expect(encryptedSharedSecret).to.equal(expectedSharedSecret);
+
     });
 
 });
