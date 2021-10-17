@@ -30,9 +30,7 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
     const extendedPublicKeyBuffers = Buffer.concat([extendedPublicKey._buffers.parentFingerPrint, extendedPublicKey._buffers.chainCode, extendedPublicKey._buffers.publicKey]);
 
     const sharedSecret = this.encryptSharedKey(senderPrivateKeyBuffer, receiverPublicKeyBuffer);
-    console.log({senderPrivateKey, extendedPublicKey})
     const accountReference = this.createAccountReference(senderPrivateKeyBuffer, extendedPublicKey.toBuffer());
-    console.log({accountReference});
     const encryptedPublicKey = this.encryptPublicKey(extendedPublicKeyBuffers, sharedSecret);
     const encryptedPublicKeyBuffer = Buffer.from(encryptedPublicKey, 'hex');
     const encryptedAccountLabelBuffer = Buffer.from(this.encryptAccountLabel(sharedSecret, accountLabel), 'base64')
@@ -44,7 +42,6 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
         accountReference,
         encryptedAccountLabel: encryptedAccountLabelBuffer ,
     };
-    console.log({contactRequest});
     const contactRequestDocument = await this.platform.documents.create(
         'dashpay.contactRequest',
         senderIdentity,
@@ -57,6 +54,5 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
         delete: [],
     };
 
-    // // Sign and submit the document(s)
     return this.platform.documents.broadcast(documentBatch, senderIdentity);
 }

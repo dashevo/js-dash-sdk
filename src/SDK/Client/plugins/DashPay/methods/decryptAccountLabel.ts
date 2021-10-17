@@ -21,7 +21,6 @@ export function decryptAccountLabel(encryptedAccountLabel, sharedSecret) {
             iv: parsedEncryptedAccountLabelBuffer
         }
     );
-
     // Transform to UTF8 and unpad before returning.
     return decryptedAccountLabel
         .toString(CryptoJS.enc.Utf8)
