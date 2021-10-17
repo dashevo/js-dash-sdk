@@ -5,7 +5,7 @@ export class Contact {
     public receivedRequest: any;
     public identity?: any;
     public profile?: any;
-    public addresses?: any;
+    public keys?: any;
 
     constructor(identityId, sentRequest, receivedRequest) {
         this.username = null;
@@ -23,9 +23,9 @@ export class Contact {
     setProfile(profile){
         this.profile = profile
     }
-    setAddresses(addressesSet){
-        const { receiving, sending } = addressesSet;
-        this.addresses = {
+    setHDKeys(keysSet){
+        const { receiving, sending } = keysSet;
+        this.keys = {
             receiving,
             sending
         };

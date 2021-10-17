@@ -72,16 +72,7 @@ export async function fetchEstablishedContacts(this: any, fromTimestamp = 0) {
             const {privateKey} = this.identities.getIdentityHDKeyById(selfIdentities[0].getId().toString(), 0);
 
             const sharedSecret = this.encryptSharedKey(privateKey.toBuffer(), senderKey.data);
-            const sentRequestEncryptedPublicKeyBuffer = establishedContact.sentRequest.data.encryptedPublicKey;
-            const sentDecryptedPublicKeyBuffer = Buffer.from(this.decryptPublicKey(sentRequestEncryptedPublicKeyBuffer, sharedSecret), 'hex');
-            const sentContactPublicKey = HDPublicKey.fromObject({
-                parentFingerPrint: sentDecryptedPublicKeyBuffer.slice(0, 4),
-                chainCode: sentDecryptedPublicKeyBuffer.slice(4, 36),
-                publicKey: sentDecryptedPublicKeyBuffer.slice(36, 69),
-                network: 'testnet',
-                depth: Buffer.from('07', 'hex'),
-                childIndex: Buffer.alloc(4),
-            })
+
             const receivedRequestEncryptedPublicKeyBuffer = establishedContact.receivedRequest.data.encryptedPublicKey;
             const receivedDecryptedPublicKeyBuffer = Buffer.from(this.decryptPublicKey(receivedRequestEncryptedPublicKeyBuffer, sharedSecret), 'hex');
 
@@ -93,10 +84,12 @@ export async function fetchEstablishedContacts(this: any, fromTimestamp = 0) {
                 depth: Buffer.from('07', 'hex'),
                 childIndex: Buffer.alloc(4),
             })
+            // @ts-ignore
+            const extendedPrivateKey = this.keyChain.getDIP15ExtendedKey('0x'+ `${selfIdentities[0].getId().toString()}`, '0x'+`${establishedContact.identity.getId().toString()}`);
 
-            establishedContact.setAddresses({
-                sending: [receivedContactPublicKey.deriveChild(0)],
-                receiving: [sentContactPublicKey.deriveChild(0)]
+            establishedContact.setHDKeys({
+                sending: receivedContactPublicKey,
+                receiving: extendedPrivateKey
             });
         })
     return establishedContacts;
