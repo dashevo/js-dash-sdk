@@ -401,9 +401,9 @@ describe('DashPayPlugin - sendContactRequest', () => {
         const batch = {
             create: [contactReqDocument],
             replace: [],
-            delete: [],
+            delete: []
         };
-        expect(platform.documents.broadcast.firstCall.args).to.deep.equal([batch,"GzggcEzz9fALyv4R9MuCDaMpXJ8HWMANSHCphPn2hhd9"]);
+        expect(platform.documents.broadcast.firstCall.args).to.deep.equal([batch,identitySender]);
         expect(sendContactRequestResult).to.deep.equal(expectedResult);
     });
 
