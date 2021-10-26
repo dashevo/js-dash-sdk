@@ -1,3 +1,37 @@
+# [3.21.2](https://github.com/dashevo/DashJS/compare/v3.21.1...v3.21.2) (2021-10-26)
+
+
+### Chores
+
+* update DPNS and DashPay contract ids ([#292](https://github.com/dashevo/DashJS/issues/292))
+
+
+
+# [3.21.1](https://github.com/dashevo/DashJS/compare/v3.21.0...v3.21.1) (2021-10-26)
+
+
+### Chores
+
+* update DPNS and DashPay contract ids ([#290](https://github.com/dashevo/DashJS/issues/290))
+
+
+
+# [3.21.0](https://github.com/dashevo/DashJS/compare/v3.20.3...v3.21.0) (2021-10-21)
+
+
+### Features
+
+* **Document:** throw error on null Data Сontract ([#244](https://github.com/dashevo/DashJS/issues/244))
+* support higher protocol version ([#271](https://github.com/dashevo/DashJS/issues/271))
+* add `driveProtocolVersion` option ([#249](https://github.com/dashevo/DashJS/issues/249))
+* convenient broadcast errors ([#262](https://github.com/dashevo/DashJS/issues/262), [#266](https://github.com/dashevo/DashJS/issues/266), [#273](https://github.com/dashevo/DashJS/issues/273))
+
+### BREAKING CHANGE
+
+`StateTransitionBroadcastError#getData` is removed. Use `StateTransitionBroadcastError#getCause` to get additional details.
+
+
+
 ## [3.20.3](https://github.com/dashevo/DashJS/compare/v3.20.2...v3.20.3) (2021-08-08)
 
 ### Chores
