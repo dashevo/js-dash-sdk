@@ -1,36 +1,87 @@
+import crypto from "crypto";
 import { Platform } from "./Platform";
-import { wait } from "../../../utils/wait";
+import { StateTransitionBroadcastError } from "../../../errors/StateTransitionBroadcastError";
+import { IStateTransitionResult } from "./IStateTransitionResult";
+import { IPlatformStateProof } from "./IPlatformStateProof";
+
+const ResponseError = require('@dashevo/dapi-client/lib/transport/errors/response/ResponseError');
+const InvalidRequestDPPError = require('@dashevo/dapi-client/lib/transport/errors/response/InvalidRequestDPPError');
+
+const createGrpcTransportError = require('@dashevo/dapi-client/lib/transport/GrpcTransport/createGrpcTransportError');
+
+const GrpcError = require('@dashevo/grpc-common/lib/server/error/GrpcError');
 
 /**
  * @param {Platform} platform
  * @param stateTransition
- * @param identity
- * @param {number} [keyIndex=0]
  */
-export default async function broadcastStateTransition(platform: Platform, stateTransition: any, identity: any, keyIndex : number = 0) {
+export default async function broadcastStateTransition(platform: Platform, stateTransition: any): Promise<IPlatformStateProof|void> {
     const { client, dpp } = platform;
 
-    const account = await client.getWalletAccount();
-
-    // @ts-ignore
-    const { privateKey } = account.getIdentityHDKeyById(
-        identity.getId().toString(),
-        keyIndex,
-    );
-
-    stateTransition.sign(
-        identity.getPublicKeyById(keyIndex),
-        privateKey,
-    );
-
-    const result = await dpp.stateTransition.validateStructure(stateTransition);
+    const result = await dpp.stateTransition.validateBasic(stateTransition);
 
     if (!result.isValid()) {
-        throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
+        const consensusError = result.getFirstError();
+
+        throw new StateTransitionBroadcastError(
+            consensusError.getCode(),
+            consensusError.message,
+            consensusError,
+        );
     }
 
-    await client.getDAPIClient().platform.broadcastStateTransition(stateTransition.toBuffer());
+    // Subscribing to future result
+    const hash = crypto.createHash('sha256')
+      .update(stateTransition.toBuffer())
+      .digest();
 
-    // Wait some time for propagation
-    await wait(1000);
+    const serializedStateTransition = stateTransition.toBuffer();
+
+    try {
+        await client.getDAPIClient().platform.broadcastStateTransition(serializedStateTransition);
+    } catch (error) {
+        if (error instanceof ResponseError) {
+            let cause = error;
+
+            // Pass DPP consensus error directly to avoid
+            // additional wrappers
+            if (cause instanceof InvalidRequestDPPError) {
+                cause = cause.getConsensusError();
+            }
+
+            throw new StateTransitionBroadcastError(
+                cause.getCode(),
+                cause.message,
+                cause,
+            );
+        }
+
+        throw error;
+    }
+
+    // Waiting for result to return
+    const stateTransitionResult: IStateTransitionResult = await client.getDAPIClient().platform.waitForStateTransitionResult(hash, { prove: true });
+
+    let { error } = stateTransitionResult;
+
+    if (error) {
+        // Create DAPI response error from gRPC error passed as gRPC response
+        const grpcError = new GrpcError(error.code, error.message, error.data);
+
+        let cause = createGrpcTransportError(grpcError);
+
+        // Pass DPP consensus error directly to avoid
+        // additional wrappers
+        if (cause instanceof InvalidRequestDPPError) {
+            cause = cause.getConsensusError();
+        }
+
+        throw new StateTransitionBroadcastError(
+            cause.getCode(),
+            cause.message,
+            cause,
+        );
+    }
+
+    return stateTransitionResult.proof;
 }

@@ -2,8 +2,10 @@
 import Identifier from "@dashevo/dpp/lib/Identifier";
 import {Platform} from "../../Platform";
 
-import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
+import createAssetLockProof from "./internal/createAssetLockProof";
+import createIdentityTopUpTransition from "./internal/createIdnetityTopUpTransition";
+import broadcastStateTransition from "../../broadcastStateTransition";
 
 /**
  * Register identities to the platform
@@ -14,7 +16,9 @@ import createAssetLockTransaction from "../../createAssetLockTransaction";
  * @returns {boolean}
  */
 export async function topUp(this: Platform, identityId: Identifier | string, amount: number): Promise<any> {
-    const { client, dpp } = this;
+    await this.initialize();
+
+    const { client } = this;
 
     identityId = Identifier.from(identityId);
 
@@ -22,36 +26,20 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
 
     const {
         transaction: assetLockTransaction,
-        privateKey: assetLockPrivateKey
+        privateKey: assetLockPrivateKey,
+        outputIndex: assetLockOutputIndex
     } = await createAssetLockTransaction(this, amount);
 
     // Broadcast Asset Lock transaction
     await account.broadcastTransaction(assetLockTransaction);
-
-    // Wait some time for propagation
-    await wait(1000);
-
-    // Create ST
-
-    const outPointBuffer = assetLockTransaction.getOutPointBuffer(0);
+    // Create a proof for the asset lock transaction
+    const assetLockProof = await createAssetLockProof(this, assetLockTransaction, assetLockOutputIndex);
 
     // @ts-ignore
-    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(identityId, outPointBuffer);
-
-    identityTopUpTransition.signByPrivateKey(assetLockPrivateKey);
-
-    const result = await dpp.stateTransition.validateStructure(identityTopUpTransition);
-
-    if (!result.isValid()) {
-        throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
-    }
+    const identityTopUpTransition = await createIdentityTopUpTransition(this, assetLockProof, assetLockPrivateKey, identityId);
 
     // Broadcast ST
-
-    await client.getDAPIClient().platform.broadcastStateTransition(identityTopUpTransition.toBuffer());
-
-    // Wait some time for propagation
-    await wait(1000);
+    await broadcastStateTransition(this, identityTopUpTransition);
 
     return true;
 }

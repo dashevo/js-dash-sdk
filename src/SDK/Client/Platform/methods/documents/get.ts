@@ -1,4 +1,5 @@
 import Identifier from '@dashevo/dpp/lib/Identifier';
+import Metadata from "@dashevo/dpp/lib/Metadata";
 
 import {Platform} from "../../Platform";
 
@@ -96,6 +97,8 @@ function convertIdentifierProperties(whereCondition: WhereCondition, binaryPrope
 export async function get(this: Platform, typeLocator: string, opts: fetchOpts): Promise<any> {
     if (!typeLocator.includes('.')) throw new Error('Accessing to field is done using format: appName.fieldName');
 
+    await this.initialize();
+
     // locator is of `dashpay.profile` with dashpay the app and profile the field.
     const [appName, fieldType] = typeLocator.split('.');
     // FIXME: we may later want a hashmap of schemas and contract IDs
@@ -120,14 +123,30 @@ export async function get(this: Platform, typeLocator: string, opts: fetchOpts):
     }
 
     // @ts-ignore
-    const rawDocuments = await this.client.getDAPIClient().platform.getDocuments(
-        Identifier.from(appDefinition.contractId),
+    const documentsResponse = await this.client.getDAPIClient().platform.getDocuments(
+        appDefinition.contractId,
         fieldType,
         opts
     );
 
+    const rawDocuments = documentsResponse.getDocuments();
+
     return Promise.all(
-        rawDocuments.map((rawDocument) => this.dpp.document.createFromBuffer(rawDocument)),
+        rawDocuments.map(async (rawDocument) => {
+            const document = await this.dpp.document.createFromBuffer(rawDocument);
+
+            let metadata = null;
+            const responseMetadata = documentsResponse.getMetadata();
+            if (responseMetadata) {
+                metadata = new Metadata({
+                    blockHeight: responseMetadata.getHeight(),
+                    coreChainLockedHeight: responseMetadata.getCoreChainLockedHeight(),
+                });
+            }
+            document.setMetadata(metadata);
+
+            return document;
+        }),
     );
 }
 

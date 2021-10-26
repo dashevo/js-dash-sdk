@@ -19,6 +19,10 @@ import registerName from "./methods/names/register";
 import resolveName from "./methods/names/resolve";
 import resolveNameByRecord from "./methods/names/resolveByRecord";
 import searchName from "./methods/names/search";
+import broadcastStateTransition from "./broadcastStateTransition";
+import { IPlatformStateProof } from "./IPlatformStateProof";
+import StateRepository from './StateRepository';
+import { latestVersion as latestProtocolVersion } from "@dashevo/dpp/lib/version/protocolVersion";
 
 /**
  * Interface for PlatformOpts
@@ -28,6 +32,8 @@ import searchName from "./methods/names/search";
  */
 export interface PlatformOpts {
     client: Client,
+    network: string,
+    driveProtocolVersion?: number,
 }
 
 /**
@@ -89,7 +95,19 @@ export class Platform {
      */
     public contracts: Records;
 
+    /**
+     * Broadcasts state transition
+     * @param {Object} stateTransition
+     */
+    public broadcastStateTransition(stateTransition: any): Promise<IPlatformStateProof|void> {
+        return broadcastStateTransition(this, stateTransition);
+    };
+
     client: Client;
+
+    private static readonly networkToProtocolVersion: Map<string, number> = new Map([
+        ['testnet', 1],
+    ]);
 
     /**
      * Construct some instance of Platform
@@ -119,16 +137,29 @@ export class Platform {
             topUp: topUpIdentity.bind(this),
         };
 
-        const stateRepository = {
-            fetchIdentity: getIdentity.bind(this),
-            fetchDataContract: getContract.bind(this)
-        };
+        this.client = options.client;
+
+        const mappedProtocolVersion = Platform.networkToProtocolVersion.get(
+            options.network,
+        );
+
+        // use protocol version from options if set
+        // use mapped one otherwise
+        // fallback to one that set in dpp as the last option
+        const driveProtocolVersion = options.driveProtocolVersion !== undefined
+          ? options.driveProtocolVersion
+          : (mappedProtocolVersion !== undefined ? mappedProtocolVersion : latestProtocolVersion);
+
+        const stateRepository = new StateRepository(this.client);
 
         this.dpp = new DashPlatformProtocol({
-            ...options,
             stateRepository,
+            protocolVersion: driveProtocolVersion,
+            ...options,
         });
+    }
 
-        this.client = options.client;
+    async initialize() {
+        await this.dpp.initialize();
     }
 }

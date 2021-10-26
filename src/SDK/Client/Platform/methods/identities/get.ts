@@ -1,6 +1,8 @@
 import {Platform} from "../../Platform";
 // @ts-ignore
 import Identifier from "@dashevo/dpp/lib/Identifier";
+import Metadata from "@dashevo/dpp/lib/Metadata";
+const NotFoundError = require('@dashevo/dapi-client/lib/transport/GrpcTransport/errors/NotFoundError');
 
 /**
  * Get an identity from the platform
@@ -10,16 +12,35 @@ import Identifier from "@dashevo/dpp/lib/Identifier";
  * @returns Identity
  */
 export async function get(this: Platform, id: Identifier|string): Promise<any> {
+    await this.initialize();
+
     const identifier = Identifier.from(id);
 
-    // @ts-ignore
-    const identityBuffer = await this.client.getDAPIClient().platform.getIdentity(identifier);
+    let identityResponse;
+    try {
+        identityResponse = await this.client.getDAPIClient().platform.getIdentity(identifier);
+    } catch (e) {
+        if (e instanceof NotFoundError) {
+            return null;
+        }
 
-    if (identityBuffer === null) {
-        return null;
+        throw e;
     }
 
-    return this.dpp.identity.createFromBuffer(identityBuffer);
+    const identity = this.dpp.identity.createFromBuffer(identityResponse.getIdentity());
+
+    let metadata = null;
+    const responseMetadata = identityResponse.getMetadata();
+    if (responseMetadata) {
+        metadata = new Metadata({
+            blockHeight: responseMetadata.getHeight(),
+            coreChainLockedHeight: responseMetadata.getCoreChainLockedHeight(),
+        });
+    }
+
+    identity.setMetadata(metadata);
+
+    return identity;
 }
 
 export default get;

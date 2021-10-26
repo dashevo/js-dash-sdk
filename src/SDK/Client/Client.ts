@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import { Account, Wallet } from "@dashevo/wallet-lib";
 import DAPIClientTransport from "@dashevo/wallet-lib/src/transport/DAPIClientTransport/DAPIClientTransport"
 import { Platform } from './Platform';
@@ -5,12 +6,15 @@ import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 import { ClientAppDefinitionOptions, ClientApps } from "./ClientApps";
 
+export interface WalletOptions extends Wallet.IWalletOptions {
+    defaultAccountIndex?: number;
+}
+
 /**
  * Interface Client Options
  *
  * @param {ClientApps?} [apps] - applications
- * @param {Wallet.IWalletOptions} [wallet] - Wallet options
- * @param {number} [walletAccountIndex=0] - Wallet account index number
+ * @param {WalletOptions} [wallet] - Wallet options
  * @param {DAPIAddressProvider} [dapiAddressProvider] - DAPI Address Provider instance
  * @param {Array<RawDAPIAddress|DAPIAddress|string>} [dapiAddresses] - DAPI addresses
  * @param {string[]|RawDAPIAddress[]} [seeds] - DAPI seeds
@@ -21,8 +25,7 @@ import { ClientAppDefinitionOptions, ClientApps } from "./ClientApps";
  */
 export interface ClientOpts {
     apps?: Array<ClientAppDefinitionOptions>,
-    wallet?: Wallet.IWalletOptions,
-    walletAccountIndex?: number,
+    wallet?: WalletOptions,
     dapiAddressProvider?: any,
     dapiAddresses?: any[],
     seeds?: any[],
@@ -30,18 +33,19 @@ export interface ClientOpts {
     timeout?: number,
     retries?: number,
     baseBanTime?: number,
+    driveProtocolVersion?: number,
 }
 
 /**
  * Client class that wraps all components together to allow integrated payments on both the Dash Network (layer 1)
  * and the Dash Platform (layer 2).
  */
-export class Client {
-    public network: string = 'evonet';
+export class Client extends EventEmitter {
+    public network: string = 'testnet';
     public wallet: Wallet | undefined;
     public account: Account | undefined;
-    public platform: Platform | undefined;
-    public walletAccountIndex: number | undefined = 0;
+    public platform: Platform;
+    public defaultAccountIndex: number | undefined = 0;
     private readonly dapiClient: DAPIClient;
     private readonly apps: ClientApps;
     private options: ClientOpts;
@@ -52,12 +56,11 @@ export class Client {
      * @param {ClientOpts} [options] - options for SDK Client
      */
     constructor(options: ClientOpts = {}) {
-        this.options = {
-            walletAccountIndex: 0,
-            ...options
-        }
+        super();
 
-        this.network = this.options.network ? this.options.network.toString() : 'evonet';
+        this.options = options;
+
+        this.network = this.options.network ? this.options.network.toString() : 'testnet';
 
         // Initialize DAPI Client
         const dapiClientOptions = {
@@ -94,13 +97,21 @@ export class Client {
             });
 
             // @ts-ignore
-            this.walletAccountIndex = this.options.walletAccountIndex;
+            this.wallet.on('error', (error, context) => (
+                this.emit('error', error, { wallet: context })
+            ));
         }
+
+        // @ts-ignore
+        this.defaultAccountIndex = this.options.wallet?.defaultAccountIndex || 0;
 
         const appsOpts: Array<ClientAppDefinitionOptions> = [{
                 contractId: '3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8',
                 alias: 'dpns',
-            }];
+            }, {
+            contractId: 'HpJZGdjnHjUucndek2kc1P9RBhTQZxjHFeQKnanxVVJp',
+            alias: 'dashpay',
+        }];
 
         if(this.options.apps){
             appsOpts.push(...this.options.apps);
@@ -110,6 +121,8 @@ export class Client {
 
         this.platform = new Platform({
             client: this,
+            network: this.network,
+            driveProtocolVersion: this.options.driveProtocolVersion,
         });
     }
 
@@ -125,7 +138,7 @@ export class Client {
         }
 
         options = {
-            index: this.walletAccountIndex,
+            index: this.defaultAccountIndex,
             ...options,
         }
 
