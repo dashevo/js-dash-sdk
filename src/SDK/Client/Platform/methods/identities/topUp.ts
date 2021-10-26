@@ -1,10 +1,14 @@
 // @ts-ignore
 import Identifier from "@dashevo/dpp/lib/Identifier";
-import {PrivateKey} from "@dashevo/dashcore-lib";
+import { PrivateKey } from "@dashevo/dashcore-lib";
+import { DashPlatformProtocol } from "@dashevo/dpp"
+
+import { Platform } from "../../Platform";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
 import createAssetLockProof from "./internal/createAssetLockProof";
 import createIdentityTopUpTransition from "./internal/createIdnetityTopUpTransition";
 import broadcastStateTransition from "../../broadcastStateTransition";
+
 
 /**
  * @param {DashPlatformProtocol} dpp
@@ -36,7 +40,7 @@ function calculateTopUpTransitionFee(dpp: DashPlatformProtocol, identityId: stri
 export async function topUp(this: Platform, identityId: Identifier | string, amount: number): Promise<any> {
     await this.initialize();
 
-    const { client } = this;
+    const { dpp, client } = this;
 
     identityId = Identifier.from(identityId);
 
@@ -55,15 +59,25 @@ export async function topUp(this: Platform, identityId: Identifier | string, amo
         transaction: assetLockTransaction,
         privateKey: assetLockPrivateKey,
         outputIndex: assetLockOutputIndex
-    } = await createAssetLockTransaction(this, amount);
+    } = await createAssetLockTransaction(
+        this,
+        assetLockOneTimePrivateKey,
+        amount + topUpTransitionFee,
+    );
 
     // Broadcast Asset Lock transaction
     await account.broadcastTransaction(assetLockTransaction);
+
     // Create a proof for the asset lock transaction
     const assetLockProof = await createAssetLockProof(this, assetLockTransaction, assetLockOutputIndex);
 
     // @ts-ignore
-    const identityTopUpTransition = await createIdentityTopUpTransition(this, assetLockProof, assetLockPrivateKey, identityId);
+    const identityTopUpTransition = await createIdentityTopUpTransition(
+        this,
+        assetLockProof,
+        assetLockPrivateKey,
+        identityId,
+    );
 
     // Broadcast ST
     await broadcastStateTransition(this, identityTopUpTransition);
