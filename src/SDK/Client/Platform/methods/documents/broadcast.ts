@@ -1,6 +1,8 @@
-import {Platform} from "../../Platform";
+import { Platform } from "../../Platform";
 import broadcastStateTransition from '../../broadcastStateTransition';
-import Document from '@dashevo/dpp/lib/document/Document'
+import Document from '@dashevo/dpp/lib/document/Document';
+import { signStateTransition } from "../../signStateTransition";
+
 /**
  * Broadcast document onto the platform
  *
@@ -11,12 +13,17 @@ import Document from '@dashevo/dpp/lib/document/Document'
  * @param {Document[]} [documents.delete]
  * @param identity - identity
  */
-export default async function broadcast(this: Platform, documents: { create: Document[], replace: Document[], delete: Document[]}, identity: any): Promise<any> {
+export default async function broadcast(this: Platform, documents: { create?: Document[], replace?: Document[], delete?: Document[]}, identity: any): Promise<any> {
+    await this.initialize();
+
     const { dpp } = this;
 
     const documentsBatchTransition = dpp.document.createStateTransition(documents);
 
-    await broadcastStateTransition(this, documentsBatchTransition, identity);
+    await signStateTransition(this, documentsBatchTransition, identity);
 
-    return documents;
+    // Broadcast state transition also wait for the result to be obtained
+    await broadcastStateTransition(this, documentsBatchTransition);
+
+    return documentsBatchTransition;
 }

@@ -1,6 +1,11 @@
 import {Platform} from "../../Platform";
 
-declare type ContractIdentifier = string;
+// @ts-ignore
+import Identifier from "@dashevo/dpp/lib/Identifier";
+import Metadata from "@dashevo/dpp/lib/Metadata";
+const NotFoundError = require('@dashevo/dapi-client/lib/transport/GrpcTransport/errors/NotFoundError');
+
+declare type ContractIdentifier = string | Identifier;
 
 /**
  * Get contracts from the platform
@@ -10,33 +15,52 @@ declare type ContractIdentifier = string;
  * @returns contracts
  */
 export async function get(this: Platform, identifier: ContractIdentifier): Promise<any> {
-    let localContract;
+    await this.initialize();
 
-    for (let appName in this.apps) {
-        const app = this.apps[appName];
-        if (app.contractId === identifier) {
-            localContract = app;
-            break;
+    const contractId : Identifier = Identifier.from(identifier);
+
+    // Try to get contract from the cache
+    for (const appName of this.client.getApps().getNames()) {
+        const appDefinition = this.client.getApps().get(appName);
+        if (appDefinition.contractId.equals(contractId) && appDefinition.contract) {
+            return appDefinition.contract;
         }
     }
 
-    if (localContract && localContract.contract) {
-        return localContract.contract;
-    } else {
-        const rawContract = await this.client.getDAPIClient().platform.getDataContract(identifier);
-        if(!rawContract){
+    // Fetch contract otherwise
+    let dataContractResponse;
+    try {
+        dataContractResponse = await this.client.getDAPIClient().platform.getDataContract(contractId);
+    } catch (e) {
+        if (e instanceof NotFoundError) {
             return null;
         }
 
-        const contract = await this.dpp.dataContract.createFromSerialized(rawContract);
-        const app = {contractId: identifier, contract};
-
-        // If we do not have even the identifier in this.apps, we add it with timestamp as key
-        if (localContract === undefined || !localContract.contract) {
-            this.apps[Date.now()] = app;
-        }
-        return app.contract;
+        throw e;
     }
+
+    const contract = await this.dpp.dataContract.createFromBuffer(dataContractResponse.getDataContract());
+
+    let metadata = null;
+    const responseMetadata = dataContractResponse.getMetadata();
+    if (responseMetadata) {
+        metadata = new Metadata({
+            blockHeight: responseMetadata.getHeight(),
+            coreChainLockedHeight: responseMetadata.getCoreChainLockedHeight(),
+        });
+    }
+    contract.setMetadata(metadata);
+
+    // Store contract to the cache
+
+    for (const appName of this.client.getApps().getNames()) {
+        const appDefinition = this.client.getApps().get(appName);
+        if (appDefinition.contractId.equals(contractId)) {
+            appDefinition.contract = contract;
+        }
+    }
+
+    return contract;
 }
 
 export default get;

@@ -1,8 +1,10 @@
-import {Platform} from "../../Platform";
-import { wait } from "../../../../../utils/wait";
-import createAssetLockTransaction from "../../createAssetLockTransaction";
+// @ts-ignore
+import Identifier from "@dashevo/dpp/lib/Identifier";
 import {PrivateKey} from "@dashevo/dashcore-lib";
-import DashPlatformProtocol from "@dashevo/dpp";
+import createAssetLockTransaction from "../../createAssetLockTransaction";
+import createAssetLockProof from "./internal/createAssetLockProof";
+import createIdentityTopUpTransition from "./internal/createIdnetityTopUpTransition";
+import broadcastStateTransition from "../../broadcastStateTransition";
 
 /**
  * @param {DashPlatformProtocol} dpp
@@ -27,12 +29,16 @@ function calculateTopUpTransitionFee(dpp: DashPlatformProtocol, identityId: stri
  * Register identities to the platform
  *
  * @param {Platform} this - bound instance class
- * @param {string} identityId - id of the identity to top up
+ * @param {Identifier|string} identityId - id of the identity to top up
  * @param {number} amount - amount to top up in duffs
  * @returns {boolean}
  */
-export async function topUp(this: Platform, identityId: string, amount: number): Promise<any> {
-    const { client, dpp } = this;
+export async function topUp(this: Platform, identityId: Identifier | string, amount: number): Promise<any> {
+    await this.initialize();
+
+    const { client } = this;
+
+    identityId = Identifier.from(identityId);
 
     // @ts-ignore
     const assetLockOneTimePrivateKey = new PrivateKey();
@@ -45,38 +51,22 @@ export async function topUp(this: Platform, identityId: string, amount: number):
 
     const account = await client.getWalletAccount();
 
-    const assetLockTransaction = await createAssetLockTransaction(
-        this,
-        assetLockOneTimePrivateKey,
-        amount + topUpTransitionFee,
-    );
+    const {
+        transaction: assetLockTransaction,
+        privateKey: assetLockPrivateKey,
+        outputIndex: assetLockOutputIndex
+    } = await createAssetLockTransaction(this, amount);
 
     // Broadcast Asset Lock transaction
     await account.broadcastTransaction(assetLockTransaction);
+    // Create a proof for the asset lock transaction
+    const assetLockProof = await createAssetLockProof(this, assetLockTransaction, assetLockOutputIndex);
 
-    // Wait some time for propagation
-    await wait(1000);
-
-    // Create ST
-
-    const outPointBuffer = assetLockTransaction.getOutPointBuffer(0);
-
-    const identityTopUpTransition = dpp.identity.createIdentityTopUpTransition(identityId, outPointBuffer);
-
-    identityTopUpTransition.signByPrivateKey(assetLockOneTimePrivateKey);
-
-    const result = await dpp.stateTransition.validateStructure(identityTopUpTransition);
-
-    if (!result.isValid()) {
-        throw new Error(`StateTransition is invalid - ${JSON.stringify(result.getErrors())}`);
-    }
+    // @ts-ignore
+    const identityTopUpTransition = await createIdentityTopUpTransition(this, assetLockProof, assetLockPrivateKey, identityId);
 
     // Broadcast ST
-
-    await client.getDAPIClient().platform.broadcastStateTransition(identityTopUpTransition.serialize());
-
-    // Wait some time for propagation
-    await wait(1000);
+    await broadcastStateTransition(this, identityTopUpTransition);
 
     return true;
 }

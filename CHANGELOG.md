@@ -1,3 +1,262 @@
+# [3.21.2](https://github.com/dashevo/DashJS/compare/v3.21.1...v3.21.2) (2021-10-26)
+
+
+### Chores
+
+* update DPNS and DashPay contract ids ([#292](https://github.com/dashevo/DashJS/issues/292))
+
+
+
+# [3.21.1](https://github.com/dashevo/DashJS/compare/v3.21.0...v3.21.1) (2021-10-26)
+
+
+### Chores
+
+* update DPNS and DashPay contract ids ([#290](https://github.com/dashevo/DashJS/issues/290))
+
+
+
+# [3.21.0](https://github.com/dashevo/DashJS/compare/v3.20.3...v3.21.0) (2021-10-21)
+
+
+### Features
+
+* **Document:** throw error on null Data Сontract ([#244](https://github.com/dashevo/DashJS/issues/244))
+* support higher protocol version ([#271](https://github.com/dashevo/DashJS/issues/271))
+* add `driveProtocolVersion` option ([#249](https://github.com/dashevo/DashJS/issues/249))
+* convenient broadcast errors ([#262](https://github.com/dashevo/DashJS/issues/262), [#266](https://github.com/dashevo/DashJS/issues/266), [#273](https://github.com/dashevo/DashJS/issues/273))
+
+### BREAKING CHANGE
+
+`StateTransitionBroadcastError#getData` is removed. Use `StateTransitionBroadcastError#getCause` to get additional details.
+
+
+
+## [3.20.3](https://github.com/dashevo/DashJS/compare/v3.20.2...v3.20.3) (2021-08-08)
+
+### Chores
+
+* update DashPay and DPNS contracts ([#240](https://github.com/dashevo/DashJS/issues/240))
+
+
+
+## [3.20.2](https://github.com/dashevo/DashJS/compare/v3.20.1...v3.20.2) (2021-07-28)
+
+
+### Bug Fixes
+
+* InvalidResponse error when connecting to older versions of dapi ([#241](https://github.com/dashevo/DashJS/issues/241))
+
+
+
+## [3.20.1](https://github.com/dashevo/DashJS/compare/v3.20.0...v3.20.1) (2021-07-22)
+
+
+### Features
+
+* update DashPay and DPNS contracts ([4a0f0f8](https://github.com/dashevo/DashJS/commit/4a0f0f84a37fd6f41aa75c718ddd8a5ebc43c452))
+
+
+
+# [3.20.0](https://github.com/dashevo/DashJS/compare/v3.19.4...v3.20.0) (2021-07-13)
+
+
+### Features
+
+* provide metadata for documents, identities and data contracts ([#231](https://github.com/dashevo/DashJS/issues/231))
+* update wallet options ([#229](https://github.com/dashevo/DashJS/issues/229))
+
+
+### BREAKING CHANGES
+
+* `wallet.defaultAccountIndex` should be used instead of `walletAccountIndex` option
+
+
+
+## [3.19.4](https://github.com/dashevo/DashJS/compare/v3.19.3...v3.19.4) (2021-05-18)
+
+
+### Bug Fixes
+
+* Binary properties in platform queries not encoded properly ([#223](https://github.com/dashevo/js-dash-sdk/pull/223))
+
+## [3.19.3](https://github.com/dashevo/DashJS/compare/v3.19.2...v3.19.3) (2021-05-18)
+
+
+### Bug Fixes
+
+* CBOR not decoding buffers properly in browsers([#219](https://github.com/dashevo/js-dash-sdk/pull/219))
+
+
+## [3.19.2](https://github.com/dashevo/DashJS/compare/v3.19.1...v3.19.2) (2021-05-18)
+
+
+### Bug Fixes
+
+* add some handler for metadata error ([#216](https://github.com/dashevo/DashJS/issues/216))
+
+
+
+## [3.19.1](https://github.com/dashevo/DashJS/compare/v3.19.0...v3.19.1) (2021-05-10)
+
+
+### Bug Fixes
+
+* invalid testnet DPNS contract id ([#214](https://github.com/dashevo/DashJS/issues/214))
+
+
+
+# [3.19.0](https://github.com/dashevo/DashJS/compare/v3.18.2...v3.19.0) (2021-05-04)
+
+### Features
+
+* add `verifyInstantLock` to state repository ([#193](https://github.com/dashevo/DashJS/issues/193))
+* Chain Asset Lock proof ([#203](https://github.com/dashevo/DashJS/issues/203))
+* update to new getStatus endpoint ([#205](https://github.com/dashevo/DashJS/issues/205))
+* remove fake Instant Asset Locks proofs ([#198](https://github.com/dashevo/DashJS/issues/198))
+
+
+### BREAKING CHANGES
+
+* Fallbacks for Instant Asset lock proofs are removed. SDK is not compatible with local network created with mn-bootstrap v0.18
+* See [DPP breaking changes](https://github.com/dashevo/js-dpp/releases/tag/v0.19.0)
+* See [Wallet lib breaking changes](https://github.com/dashevo/wallet-lib/releases/tag/v7.19.0)
+
+
+
+## [3.18.2](https://github.com/dashevo/DashJS/compare/v3.18.1...v3.18.2) (2021-04-28)
+
+### Bug Fixes
+
+* `transaction.isCoinbase` is not a function and other fixes from wallet-lib 7.18.1 ([#236](https://github.com/dashevo/wallet-lib/issues/236))
+
+
+
+## [3.18.1](https://github.com/dashevo/DashJS/compare/v3.18.0...v3.18.1) (2021-03-03)
+
+### Features
+
+* handle wallet async errors ([#190](https://github.com/dashevo/DashJS/issues/190))
+
+
+
+# [3.18.0](https://github.com/dashevo/DashJS/compare/v3.18.0...v3.17.0) (2021-03-03)
+
+### Features
+
+* make identity derivation DIP-11 compatible ([#188](https://github.com/dashevo/DashJS/issues/188)
+* more reliable and secure ST ack ([#180](https://github.com/dashevo/DashJS/issues/180))
+
+
+### Bug Fixes
+
+* ensure name search uses lowercase label ([#183](https://github.com/dashevo/DashJS/issues/183))
+
+
+### BREAKING CHANGES
+
+* Identities registered in versions prior to that one won't sync, as identities are now using hardened derivation and derived from the wallet, not from the account. This change is made to make JS SDK compatible with Android and iOS apps and DIP 11.
+
+
+
+# [3.17.0](https://github.com/dashevo/DashJS/compare/v3.16.2...v3.17.0) (2020-12-30)
+
+
+### Features
+
+* connect to testnet by default ([#176](https://github.com/dashevo/DashJS/issues/176))
+* update `dapi-client`, `dashcore-lib`, `dpp` and `wallet-lib` ([#152](https://github.com/dashevo/DashJS/issues/152), [#172](https://github.com/dashevo/DashJS/issues/172))
+* wait broadcasted data to be available from queries ([#165](https://github.com/dashevo/DashJS/issues/165))
+* asset lock proofs for identity funding ([#169](https://github.com/dashevo/js-dash-sdk/issues/169))
+
+
+### Bug Fixes
+
+* crypto.randomBytes stub causing tests to fail ([#173](https://github.com/dashevo/DashJS/issues/173))
+
+
+### BREAKING CHANGES
+
+* requires a version of DAPI with instant locks implemented, i.e. 0.17 or higher
+
+
+
+## [3.16.2](https://github.com/dashevo/DashJS/compare/v3.16.1...v3.16.2) (2020-11-17)
+
+
+### Bug Fixes
+
+* cannot read property 'getBinaryProperties' of undefined ([#158](https://github.com/dashevo/DashJS/issues/158))
+
+
+
+## [3.16.1](https://github.com/dashevo/DashJS/compare/v3.16.0...v3.16.1) (2020-10-30)
+
+
+### Bug Fixes
+
+* `$id` and `$ownerId` are not converted to identifiers ([#148](https://github.com/dashevo/DashJS/issues/148))
+
+
+
+# [3.16.0](https://github.com/dashevo/DashJS/compare/v3.15.2...v3.16.0) (2020-10-29)
+
+### Features
+
+* convert string identifiers in `where` conditions ([#145](https://github.com/dashevo/DashJS/issues/145))
+* make `broadcast` methods to return a state transition ([#146](https://github.com/dashevo/DashJS/issues/146))
+* introduce Identifier type for data contract, document and identity IDs ([#142](https://github.com/dashevo/DashJS/issues/142))
+
+
+### BREAKING CHANGES
+
+* `client.platform.contracts.broadcast` returns a `DataContractCreateTransition` instead of `DataContract`
+* `client.platform.documents.broadcast` returns a `DocuemntsBatchTransition` instead of `Documents[]`
+* `client.apps` is an instance of `ClientApps` class. Use `Client#getApps()` to get/update applications
+
+
+
+## [3.15.2](https://github.com/dashevo/DashJS/compare/v3.15.1...v3.15.2) (2020-09-14)
+
+
+### Bug Fixes
+
+* Update wallet-lib to a version with sync process fixes ([#185](https://github.com/dashevo/wallet-lib/pull/185))
+
+
+
+## [3.15.1](https://github.com/dashevo/DashJS/compare/v3.15.0...v3.15.1) (2020-09-07)
+
+
+### Bug Fixes
+
+* invalid argument type: script error from dashcore-lib ([#138](https://github.com/dashevo/DashJS/issues/138))
+
+
+
+# [3.15.0](https://github.com/dashevo/DashJS/compare/v3.14.1...v3.15.0) (2020-09-04)
+
+
+### Features
+
+* update to new Wallet and DPNS contract ([#127](https://github.com/dashevo/js-dash-sdk/pull/127))
+
+
+### BREAKING CHANGES
+
+* `client.platform.names.register` now receive records as a second argument
+* See [DPP breaking changes](https://github.com/dashevo/js-dpp/releases/tag/v0.15.0)
+
+
+## [3.14.1](https://github.com/dashevo/DashJS/compare/v3.14.0...v3.14.1) (2020-07-24)
+
+
+### Bug Fixes
+
+* outdated DPNS contract ID ([#118](https://github.com/dashevo/DashJS/issues/118))
+
+
+
 # [3.14.0](https://github.com/dashevo/DashJS/compare/v3.13.4...v3.14.0) (2020-07-23)
 
 
@@ -41,7 +300,7 @@
 - **Bug fixes:**
     * fix: wrong assetlock tx fee estimation (#85)
     * fix: generate one-time private key for the asset lock transaction (#86)
-        
+
 ## [3.13.2](https://github.com/dashevo/DashJS/compare/v3.13.1...v3.13.2) (2020-06-12)
 
 - **Bug fixes:**
@@ -79,7 +338,7 @@
   - added replacement of a document. (#41)
   - added deletion of a document (#41)
 
-- **impr**: 
+- **impr**:
   - update to dpp 0.12 (#41)
 
 - **fix**:
@@ -87,7 +346,7 @@
 
 - **Chore, Docs & Tests:**
   - bumped wallet-lib to 6.1 (#41)
- 
+
 # [2.0.0](https://github.com/dashevo/DashJS/compare/v1.1.2...v2.0.0) (2020-03-27)
 
 - **breaking:**
@@ -98,7 +357,7 @@
   - exported file for web environment is now `Dash` instead of `DashJS`
 - **feat**:
   - Sign and verify message (#24)
-- **impr**: 
+- **impr**:
   - Typings documentation (#30)
   - Code cleanup (#31)
   - Export all Dashcore Primitives (under `SDK.Core.*`)
@@ -108,7 +367,7 @@
   - Identity/register: updated getUTXOS usages on (#afda5bbafb940b2e15d5e773d0e8fc5fbc48ee13)
   - fix(StateTransitionBuilder): records type detection (#b49f74b4b8e03e9d1020dd789c62f4310a4fc1ad)
   - broadcasting of contracts (#f4b63e6be692841f1b138e5b058e531a0873f456, #4aa31fec0e5579d7ef8b9222576863a069b95fd3)
-- **chore**: 
+- **chore**:
   - updated for new evonet (updated wallet-lib to 6.0.0)
   -  updated dapi-client to 0.11 (#fba4d55d3281bec5e65605787dd23a6ca3517476)
   - updated DPNS contractID on evonet (#d0cf11d30cf7c9aaef1ffa4a2b8a955fbf5b1184)

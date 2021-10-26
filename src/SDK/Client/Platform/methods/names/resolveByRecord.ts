@@ -1,18 +1,23 @@
 import { Platform } from "../../Platform";
+import Identifier from "@dashevo/dpp/lib/Identifier";
 
 /**
  * @param record - the exact name of the record to resolve
  * @param value - the exact value for this record to resolve
- * @returns {Document} document
+ * @returns {Document[]} - Resolved domains
  */
 export async function resolveByRecord(this: Platform, record: string, value: any): Promise<any> {
-    const [document] = await this.documents.get('dpns.domain', {
+    await this.initialize();
+
+    if (record === 'dashUniqueIdentityId' || record === 'dashAliasIdentityId') {
+        value = Identifier.from(value);
+    }
+
+    return await this.documents.get('dpns.domain', {
         where: [
             [`records.${record}`, '==', value],
         ],
     });
-
-    return document;
 }
 
 export default resolveByRecord;

@@ -17,13 +17,14 @@ describe('Platform', () => {
                     documents: {
                         get: this.sinon.stub(),
                     },
+                    initialize:  this.sinon.stub(),
                 };
             });
 
             it('should resolve domain by it\'s record', async () => {
                 platformMock.documents.get.resolves([parentDomainDocument]);
 
-                const receivedDocument = await resolveByRecord.call(
+                const receivedDocuments = await resolveByRecord.call(
                     platformMock, 'recordName', 'recordValue',
                 );
 
@@ -35,13 +36,13 @@ describe('Platform', () => {
                     },
                 ]);
 
-                expect(receivedDocument).to.deep.equal(parentDomainDocument);
+                expect(receivedDocuments).to.deep.equal([parentDomainDocument]);
             });
 
             it('should return null if domain was not found', async () => {
                 platformMock.documents.get.resolves([]);
 
-                const receivedDocument = await resolveByRecord.call(
+                const receivedDocuments = await resolveByRecord.call(
                     platformMock, 'recordName', 'recordValue',
                 );
 
@@ -53,7 +54,8 @@ describe('Platform', () => {
                     },
                 ]);
 
-                expect(receivedDocument).to.be.undefined;
+                expect(receivedDocuments).to.be.an('array');
+                expect(receivedDocuments.length).to.equal(0);
             });
         });
     });

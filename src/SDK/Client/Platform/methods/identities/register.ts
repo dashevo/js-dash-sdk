@@ -1,7 +1,9 @@
 import { Platform } from "../../Platform";
-import { wait } from "../../../../../utils/wait";
 import createAssetLockTransaction from "../../createAssetLockTransaction";
-import {PrivateKey} from "@dashevo/dashcore-lib";
+import { PrivateKey } from "@dashevo/dashcore-lib";
+import createIdentityCreateTransition from "./internal/createIdentityCreateTransition";
+import createAssetLockProof from "./internal/createAssetLockProof";
+import broadcastStateTransition from "../../broadcastStateTransition";
 
 /**
  * Register identities to the platform
@@ -9,23 +11,41 @@ import {PrivateKey} from "@dashevo/dashcore-lib";
  * @param {number} [fundingAmount=10000] - funding amount in duffs
  * @returns {Identity} identity - a register and funded identity
  */
-export default async function register(this: Platform, fundingAmount : number = 10000): Promise<any> {
-    const { client, dpp } = this;
+export default async function register(
+  this: Platform,
+  fundingAmount : number = 10000
+): Promise<any> {
+    await this.initialize();
+
+    const { client } = this;
 
     const account = await client.getWalletAccount();
+
     // @ts-ignore
     const assetLockOneTimePrivateKey = new PrivateKey();
 
     const assetLockTransaction = await createAssetLockTransaction(this, assetLockOneTimePrivateKey, fundingAmount);
 
+    const {
+        transaction: assetLockTransaction,
+        privateKey: assetLockPrivateKey
+        outputIndex: assetLockOutputIndex,
+    } = await createAssetLockTransaction(this, fundingAmount);
+
     // Broadcast Asset Lock transaction
     await account.broadcastTransaction(assetLockTransaction);
+    const assetLockProof = await createAssetLockProof(this, assetLockTransaction, assetLockOutputIndex);
 
-    // Wait some time for propagation
-    await wait(1000);
+    const { identity, identityCreateTransition, identityIndex } = await createIdentityCreateTransition(
+        this, assetLockProof, assetLockPrivateKey
+    );
+    await broadcastStateTransition(this, identityCreateTransition);
 
-    // Create Identity
-    const assetLockOutPoint = assetLockTransaction.getOutPointBuffer(0);
+    // const { identity, identityCreateTransition, identityIndex } = await createIdentityCreateTransition(
+    //     this, assetLockProof, assetLockPrivateKey
+    // );
+    // await broadcastStateTransition(this, identityCreateTransition);
+
 
     const identityIndex = await account.getUnusedIdentityIndex();
 
@@ -51,12 +71,9 @@ export default async function register(this: Platform, fundingAmount : number = 
 
     account.storage.insertIdentityIdAtIndex(
         account.walletId,
-        identity.getId(),
+        identity.getId().toString(),
         identityIndex,
     );
-
-    // Wait some time for propagation
-    await wait(1000);
 
     return identity;
 }
