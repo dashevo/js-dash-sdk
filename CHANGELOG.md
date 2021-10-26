@@ -1,4 +1,4 @@
-# [3.21.1](https://github.com/dashevo/DashJS/compare/v3.21.1...v3.21.2) (2021-10-26)
+# [3.21.2](https://github.com/dashevo/DashJS/compare/v3.21.1...v3.21.2) (2021-10-26)
 
 
 ### Chores
