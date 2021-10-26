@@ -33,9 +33,16 @@ describe('ClientApps', () => {
         })
     });
 
-    it('should .getNames()', function () {
-        const names = apps.getNames();
-        expect(names).to.deep.equal(['dpns', 'tutorialContract']);
+    it('should .getIdentifiers()', function () {
+        const identifiers = apps.getIdentifiers();
+        expect(identifiers).to.deep.equal([
+            Identifier.from('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8'),
+            Identifier.from('3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u9')
+        ]);
+    });
+    it('should .getAliases()', function () {
+        const aliases = apps.getAliases();
+        expect(aliases).to.deep.equal(['tutorialContract', 'contract', 'dpns']);
     });
     it('should .has', function () {
         expect(apps.has('dpns')).to.equal(true);

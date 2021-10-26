@@ -106,9 +106,9 @@ export class Client extends EventEmitter {
         this.defaultAccountIndex = this.options.wallet?.defaultAccountIndex || 0;
 
         const appsOpts: Array<ClientAppDefinitionOptions> = [{
-                contractId: '3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8',
-                alias: 'dpns',
-            }, {
+            contractId: '3VvS19qomuGSbEYWbTsRzeuRgawU3yK4fPMzLrbV62u8',
+            alias: 'dpns',
+        }, {
             contractId: 'HpJZGdjnHjUucndek2kc1P9RBhTQZxjHFeQKnanxVVJp',
             alias: 'dashpay',
         }];

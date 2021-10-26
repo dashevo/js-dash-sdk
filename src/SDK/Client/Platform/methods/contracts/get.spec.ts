@@ -23,11 +23,10 @@ const dpp = {
 }
 factory.dpp = dpp;
 
-const apps = new ClientApps({
-    ratePlatform: {
-        contractId: contractsFixtures.ratePlatform.$id
-    },
-});
+const apps = new ClientApps([{
+    contractId: contractsFixtures.ratePlatform.$id,
+    alias: 'ratePlatform',
+}]);
 let client;
 let askedFromDapi;
 let initialize;
