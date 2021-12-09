@@ -6,6 +6,7 @@ export class Contact {
     public identity?: any;
     public profile?: any;
     public keys?: any;
+    public keychains?: any;
 
     constructor(identityId, sentRequest, receivedRequest) {
         this.username = null;
@@ -29,6 +30,17 @@ export class Contact {
             receiving,
             sending
         };
+    }
+    setKeyChains(keychainsSet){
+        const { receiving, sending } = keychainsSet;
+        this.keychains = {
+            receiving,
+            sending
+        };
+    }
+    getUnusedAddress(type = 'receiving'){
+        const keychain = this.keychains[type];
+        return keychain.getFirstUnusedAddress();
     }
 }
 

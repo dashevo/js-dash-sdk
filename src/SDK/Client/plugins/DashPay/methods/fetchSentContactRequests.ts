@@ -2,8 +2,8 @@
  *
  */
 export async function fetchSentContactRequests(this: any, fromTimestamp = 0){
-    // @ts-ignore
-    const identities = this.storage.getIndexedIdentityIds(this.walletId);
+    const walletStore = this.storage.getWalletStore(this.walletId)
+    const identities = walletStore.getIndexedIdentityIds();
     if(!identities.length){
         throw new Error('Require an identity to fetch sent contact requests');
     }

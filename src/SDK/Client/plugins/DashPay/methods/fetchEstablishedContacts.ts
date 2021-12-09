@@ -1,5 +1,6 @@
 import { Contact } from "../types/Contact";
 import { HDPublicKey } from "@dashevo/dashcore-lib";
+import {KeyChain} from "@dashevo/wallet-lib";
 
 /**
  * Fetch establish contact from a specific timestamp
@@ -50,7 +51,8 @@ export async function fetchEstablishedContacts(this: any, fromTimestamp = 0) {
         }
     });
     await Promise.all(infoFetchingPromises);
-    const selfIdentitiesIds = this.storage.getIndexedIdentityIds(this.walletId);
+    const walletStore = this.storage.getWalletStore(this.walletId)
+    const selfIdentitiesIds = walletStore.getIndexedIdentityIds();
     const selfIdentitiesPrimises = [];
     const selfIdentities = [];
     selfIdentitiesIds.forEach((selfIdentitiesId) => {
@@ -84,12 +86,40 @@ export async function fetchEstablishedContacts(this: any, fromTimestamp = 0) {
                 depth: Buffer.from('07', 'hex'),
                 childIndex: Buffer.alloc(4),
             })
+
             // @ts-ignore
-            const extendedPrivateKey = this.keyChain.getDIP15ExtendedKey('0x'+ `${selfIdentities[0].getId().toString()}`, '0x'+`${establishedContact.identity.getId().toString()}`);
+            const extendedPrivateKey = this.keyChainStore.getMasterKeyChain().getDIP15ExtendedKey('0x'+ `${selfIdentities[0].getId().toString()}`, '0x'+`${establishedContact.identity.getId().toString()}`);
 
             establishedContact.setHDKeys({
                 sending: receivedContactPublicKey,
                 receiving: extendedPrivateKey
+            });
+
+            const lookAheadOpts = {
+                paths:{
+                    'm/0': 10,
+                },
+                isWatched: true
+            }
+            //@ts-ignore
+            const sendingKeyChain = new KeyChain({HDPublicKey: receivedContactPublicKey, lookAheadOpts });
+            //@ts-ignore
+            const receivingKeyChain = new KeyChain({HDPublicKey: extendedPrivateKey, lookAheadOpts });
+            //@ts-ignore
+            const issuedSendingKeyChainPaths = sendingKeyChain.getIssuedPaths();
+            //@ts-ignore
+            const issuedReceivingKeyChainPaths = receivingKeyChain.getIssuedPaths();
+                establishedContact.setKeyChains({
+                sending: sendingKeyChain,
+                receiving: receivingKeyChain,
+            });
+            const chainStore = this.storage.getChainStore(this.network);
+
+            issuedReceivingKeyChainPaths.forEach((issuedPath) => {
+                chainStore.importAddress(issuedPath.address.toString());
+            });
+            issuedSendingKeyChainPaths.forEach((issuedPath) => {
+                chainStore.importAddress(issuedPath.address.toString());
             });
         })
     return establishedContacts;

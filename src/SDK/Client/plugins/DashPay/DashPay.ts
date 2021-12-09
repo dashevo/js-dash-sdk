@@ -26,6 +26,7 @@ export class DashPay extends plugins.StandardPlugin {
     fetchReceivedContactRequests: any;
     fetchSentContactRequests: any;
     sendContactRequest: any;
+    private contacts: any[];
     constructor() {
         super({
             name: 'DashPay',
@@ -35,10 +36,11 @@ export class DashPay extends plugins.StandardPlugin {
             workerIntervalTime: 60 * 1000,
             dependencies: [
                 'storage',
-                'keyChain',
                 'decrypt',
                 'encrypt',
+                'keyChainStore',
                 'walletId',
+                'network',
                 'identities',
                 'getUnusedIdentityIndex'
             ],
@@ -46,6 +48,7 @@ export class DashPay extends plugins.StandardPlugin {
                 after: ['IdentitySyncWorker']
             }
         });
+        this.contacts = []
     }
 }
 DashPay.prototype.acceptContactRequest = acceptContactRequest;

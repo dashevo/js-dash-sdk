@@ -84,6 +84,8 @@ export class Client extends EventEmitter {
 
         this.dapiClient = new DAPIClient(dapiClientOptions);
 
+        let dashpayPlugin;
+        let dashpaySyncWorker;
         // Initialize a wallet if `wallet` option is preset
         if (this.options.wallet !== undefined) {
             if (this.options.wallet.network !== undefined && this.options.wallet.network !== this.network) {
@@ -103,9 +105,12 @@ export class Client extends EventEmitter {
                 !this.options.wallet.privateKey &&
                 this.options.wallet.offlineMode !== true
             ){
+                dashpayPlugin = new DashPay();
+                dashpaySyncWorker = new DashPaySyncWorker();
                 //@ts-ignore
-                walletOptions.plugins = [new DashPay(), new DashPaySyncWorker()];
+                walletOptions.plugins = [dashpayPlugin, dashpaySyncWorker];
             }
+            //@ts-ignore
             this.wallet = new Wallet(walletOptions);
 
             // @ts-ignore
@@ -132,6 +137,11 @@ export class Client extends EventEmitter {
             driveProtocolVersion: this.options.driveProtocolVersion,
         });
 
+        if(dashpaySyncWorker && dashpayPlugin){
+            dashpayPlugin.inject('platform', this.platform, true)
+            dashpaySyncWorker.inject('platform', this.platform, true)
+        }
+
     }
 
     /**
@@ -150,16 +160,12 @@ export class Client extends EventEmitter {
             index: this.defaultAccountIndex,
             ...options,
         }
-
         const account = await wallet.getAccount(options);
 
         try {
-            const dashpayPlugin = account.getPlugin('dashpay');
             const dashpayworker = account.getWorker('DashPaySyncWorker');
-            // @ts-ignore
-            await dashpayPlugin.inject('platform', this.platform, true)
-            // @ts-ignore
-            await dashpayworker.inject('platform', this.platform, true)
+            //@ts-ignore
+            await dashpayworker.execute();
         } catch {}
 
         return account;

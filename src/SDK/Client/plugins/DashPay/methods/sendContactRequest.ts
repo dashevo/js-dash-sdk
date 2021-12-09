@@ -5,7 +5,9 @@
  */
 export async function sendContactRequest(this: any, contactName, accountLabel = 'Default account'){
     // @ts-ignore
-    const identities = this.storage.getIndexedIdentityIds(this.walletId);
+    const walletStore = this.storage.getWalletStore(this.walletId);
+    // @ts-ignore
+    const identities = walletStore.getIndexedIdentityIds();
     if(!identities.length){
         throw new Error('Require an identity to send a contact request');
     }
@@ -24,7 +26,7 @@ export async function sendContactRequest(this: any, contactName, accountLabel = 
     const receiverPublicKey = receiverIdentity.toJSON().publicKeys[0].data;
     const receiverPublicKeyBuffer = Buffer.from(receiverPublicKey, 'base64');
 
-    const extendedPrivateKey = this.keyChain.getDIP15ExtendedKey('0x'+ senderDashUniqueIdentityId, '0x'+contactDashUniqueIdentityId);
+    const extendedPrivateKey = this.keyChainStore.getMasterKeyChain().getDIP15ExtendedKey('0x'+ senderDashUniqueIdentityId, '0x'+contactDashUniqueIdentityId);
     const extendedPublicKey = extendedPrivateKey.hdPublicKey;
 
     const extendedPublicKeyBuffers = Buffer.concat([extendedPublicKey._buffers.parentFingerPrint, extendedPublicKey._buffers.chainCode, extendedPublicKey._buffers.publicKey]);

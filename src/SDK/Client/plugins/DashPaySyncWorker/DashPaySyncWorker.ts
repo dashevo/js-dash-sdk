@@ -1,4 +1,4 @@
-import { plugins } from "@dashevo/wallet-lib"
+import {KeyChain, plugins} from "@dashevo/wallet-lib"
 
 export class DashPaySyncWorker extends plugins.Worker {
     private fromTimestamp: number;
@@ -8,6 +8,7 @@ export class DashPaySyncWorker extends plugins.Worker {
     private getPlugin: any;
     private storage: any;
     private contacts: any[];
+    private keyChainStore: any;
 
     constructor() {
         super({
@@ -18,9 +19,9 @@ export class DashPaySyncWorker extends plugins.Worker {
             workerIntervalTime: 60 * 1000,
             dependencies: [
                 'storage',
+                'keyChainStore',
                 'getWorker',
                 'getPlugin',
-                'keyChain',
                 'walletId',
                 'identities',
                 'getUnusedIdentityIndex',
@@ -36,10 +37,15 @@ export class DashPaySyncWorker extends plugins.Worker {
         this.fromTimestamp = 0;
     }
 
+    async onStart(){
+
+    }
+
     async execute() {
         if (this.platform && this.platform.identities) {
             const dashPay = await this.getPlugin('DashPay');
-            const identities = this.storage.getIndexedIdentityIds(this.walletId);
+            const walletStore = this.storage.getWalletStore(this.walletId)
+            const identities = walletStore.getIndexedIdentityIds(this.walletId);
 
             // We require an identity to fetch contacts
             if (identities.length) {
@@ -47,29 +53,24 @@ export class DashPaySyncWorker extends plugins.Worker {
                 // set 10 minute before last query
                 // see: https://github.com/dashpay/dips/blob/master/dip-0015.md#fetching-contact-requests
                 this.fromTimestamp = +new Date() - 10 * 60 * 1000;
-                const addressesStore = this.storage.store.wallets[this.walletId].addresses;
+                // const walletStore = this.storage.getWalletStore(this.walletId);
+                // const addressesStore = this.storage.store.wallets[this.walletId].addresses;
+                //@ts-ignore
+                const txStreamSyncWorker = await this.getWorker('TransactionSyncStreamWorker');
 
                 contacts
                     .forEach((contact) => {
                         console.log(`DashPaySyncWorker - Fetched contact ${contact.username}`);
                         this.contacts.push(contact);
-                        const { receiving } = contact.keys;
-                        const receiverRootPath = `${contact.sentRequest.ownerId}/${contact.receivedRequest.ownerId}`
-                        const sendingRootPath = `${contact.receivedRequest.ownerId}/${contact.sentRequest.ownerId}`
+                        dashPay.contacts.push(contact);
 
-                        addressesStore.misc[`${receiverRootPath}/0`] = {
-                            path: `${sendingRootPath}/0`,
-                            index: 0,
-                            transactions: [],
-                            address: receiving.deriveChild(0).privateKey.toAddress(),
-                            balanceSat: 0,
-                            unconfirmedBalanceSat: 0,
-                            utxos: {},
-                            fetchedLast: 0,
-                            used: false
-                        };
+                        this.keyChainStore.addKeyChain(contact.keychains.receiving);
+                        this.keyChainStore.addKeyChain(contact.keychains.sending);
+                        //@ts-ignore
                     })
 
+                await txStreamSyncWorker.onStop()
+                await txStreamSyncWorker.onStart();
             }
         }
     }
