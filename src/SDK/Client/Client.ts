@@ -5,6 +5,8 @@ import { Platform } from './Platform';
 import { Network } from "@dashevo/dashcore-lib";
 import DAPIClient from "@dashevo/dapi-client";
 import { ClientApps, ClientAppsOptions } from "./ClientApps";
+import { DashPaySyncWorker } from "./plugins/DashPaySyncWorker/DashPaySyncWorker";
+import { DashPay } from "./plugins/DashPay/DashPay";
 
 export interface WalletOptions extends Wallet.IWalletOptions {
     defaultAccountIndex?: number;
@@ -82,6 +84,8 @@ export class Client extends EventEmitter {
 
         this.dapiClient = new DAPIClient(dapiClientOptions);
 
+        let dashpayPlugin;
+        let dashpaySyncWorker;
         // Initialize a wallet if `wallet` option is preset
         if (this.options.wallet !== undefined) {
             if (this.options.wallet.network !== undefined && this.options.wallet.network !== this.network) {
@@ -90,11 +94,24 @@ export class Client extends EventEmitter {
 
             const transport = new DAPIClientTransport(this.dapiClient);
 
-            this.wallet = new Wallet({
+            const walletOptions = {
                 transport,
                 network: this.network,
-                ...this.options.wallet,
-            });
+            ...this.options.wallet,
+            }
+
+            // If it's a bip44 wallet, we pass the DashPay Worker and DashPay plugin
+            if(
+                !this.options.wallet.privateKey &&
+                this.options.wallet.offlineMode !== true
+            ){
+                dashpayPlugin = new DashPay();
+                dashpaySyncWorker = new DashPaySyncWorker();
+                //@ts-ignore
+                walletOptions.plugins = [dashpayPlugin, dashpaySyncWorker];
+            }
+            //@ts-ignore
+            this.wallet = new Wallet(walletOptions);
 
             // @ts-ignore
             this.wallet.on('error', (error, context) => (
@@ -119,6 +136,12 @@ export class Client extends EventEmitter {
             network: this.network,
             driveProtocolVersion: this.options.driveProtocolVersion,
         });
+
+        if(dashpaySyncWorker && dashpayPlugin){
+            dashpayPlugin.inject('platform', this.platform, true)
+            dashpaySyncWorker.inject('platform', this.platform, true)
+        }
+
     }
 
     /**
@@ -128,7 +151,8 @@ export class Client extends EventEmitter {
      * @returns {Promise<Account>}
      */
     async getWalletAccount(options: Account.Options = {}) : Promise<Account> {
-        if (!this.wallet) {
+        const { wallet } = this;
+        if (!wallet) {
             throw new Error('Wallet is not initialized, pass `wallet` option to Client');
         }
 
@@ -136,8 +160,15 @@ export class Client extends EventEmitter {
             index: this.defaultAccountIndex,
             ...options,
         }
+        const account = await wallet.getAccount(options);
 
-        return this.wallet.getAccount(options);
+        try {
+            const dashpayworker = account.getWorker('DashPaySyncWorker');
+            //@ts-ignore
+            await dashpayworker.execute();
+        } catch {}
+
+        return account;
     }
 
     /**
